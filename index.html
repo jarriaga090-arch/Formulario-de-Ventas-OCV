@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reporte de Resultados y Evaluación de Evento</title>
+  <style>
+    :root {
+      --primary-color: #0d6efd;
+      --primary-hover: #0b5ed7;
+      --bg-color: #f4f6f9;
+      --card-bg: #ffffff;
+      --text-main: #212529;
+      --text-muted: #6c757d;
+      --border-color: #dee2e6;
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      padding: 24px 16px;
+      line-height: 1.5;
+    }
+
+    .form-card {
+      max-width: 860px;
+      margin: 0 auto;
+      background-color: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      padding: 32px 28px;
+    }
+
+    .form-header {
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+
+    .form-header h2 {
+      color: var(--text-main);
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+    }
+
+    .form-header p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .section-title {
+      font-size: 1.15rem;
+      color: var(--primary-color);
+      margin: 28px 0 16px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .note {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    input[type="tel"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      margin: 12px 0 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 10px 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f8f9fa;
+      font-weight: 600;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .btn-action {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn-add {
+      background-color: #198754;
+      color: #ffffff;
+      margin-bottom: 20px;
+    }
+
+    .btn-add:hover {
+      background-color: #157347;
+    }
+
+    .btn-delete {
+      background-color: #dc3545;
+      color: #ffffff;
+    }
+
+    .btn-delete:hover {
+      background-color: #bb2d3b;
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 0.9rem;
+    }
+
+    .checkbox-item input {
+      margin-top: 3px;
+    }
+
+    .legal-box {
+      background-color: #fff9e6;
+      border: 1px solid #ffeeba;
+      border-radius: 6px;
+      padding: 16px;
+      margin: 24px 0;
+    }
+
+    .legal-box p {
+      font-size: 0.9rem;
+      font-style: italic;
+      color: #856404;
+      margin-bottom: 12px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background-color: var(--primary-color);
+      color: #ffffff;
+      padding: 14px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn-submit:hover {
+      background-color: var(--primary-hover);
+    }
+  </style>
+</head>
+<body>
+
+<div class="form-card">
+  <div class="form-header">
+    <h2>Reporte de Resultados y Evaluación de Evento</h2>
+    <p>Complete la información cuantitativa, impacto económico y evaluación de servicios. Los datos demográficos deben ser agregados y anónimos.</p>
+  </div>
+
+  <form id="eventoReporteForm" enctype="multipart/form-data">
+
+    <!-- SECCIÓN 1: GENERALES -->
+    <h3 class="section-title">1. Resumen Ejecutivo del Evento</h3>
+    <div class="form-grid">
+      <div class="form-group full-width">
+        <label for="nombre_evento">Nombre del Evento *</label>
+        <input type="text" id="nombre_evento" name="nombre_evento" placeholder="Ej. Festival Cielo Mágico" required>
+      </div>
+
+      <div class="form-group">
+        <label for="fecha_realizacion">Fecha(s) de Realización *</label>
+        <input type="text" id="fecha_realizacion" name="fecha_realizacion" placeholder="Ej. Del 23 al 25 de octubre 2026" required>
+      </div>
+
+      <div class="form-group">
+        <label for="recinto">Recinto / Sede *</label>
+        <input type="text" id="recinto" name="recinto" placeholder="Ej. Parque Cielo Mágico, Santiago, N.L." required>
+      </div>
+
+      <div class="form-group full-width">
+        <label for="monto_inversion">Monto de Inversión Estimada ($ M.N.) *</label>
+        <input type="number" id="monto_inversion" name="monto_inversion" placeholder="800000" min="0" step="any" required>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 2: ASISTENCIA Y RESULTADOS -->
+    <h3 class="section-title">2. Registro de Asistencia y Resultados</h3>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="total_asistentes">Número Total de Asistentes *</label>
+        <input type="number" id="total_asistentes" name="total_asistentes" placeholder="50000" min="0" required>
+      </div>
+
+      <div class="form-group">
+        <label for="asistentes_locales">Asistentes Locales *</label>
+        <input type="number" id="asistentes_locales" name="asistentes_locales" placeholder="44000" min="0" required>
+      </div>
+
+      <div class="form-group">
+        <label for="asistentes_foraneos">Asistentes Foráneos *</label>
+        <input type="number" id="asistentes_foraneos" name="asistentes_foraneos" placeholder="6000" min="0" required>
+      </div>
+
+      <div class="form-group">
+        <label for="cuartos_noche">Cuartos-Noche Generados (Total Global) *</label>
+        <input type="number" id="cuartos_noche" name="cuartos_noche" placeholder="4800" min="0" required>
+        <span class="note">Contemplando noches de estancia del evento.</span>
+      </div>
+
+      <div class="form-group">
+        <label for="derrama_economica">Derrama Económica Estimada ($ M.N.) *</label>
+        <input type="number" id="derrama_economica" name="derrama_economica" placeholder="248400000" min="0" step="any" required>
+      </div>
+
+      <div class="form-group">
+        <label for="inversion_privada">Inversión Privada Estimada ($ M.N.) *</label>
+        <input type="number" id="inversion_privada" name="inversion_privada" placeholder="32000000" min="0" step="any" required>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 3: DETALLE DE HOTELERÍA DINÁMICO -->
+    <h3 class="section-title">3. Relación de Hotelería y Cuartos - Noche</h3>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre del Hotel / Zona de Hospedaje</th>
+            <th style="width: 180px;">Cuartos - Noche Estimados</th>
+            <th style="width: 70px;" class="text-center">Acción</th>
+          </tr>
+        </thead>
+        <tbody id="tablaHotelesBody">
+          <tr>
+            <td>
+              <input type="text" name="hotel_nombre[]" value="Las Palomas de Santiago" placeholder="Nombre del hotel" required>
+            </td>
+            <td>
+              <input type="number" class="hotel-input" name="hotel_cuartos[]" min="0" value="250" required>
+            </td>
+            <td class="text-center">
+              <button type="button" class="btn-action btn-delete" onclick="eliminarFila(this, 'tablaHotelesBody', calcularTotalHoteles)">✕</button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input type="text" name="hotel_nombre[]" value="Bahía Escondida de Santiago" placeholder="Nombre del hotel" required>
+            </td>
+            <td>
+              <input type="number" class="hotel-input" name="hotel_cuartos[]" min="0" value="170" required>
+            </td>
+            <td class="text-center">
+              <button type="button" class="btn-action btn-delete" onclick="eliminarFila(this, 'tablaHotelesBody', calcularTotalHoteles)">✕</button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input type="text" name="hotel_nombre[]" value="Rincón de Santiago" placeholder="Nombre del hotel" required>
+            </td>
+            <td>
+              <input type="number" class="hotel-input" name="hotel_cuartos[]" min="0" value="190" required>
+            </td>
+            <td class="text-center">
+              <button type="button" class="btn-action btn-delete" onclick="eliminarFila(this, 'tablaHotelesBody', calcularTotalHoteles)">✕</button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input type="text" name="hotel_nombre[]" value="Airbnb (Santiago y Área Metropolitana)" placeholder="Nombre del hotel" required>
+            </td>
+            <td>
+              <input type="number" class="hotel-input" name="hotel_cuartos[]" min="0" value="500" required>
+            </td>
+            <td class="text-center">
+              <button type="button" class="btn-action btn-delete" onclick="eliminarFila(this, 'tablaHotelesBody', calcularTotalHoteles)">✕</button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input type="text" name="hotel_nombre[]" value="Hoteles de Monterrey y San Pedro" placeholder="Nombre del hotel" required>
+            </td>
+            <td>
+              <input type="number" class="hotel-input" name="hotel_cuartos[]" min="0" value="3690" required>
+            </td>
+            <td class="text-center">
+              <button type="button" class="btn-action btn-delete" onclick="eliminarFila(this, 'tablaHotelesBody', calcularTotalHoteles)">✕</button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr style="background-color: #f8f9fa; font-weight: bold;">
+            <td>Total Hotelería Estimado</td>
+            <td><span id="totalHoteleriaCalculado">0</span></td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <button type="button" class="btn-action btn-add" onclick="agregarFilaHotel()">+ Agregar Hotel</button>
+
+    <!-- SECCIÓN 4: PROCEDENCIA (CANTIDADES) Y EDADES -->
+    <h3 class="section-title">4. Resumen Demográfico de Asistentes (Anónimo)</h3>
+    <p class="note" style="margin-bottom: 14px;">Edite o agregue estados y registre el número de asistentes al evento.</p>
+    
+    <label>Procedencia por Estado / Región (Cantidad de Asistentes):</label>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Estado / Procedencia</th>
+            <th style="width: 180px;">Número de Asistentes</th>
+            <th style="width: 70px;" class="text-center">Acción</th>
+          </tr>
+        </thead>
+        <tbody id="tablaProcedenciaBody">
+          <tr>
+            <td><input type="text" name="proc_nombre[]" value="Nuevo León" placeholder="Estado o Ciudad" required></td>
+            <td><input type="number" class="proc-input" name="proc_cantidad[]" min="0" value="26500" required></td>
+            <td class="text-center"><button type="button" class="btn-action btn-delete" onclick="eliminarFila(this, 'tablaProcedenciaBody', calcularTotalProcedencia)">✕</button></td>
+          </tr>
+          <tr>
+            <td><input type="text" name="proc_nombre[]" value="Ciudad de México" placeholder="Estado o Ciudad" required></td>
+            <td><input type="number" class="proc-input" name="proc_cantidad[]" min="0" value="13650" required></td>
+            <td class="text-center"><button type="button" class="btn-action btn-delete" onclick="eliminarFila(this, 'tablaProcedenciaBody', calcularTotalProcedencia)">✕</button></td>
+          </tr>
+          <tr>
+            <td><input type="text" name="proc_nombre[]" value="Tamaulipas" placeholder="Estado o Ciudad" required></td>
+            <td><input type="number" class="proc-input" name="proc_cantidad[]" min="0" value="2300" required></td>
+            <td class="text-center"><button type="button" class="btn-action btn-delete" onclick="eliminarFila(this, 'tablaProcedenciaBody', calcularTotalProcedencia)">✕</button></td>
+          </tr>
+          <tr>
+            <td><input type="text" name="proc_nombre[]" value="Coahuila" placeholder="Estado o Ciudad" required></td>
+            <td><input type="number" class="proc-input" name="proc_cantidad[]" min="0" value="1450" required></td>
+            <td class="text-center"><button type="button" class="btn-action btn-delete" onclick="eliminarFila(this, 'tablaProcedenciaBody', calcularTotalProcedencia)">✕</button></td>
+          </tr>
+          <tr>
+            <td><input type="text" name="proc_nombre[]" value="Otros Estados / Extranjero" placeholder="Estado o Ciudad" required></td>
+            <td><input type="number" class="proc-input" name="proc_cantidad[]" min="0" value="6100" required></td>
+            <td class="text-center"><button type="button" class="btn-action btn-delete" onclick="eliminarFila(this, 'tablaProcedenciaBody', calcularTotalProcedencia)">✕</button></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr style="background-color: #f8f9fa; font-weight: bold;">
+            <td>Total Asistentes por Procedencia</td>
+            <td><span id="totalProcedenciaCalculado">0</span></td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <button type="button" class="btn-action btn-add" onclick="agregarFilaProcedencia()">+ Agregar Procedencia</button>
+
+    <label style="margin-top: 10px; display: block;">Distribución por Rango de Edad (%):</label>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="edad_18_25">18 a 25 años (%)</label>
+        <input type="number" id="edad_18_25" name="edad_18_25" min="0" max="100" step="0.1" value="15">
+      </div>
+      <div class="form-group">
+        <label for="edad_26_30">26 a 30 años (%)</label>
+        <input type="number" id="edad_26_30" name="edad_26_30" min="0" max="100" step="0.1" value="22">
+      </div>
+      <div class="form-group">
+        <label for="edad_31_39">31 a 39 años (%)</label>
+        <input type="number" id="edad_31_39" name="edad_31_39" min="0" max="100" step="0.1" value="39">
+      </div>
+      <div class="form-group">
+        <label for="edad_40_55">40 a 55 años (%)</label>
+        <input type="number" id="edad_40_55" name="edad_40_55" min="0" max="100" step="0.1" value="21">
+      </div>
+      <div class="form-group">
+        <label for="edad_56_mas">56 años o más (%)</label>
+        <input type="number" id="edad_56_mas" name="edad_56_mas" min="0" max="100" step="0.1" value="3">
+      </div>
+    </div>
+
+    <!-- SECCIÓN 5: EVIDENCIA DOCUMENTAL -->
+    <h3 class="section-title">5. Evidencia Documental</h3>
+    <div class="checkbox-group">
+      <label class="checkbox-item">
+        <input type="checkbox" name="evidencia_bd" value="1">
+        <span>Base de datos digital original (exportada de sistema de registro: edad, sexo y procedencia sin datos personales).</span>
+      </label>
+      <label class="checkbox-item">
+        <input type="checkbox" name="evidencia_testigos" value="1">
+        <span>Testigos fotográficos (gafetes, presencia de marca/logos, aforos, memorias del evento).</span>
+      </label>
+    </div>
+
+    <div class="form-grid" style="margin-top: 12px;">
+      <div class="form-group full-width">
+        <label for="archivos_evidencia">Adjuntar Archivos / Reportes (ZIP, PDF, Excel o Imágenes):</label>
+        <input type="file" id="archivos_evidencia" name="archivos_evidencia" multiple>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 6: EXPERIENCIA Y OCV -->
+    <h3 class="section-title">6. Experiencia en el Destino y OCV</h3>
+    <div class="form-grid">
+      <div class="form-group full-width">
+        <label for="asesora_nombre">Asesora / Ejecutivo que lo atendió:</label>
+        <input type="text" id="asesora_nombre" name="asesora_nombre" placeholder="Nombre de la persona asesora">
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Concepto a Evaluar</th>
+            <th class="text-center">Excelente</th>
+            <th class="text-center">Bueno</th>
+            <th class="text-center">Regular</th>
+            <th class="text-center">Malo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Servicio de la Asesora / OCV</td>
+            <td class="text-center"><input type="radio" name="eval_asesora" value="Excelente" required></td>
+            <td class="text-center"><input type="radio" name="eval_asesora" value="Bueno"></td>
+            <td class="text-center"><input type="radio" name="eval_asesora" value="Regular"></td>
+            <td class="text-center"><input type="radio" name="eval_asesora" value="Malo"></td>
+          </tr>
+          <tr>
+            <td>Servicio de Proveeduría Local</td>
+            <td class="text-center"><input type="radio" name="eval_proveeduria" value="Excelente" required></td>
+            <td class="text-center"><input type="radio" name="eval_proveeduria" value="Bueno"></td>
+            <td class="text-center"><input type="radio" name="eval_proveeduria" value="Regular"></td>
+            <td class="text-center"><input type="radio" name="eval_proveeduria" value="Malo"></td>
+          </tr>
+          <tr>
+            <td>Experiencia en el Recinto</td>
+            <td class="text-center"><input type="radio" name="eval_recinto" value="Excelente" required></td>
+            <td class="text-center"><input type="radio" name="eval_recinto" value="Bueno"></td>
+            <td class="text-center"><input type="radio" name="eval_recinto" value="Regular"></td>
+            <td class="text-center"><input type="radio" name="eval_recinto" value="Malo"></td>
+          </tr>
+          <tr>
+            <td>Servicio en Hoteles</td>
+            <td class="text-center"><input type="radio" name="eval_hoteles" value="Excelente" required></td>
+            <td class="text-center"><input type="radio" name="eval_hoteles" value="Bueno"></td>
+            <td class="text-center"><input type="radio" name="eval_hoteles" value="Regular"></td>
+            <td class="text-center"><input type="radio" name="eval_hoteles" value="Malo"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="form-group full-width" style="margin-bottom: 20px;">
+      <label for="comentarios">Comentarios y Retroalimentación Adicional:</label>
+      <textarea id="comentarios" name="comentarios" rows="3" placeholder="Escriba aquí sus observaciones..."></textarea>
+    </div>
+
+    <!-- SECCIÓN 7: DATOS DEL RESPONSABLE Y DECLARACIÓN -->
+    <h3 class="section-title">7. Datos del Responsable y Validación</h3>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="contacto_nombre">Nombre Completo *</label>
+        <input type="text" id="contacto_nombre" name="contacto_nombre" placeholder="Ej. Cristina Lizárraga" required>
+      </div>
+      <div class="form-group">
+        <label for="contacto_telefono">Teléfono / Celular *</label>
+        <input type="tel" id="contacto_telefono" name="contacto_telefono" placeholder="Ej. 442 365 1869" required>
+      </div>
+      <div class="form-group full-width">
+        <label for="contacto_mail">Correo Electrónico *</label>
+        <input type="email" id="contacto_mail" name="contacto_mail" placeholder="ejemplo@correo.com" required>
+      </div>
+    </div>
+
+    <div class="legal-box">
+      <p>“Bajo protesta de decir verdad, manifiesto que la información contenida en el presente documento es verídica y corresponde fielmente a los hechos”.</p>
+      <label class="checkbox-item" style="font-weight: 600;">
+        <input type="checkbox" id="protesta_verdad" name="protesta_verdad" required>
+        <span>Acepto y firmo digitalmente la manifestación anterior. *</span>
+      </label>
+      
+      <div class="form-group" style="margin-top: 14px;">
+        <label for="firma_organizador">Firma del Organizador / Representante Legal (Nombre y Cargo) *</label>
+        <input type="text" id="firma_organizador" name="firma_organizador" placeholder="Ej. Daniela Garza Díaz - CEO Festival Cielo Mágico" required>
+      </div>
+    </div>
+
+    <button type="submit" class="btn-submit">Enviar Formulario de Reporte</button>
+  </form>
+</div>
+
+<script>
+  // Cálculos de Totales
+  function calcularTotalHoteles() {
+    let total = 0;
+    document.querySelectorAll('.hotel-input').forEach(input => {
+      total += parseFloat(input.value) || 0;
+    });
+    document.getElementById('totalHoteleriaCalculado').textContent = total.toLocaleString();
+  }
+
+  function calcularTotalProcedencia() {
+    let total = 0;
+    document.querySelectorAll('.proc-input').forEach(input => {
+      total += parseFloat(input.value) || 0;
+    });
+    document.getElementById('totalProcedenciaCalculado').textContent = total.toLocaleString();
+  }
+
+  // Eliminar fila genérica
+  function eliminarFila(boton, tbodyId, funcionCalculo) {
+    const tbody = document.getElementById(tbodyId);
+    if (tbody.rows.length > 1) {
+      boton.closest('tr').remove();
+      if (funcionCalculo) funcionCalculo();
+    } else {
+      alert('Debe conservar al menos un elemento en la lista.');
+    }
+  }
+
+  // Agregar filas dinámicas
+  function agregarFilaHotel() {
+    const tbody = document.getElementById('tablaHotelesBody');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input type="text" name="hotel_nombre[]" placeholder="Nombre del hotel o zona" required></td>
+      <td><input type="number" class="hotel-input" name="hotel_cuartos[]" min="0" value="0" required></td>
+      <td class="text-center"><button type="button" class="btn-action btn-delete" onclick="eliminarFila(this, 'tablaHotelesBody', calcularTotalHoteles)">✕</button></td>
+    `;
+    tbody.appendChild(tr);
+    tr.querySelector('.hotel-input').addEventListener('input', calcularTotalHoteles);
+    calcularTotalHoteles();
+  }
+
+  function agregarFilaProcedencia() {
+    const tbody = document.getElementById('tablaProcedenciaBody');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input type="text" name="proc_nombre[]" placeholder="Estado o Ciudad" required></td>
+      <td><input type="number" class="proc-input" name="proc_cantidad[]" min="0" value="0" required></td>
+      <td class="text-center"><button type="button" class="btn-action btn-delete" onclick="eliminarFila(this, 'tablaProcedenciaBody', calcularTotalProcedencia)">✕</button></td>
+    `;
+    tbody.appendChild(tr);
+    tr.querySelector('.proc-input').addEventListener('input', calcularTotalProcedencia);
+    calcularTotalProcedencia();
+  }
+
+  // Inicializar listeners
+  document.querySelectorAll('.hotel-input').forEach(input => input.addEventListener('input', calcularTotalHoteles));
+  document.querySelectorAll('.proc-input').forEach(input => input.addEventListener('input', calcularTotalProcedencia));
+
+  // Cálculos iniciales
+  calcularTotalHoteles();
+  calcularTotalProcedencia();
+
+  // Envío del formulario
+  document.getElementById('eventoReporteForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    alert('¡Formulario validado con éxito!');
+  });
+</script>
+
+</body>
+</html>
