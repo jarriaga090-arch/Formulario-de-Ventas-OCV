@@ -114,6 +114,80 @@
       box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
     }
 
+    .hotel-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+
+    .hotel-table th, .hotel-table td {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      vertical-align: middle;
+    }
+
+    .hotel-table th {
+      background-color: #f8fafc;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    .hotel-table input {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    .btn-remove-row {
+      background-color: #dc2626;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      width: 32px;
+      height: 32px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      transition: background-color 0.2s;
+    }
+
+    .btn-remove-row:hover {
+      background-color: #b91c1c;
+    }
+
+    .btn-add-row {
+      background-color: #059669;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      padding: 9px 16px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color 0.2s;
+    }
+
+    .btn-add-row:hover {
+      background-color: #047857;
+    }
+
+    .row-total td {
+      font-weight: bold;
+      background-color: #f8fafc;
+    }
+
     .btn-submit {
       width: 100%;
       background-color: var(--primary);
@@ -209,123 +283,54 @@
         </div>
       </div>
 
-      <!-- 3. Hotelería --><!-- Estilos para la tabla dinámica (agrégalos dentro de <style>) -->
-<style>
-  .hotel-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 12px;
-  }
-  .hotel-table th, .hotel-table td {
-    border: 1px solid var(--border);
-    padding: 10px 12px;
-    vertical-align: middle;
-  }
-  .hotel-table th {
-    background-color: #f8fafc;
-    color: var(--text);
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-align: left;
-  }
-  .hotel-table input {
-    width: 100%;
-    padding: 8px 10px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.9rem;
-  }
-  .btn-remove-row {
-    background-color: #dc2626;
-    color: #ffffff;
-    border: none;
-    border-radius: 6px;
-    width: 32px;
-    height: 32px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-    transition: background-color 0.2s;
-  }
-  .btn-remove-row:hover {
-    background-color: #b91c1c;
-  }
-  .btn-add-row {
-    background-color: #059669;
-    color: #ffffff;
-    border: none;
-    border-radius: 6px;
-    padding: 9px 16px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 12px;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    transition: background-color 0.2s;
-  }
-  .btn-add-row:hover {
-    background-color: #047857;
-  }
-  .row-total td {
-    font-weight: bold;
-    background-color: #f8fafc;
-  }
-</style>
+      <!-- 3. Hotelería Dinámica -->
+      <div class="section-title">3. Relación de Hotelería y Cuartos – Noche</div>
 
-<!-- Estructura HTML de la Sección 3 -->
-<div class="section-title">3. Relación de Hotelería y Cuartos – Noche</div>
+      <table class="hotel-table" id="tablaHoteles">
+        <thead>
+          <tr>
+            <th style="width: 60%;">Nombre del Hotel / Zona de Hospedaje</th>
+            <th style="width: 28%;">Cuartos - Noche Estimados</th>
+            <th style="width: 12%; text-align: center;">Acción</th>
+          </tr>
+        </thead>
+        <tbody id="hotelBody">
+          <tr>
+            <td><input type="text" class="hotel-nombre" placeholder="Nombre del hotel"></td>
+            <td><input type="number" class="hotel-cuartos" value="0" min="0" oninput="calcularTotalHoteles()"></td>
+            <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaHotel(this)">✕</button></td>
+          </tr>
+          <tr>
+            <td><input type="text" class="hotel-nombre" placeholder="Nombre del hotel o zona"></td>
+            <td><input type="number" class="hotel-cuartos" value="0" min="0" oninput="calcularTotalHoteles()"></td>
+            <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaHotel(this)">✕</button></td>
+          </tr>
+          <tr>
+            <td><input type="text" class="hotel-nombre" placeholder="Nombre del hotel o zona"></td>
+            <td><input type="number" class="hotel-cuartos" value="0" min="0" oninput="calcularTotalHoteles()"></td>
+            <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaHotel(this)">✕</button></td>
+          </tr>
+          <tr>
+            <td><input type="text" class="hotel-nombre" placeholder="Nombre del hotel o zona"></td>
+            <td><input type="number" class="hotel-cuartos" value="0" min="0" oninput="calcularTotalHoteles()"></td>
+            <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaHotel(this)">✕</button></td>
+          </tr>
+          <tr>
+            <td><input type="text" class="hotel-nombre" placeholder="Nombre del hotel o zona"></td>
+            <td><input type="number" class="hotel-cuartos" value="0" min="0" oninput="calcularTotalHoteles()"></td>
+            <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaHotel(this)">✕</button></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr class="row-total">
+            <td>Total Hotelería Estimado</td>
+            <td id="labelTotalHoteles">0</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
 
-<table class="hotel-table" id="tablaHoteles">
-  <thead>
-    <tr>
-      <th style="width: 60%;">Nombre del Hotel / Zona de Hospedaje</th>
-      <th style="width: 28%;">Cuartos - Noche Estimados</th>
-      <th style="width: 12%; text-align: center;">Acción</th>
-    </tr>
-  </thead>
-  <tbody id="hotelBody">
-    <tr>
-      <td><input type="text" class="hotel-nombre" placeholder="Nombre del hotel"></td>
-      <td><input type="number" class="hotel-cuartos" value="0" min="0" oninput="calcularTotalHoteles()"></td>
-      <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaHotel(this)">✕</button></td>
-    </tr>
-    <tr>
-      <td><input type="text" class="hotel-nombre" placeholder="Nombre del hotel o zona"></td>
-      <td><input type="number" class="hotel-cuartos" value="0" min="0" oninput="calcularTotalHoteles()"></td>
-      <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaHotel(this)">✕</button></td>
-    </tr>
-    <tr>
-      <td><input type="text" class="hotel-nombre" placeholder="Nombre del hotel o zona"></td>
-      <td><input type="number" class="hotel-cuartos" value="0" min="0" oninput="calcularTotalHoteles()"></td>
-      <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaHotel(this)">✕</button></td>
-    </tr>
-    <tr>
-      <td><input type="text" class="hotel-nombre" placeholder="Nombre del hotel o zona"></td>
-      <td><input type="number" class="hotel-cuartos" value="0" min="0" oninput="calcularTotalHoteles()"></td>
-      <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaHotel(this)">✕</button></td>
-    </tr>
-    <tr>
-      <td><input type="text" class="hotel-nombre" placeholder="Nombre del hotel o zona"></td>
-      <td><input type="number" class="hotel-cuartos" value="0" min="0" oninput="calcularTotalHoteles()"></td>
-      <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaHotel(this)">✕</button></td>
-    </tr>
-  </tbody>
-  <tfoot>
-    <tr class="row-total">
-      <td>Total Hotelería Estimado</td>
-      <td id="labelTotalHoteles">0</td>
-      <td></td>
-    </tr>
-  </tfoot>
-</table>
-
-<button type="button" class="btn-add-row" onclick="agregarFilaHotel()">+ Agregar Hotel</button>
+      <button type="button" class="btn-add-row" onclick="agregarFilaHotel()">+ Agregar Hotel</button>
 
       <!-- 4. Procedencia y Edades -->
       <div class="section-title">4. Procedencia y Rango de Edades</div>
@@ -482,18 +487,12 @@
   </div>
 
   <script>
-   <script>
-    // REEMPLAZA ESTA URL CON TU URL DE APPS SCRIPT TERMINADA EN /exec
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxEkAWblE59-vpxVjKf49xCnMV15j8nHNtP7dYdZPqAY1Fe8L84Fk6x9R-CjEnKtSZF/exec';
 
     const form = document.getElementById('ocvForm');
     const submitBtn = document.getElementById('submitBtn');
 
-    // ==========================================
-    // FUNCIONES JAVASCRIPT PARA LA TABLA DINÁMICA (AQUÍ VAN)
-    // ==========================================
-
-    // 1. Agregar nueva fila
+    // 1. Agregar fila de hotel
     function agregarFilaHotel() {
       const tbody = document.getElementById('hotelBody');
       const tr = document.createElement('tr');
@@ -505,7 +504,7 @@
       tbody.appendChild(tr);
     }
 
-    // 2. Eliminar fila
+    // 2. Eliminar fila de hotel
     function eliminarFilaHotel(btn) {
       const tbody = document.getElementById('hotelBody');
       if (tbody.rows.length > 1) {
@@ -516,7 +515,7 @@
       }
     }
 
-    // 3. Calcular sumatoria automática
+    // 3. Sumatoria total de cuartos noche
     function calcularTotalHoteles() {
       const inputs = document.querySelectorAll('.hotel-cuartos');
       let total = 0;
@@ -527,9 +526,7 @@
       document.getElementById('labelTotalHoteles').innerText = total.toLocaleString();
     }
 
-    // ==========================================
-    // MANEJO DEL ENVÍO DEL FORMULARIO
-    // ==========================================
+    // 4. Envío del formulario
     form.addEventListener('submit', async function(e) {
       e.preventDefault();
 
@@ -540,18 +537,17 @@
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
 
-      // Mapear los datos de las filas dinámicas de hoteles a los tags de la plantilla
-      // Al armar el objeto 'data' antes del fetch:
-const nombresHoteles = document.querySelectorAll('.hotel-nombre');
-const cuartosHoteles = document.querySelectorAll('.hotel-cuartos');
+      // Mapear filas dinámicas de hoteles
+      const nombresHoteles = document.querySelectorAll('.hotel-nombre');
+      const cuartosHoteles = document.querySelectorAll('.hotel-cuartos');
 
-for (let i = 0; i < 5; i++) {
-  data[`hotel_${i + 1}_nombre`] = nombresHoteles[i] ? nombresHoteles[i].value : '';
-  data[`hotel_${i + 1}_cuartos`] = (cuartosHoteles[i] && cuartosHoteles[i].value !== '0') ? cuartosHoteles[i].value : '';
-}
+      for (let i = 0; i < 5; i++) {
+        data[`hotel_${i + 1}_nombre`] = nombresHoteles[i] ? nombresHoteles[i].value : '';
+        data[`hotel_${i + 1}_cuartos`] = (cuartosHoteles[i] && cuartosHoteles[i].value !== '0') ? cuartosHoteles[i].value : '';
+      }
 
-data['total_hoteleria_cuartos'] = document.getElementById('labelTotalHoteles').innerText;
-      
+      data['total_hoteleria_cuartos'] = document.getElementById('labelTotalHoteles').innerText;
+
       try {
         await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
