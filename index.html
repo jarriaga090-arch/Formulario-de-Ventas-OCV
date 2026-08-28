@@ -109,7 +109,9 @@
       margin-bottom: 6px;
     }
 
-    .form-group input, 
+    .form-group input[type="text"], 
+    .form-group input[type="email"], 
+    .form-group input[type="number"], 
     .form-group select, 
     .form-group textarea {
       padding: 10px 12px;
@@ -200,6 +202,73 @@
     .row-total td {
       font-weight: bold;
       background-color: #f8fafc;
+    }
+
+    /* Checkboxes y File Input */
+    .checkbox-container {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+      font-size: 0.92rem;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .checkbox-container input[type="checkbox"] {
+      margin-top: 3px;
+      width: 17px;
+      height: 17px;
+      cursor: pointer;
+    }
+
+    .file-input-wrapper {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .file-input-wrapper label {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .file-input-wrapper input[type="file"] {
+      font-size: 0.9rem;
+    }
+
+    /* Tabla de Evaluación con Radios */
+    .eval-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      margin-bottom: 16px;
+    }
+
+    .eval-table th, .eval-table td {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .eval-table th:first-child, .eval-table td:first-child {
+      text-align: left;
+    }
+
+    .eval-table th {
+      background-color: #f8fafc;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .eval-table input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
     }
 
     .btn-submit {
@@ -421,66 +490,81 @@
         </div>
       </div>
 
-      <!-- 5. Evaluación de Experiencia -->
-      <div class="section-title">5. Experiencia en el Destino y OCV</div>
-      <div class="grid-2">
-        <div class="form-group">
-          <label for="asesora_nombre">Asesora que lo atendió</label>
-          <input type="text" id="asesora_nombre" name="asesora_nombre" placeholder="Nombre de la asesora">
-        </div>
-        <div class="form-group">
-          <label for="servicio_asesora">Servicio de la Asesora</label>
-          <select id="servicio_asesora" name="servicio_asesora">
-            <option value="Excelente">Excelente</option>
-            <option value="Bueno">Bueno</option>
-            <option value="Regular">Regular</option>
-            <option value="Malo">Malo</option>
-          </select>
-        </div>
+      <!-- 5. Evidencia Documental -->
+      <div class="section-title">5. Evidencia Documental</div>
+      
+      <label class="checkbox-container">
+        <input type="checkbox" id="check_bd" value="Base de datos digital original (exportada de sistema de registro: edad, sexo y procedencia sin datos personales).">
+        <span>Base de datos digital original (exportada de sistema de registro: edad, sexo y procedencia sin datos personales).</span>
+      </label>
+
+      <label class="checkbox-container">
+        <input type="checkbox" id="check_testigos" value="Testigos fotográficos (gafetes, presencia de marca/logos, aforos, memorias del evento).">
+        <span>Testigos fotográficos (gafetes, presencia de marca/logos, aforos, memorias del evento).</span>
+      </label>
+
+      <div class="file-input-wrapper">
+        <label for="archivos_adjuntos">Adjuntar Archivos / Reportes (ZIP, PDF, Excel o Imágenes):</label>
+        <input type="file" id="archivos_adjuntos" multiple accept=".zip,.pdf,.xls,.xlsx,.doc,.docx,.png,.jpg,.jpeg">
       </div>
 
-      <div class="grid-3">
-        <div class="form-group">
-          <label for="servicio_proveeduria">Proveeduría Local</label>
-          <select id="servicio_proveeduria" name="servicio_proveeduria">
-            <option value="Excelente">Excelente</option>
-            <option value="Bueno">Bueno</option>
-            <option value="Regular">Regular</option>
-            <option value="Malo">Malo</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="experiencia_recinto">Experiencia en Recinto</label>
-          <select id="experiencia_recinto" name="experiencia_recinto">
-            <option value="Excelente">Excelente</option>
-            <option value="Bueno">Bueno</option>
-            <option value="Regular">Regular</option>
-            <option value="Malo">Malo</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="servicio_hoteles">Servicio en Hoteles</label>
-          <select id="servicio_hoteles" name="servicio_hoteles">
-            <option value="Excelente">Excelente</option>
-            <option value="Bueno">Bueno</option>
-            <option value="Regular">Regular</option>
-            <option value="Malo">Malo</option>
-          </select>
-        </div>
+      <!-- 6. Experiencia en el Destino y OCV -->
+      <div class="section-title">6. Experiencia en el Destino y OCV</div>
+      
+      <div class="form-group">
+        <label for="asesora_nombre">Asesora / Ejecutivo que lo atendió:</label>
+        <input type="text" id="asesora_nombre" name="asesora_nombre" placeholder="Nombre de la persona asesora">
       </div>
+
+      <table class="eval-table">
+        <thead>
+          <tr>
+            <th style="width: 44%;">Concepto a Evaluar</th>
+            <th style="width: 14%;">Excelente</th>
+            <th style="width: 14%;">Bueno</th>
+            <th style="width: 14%;">Regular</th>
+            <th style="width: 14%;">Malo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Servicio de la Asesora / OCV</td>
+            <td><input type="radio" name="servicio_asesora" value="Excelente" checked></td>
+            <td><input type="radio" name="servicio_asesora" value="Bueno"></td>
+            <td><input type="radio" name="servicio_asesora" value="Regular"></td>
+            <td><input type="radio" name="servicio_asesora" value="Malo"></td>
+          </tr>
+          <tr>
+            <td>Servicio de Proveeduría Local</td>
+            <td><input type="radio" name="servicio_proveeduria" value="Excelente" checked></td>
+            <td><input type="radio" name="servicio_proveeduria" value="Bueno"></td>
+            <td><input type="radio" name="servicio_proveeduria" value="Regular"></td>
+            <td><input type="radio" name="servicio_proveeduria" value="Malo"></td>
+          </tr>
+          <tr>
+            <td>Experiencia en el Recinto</td>
+            <td><input type="radio" name="experiencia_recinto" value="Excelente" checked></td>
+            <td><input type="radio" name="experiencia_recinto" value="Bueno"></td>
+            <td><input type="radio" name="experiencia_recinto" value="Regular"></td>
+            <td><input type="radio" name="experiencia_recinto" value="Malo"></td>
+          </tr>
+          <tr>
+            <td>Servicio en Hoteles</td>
+            <td><input type="radio" name="servicio_hoteles" value="Excelente" checked></td>
+            <td><input type="radio" name="servicio_hoteles" value="Bueno"></td>
+            <td><input type="radio" name="servicio_hoteles" value="Regular"></td>
+            <td><input type="radio" name="servicio_hoteles" value="Malo"></td>
+          </tr>
+        </tbody>
+      </table>
 
       <div class="form-group">
-        <label for="evidencia_documental">Evidencia Documental Adjunta</label>
-        <input type="text" id="evidencia_documental" name="evidencia_documental" placeholder="Ej. Base de datos digital / Testigos fotográficos">
+        <label for="comentarios">Comentarios y Retroalimentación Adicional:</label>
+        <textarea id="comentarios" name="comentarios" rows="3" placeholder="Escriba aquí sus observaciones..."></textarea>
       </div>
 
-      <div class="form-group">
-        <label for="comentarios">Comentarios y Observaciones</label>
-        <textarea id="comentarios" name="comentarios" rows="3" placeholder="Comentarios adicionales sobre el evento"></textarea>
-      </div>
-
-      <!-- 6. Datos del Contacto y Firma -->
-      <div class="section-title">6. Datos de Contacto y Firma</div>
+      <!-- 7. Datos del Contacto y Firma -->
+      <div class="section-title">7. Datos de Contacto y Firma</div>
       <div class="grid-3">
         <div class="form-group">
           <label for="contacto_nombre">Nombre Completo</label>
@@ -581,15 +665,32 @@
       document.getElementById('labelTotalProcedencias').innerText = total.toLocaleString();
     }
 
+    // === CONVERSIÓN DE ARCHIVOS A BASE64 ===
+    function readFileAsBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const base64String = reader.result.split(',')[1];
+          resolve({
+            name: file.name,
+            type: file.type,
+            base64: base64String
+          });
+        };
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+      });
+    }
+
     // === ENVÍO DEL FORMULARIO ===
     form.addEventListener('submit', async function(e) {
       e.preventDefault();
 
       const originalText = submitBtn.innerText;
-      submitBtn.innerText = 'Generando archivo Word y enviando correo...';
+      submitBtn.innerText = 'Procesando archivos y generando Word...';
       submitBtn.disabled = true;
 
-      // 1. Armar bloque de texto para la distribución por edades
+      // 1. Distribución de edades
       const e1 = document.getElementById('edad_18_25')?.value;
       const e2 = document.getElementById('edad_26_30')?.value;
       const e3 = document.getElementById('edad_31_39')?.value;
@@ -603,6 +704,24 @@
       if (e4) resumenEdades.push('40 a 55 años: ' + e4 + '%');
       if (e5) resumenEdades.push('56 años o más: ' + e5 + '%');
 
+      // 2. Evidencia Documental (Checkboxes)
+      let evidencias = [];
+      const c1 = document.getElementById('check_bd');
+      const c2 = document.getElementById('check_testigos');
+      if (c1 && c1.checked) evidencias.push('☒ ' + c1.value);
+      if (c2 && c2.checked) evidencias.push('☒ ' + c2.value);
+
+      // 3. Procesar archivos adjuntos seleccionados
+      const fileInput = document.getElementById('archivos_adjuntos');
+      let archivosAdjuntos = [];
+      if (fileInput && fileInput.files.length > 0) {
+        for (let i = 0; i < fileInput.files.length; i++) {
+          const fileData = await readFileAsBase64(fileInput.files[i]);
+          archivosAdjuntos.push(fileData);
+        }
+      }
+
+      // 4. Objeto de datos principal
       const data = {
         // Resumen Ejecutivo
         nombre_evento: document.getElementById('nombre_evento')?.value || '',
@@ -621,13 +740,15 @@
         // Edades
         distribucion_edad: resumenEdades.join('\n') || 'Sin especificar',
 
-        // Evaluación de Experiencia
+        // Evidencia
+        evidencia_documental: evidencias.join('\n') || 'Sin evidencia documental marcada',
+
+        // Evaluación de Experiencia (Radio buttons)
         asesora_nombre: document.getElementById('asesora_nombre')?.value || '',
-        servicio_asesora: document.getElementById('servicio_asesora')?.value || '',
-        servicio_proveeduria: document.getElementById('servicio_proveeduria')?.value || '',
-        experiencia_recinto: document.getElementById('experiencia_recinto')?.value || '',
-        servicio_hoteles: document.getElementById('servicio_hoteles')?.value || '',
-        evidencia_documental: document.getElementById('evidencia_documental')?.value || '',
+        servicio_asesora: document.querySelector('input[name="servicio_asesora"]:checked')?.value || '',
+        servicio_proveeduria: document.querySelector('input[name="servicio_proveeduria"]:checked')?.value || '',
+        experiencia_recinto: document.querySelector('input[name="experiencia_recinto"]:checked')?.value || '',
+        servicio_hoteles: document.querySelector('input[name="servicio_hoteles"]:checked')?.value || '',
         comentarios: document.getElementById('comentarios')?.value || '',
 
         // Contacto y Firma
@@ -635,7 +756,10 @@
         contacto_telefono: document.getElementById('contacto_telefono')?.value || '',
         contacto_mail: document.getElementById('contacto_mail')?.value || '',
         organizador_firma_nombre: document.getElementById('organizador_firma_nombre')?.value || '',
-        organizador_cargo: document.getElementById('organizador_cargo')?.value || ''
+        organizador_cargo: document.getElementById('organizador_cargo')?.value || '',
+
+        // Archivos convertidos
+        archivos_adjuntos: archivosAdjuntos
       };
 
       // Mapear Hoteles Dinámicos
@@ -669,7 +793,7 @@
           body: JSON.stringify(data)
         });
 
-        alert('¡Reporte generado con éxito! El archivo Word ha sido enviado a tu correo.');
+        alert('¡Reporte generado con éxito! Se ha enviado el documento Word y los archivos adjuntos a tu correo.');
         form.reset();
         document.getElementById('labelTotalHoteles').innerText = '0';
         document.getElementById('labelTotalProcedencias').innerText = '0';
