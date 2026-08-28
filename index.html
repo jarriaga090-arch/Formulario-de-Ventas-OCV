@@ -306,7 +306,7 @@
   <div class="form-container">
     <div class="form-header">
       <h1>Reporte de Resultados y Evaluación OCV</h1>
-      <p>Complete la información de impacto económico y evaluación de servicios, los datos ingresados son estritamente internos.</p>
+      <p>Completa los campos para generar automáticamente el documento Word oficial.</p>
     </div>
 
     <form id="ocvForm">
@@ -326,11 +326,6 @@
           <label for="recinto">Recinto / Sede</label>
           <input type="text" id="recinto" name="recinto" placeholder="Ej. Parque Cielo Mágico, Santiago, N.L.">
         </div>
-      </div>
-
-      <div class="form-group">
-        <label for="inversion_estimada">Monto de Inversión Estimada</label>
-        <input type="text" id="inversion_estimada" name="inversion_estimada" placeholder="Ej. $800,000 M.N.">
       </div>
 
       <!-- 2. Asistencia y Resultados -->
@@ -353,7 +348,7 @@
         </div>
       </div>
 
-      <div class="grid-3">
+      <div class="grid-2">
         <div class="form-group">
           <label for="cuartos_noche">Cuartos-Noche Generados (Total Global)</label>
           <input type="text" id="cuartos_noche" name="cuartos_noche" placeholder="Ej. 4,800">
@@ -363,11 +358,6 @@
           <label for="derrama_economica">Derrama Económica Estimada ($ M.N.)</label>
           <input type="text" id="derrama_economica" name="derrama_economica" placeholder="Ej. $248,400,000 M.N.">
           <span class="field-hint">Gasto estimado que generará el evento en la ciudad.</span>
-        </div>
-        <div class="form-group">
-          <label for="inversion_privada">Inversión Privada Estimada ($ M.N.)</label>
-          <input type="text" id="inversion_privada" name="inversion_privada" placeholder="Ej. $32,000,000 M.N.">
-          <span class="field-hint">Monto estimado destinado a la realización del evento.</span>
         </div>
       </div>
 
@@ -596,15 +586,9 @@
         </div>
       </div>
 
-      <div class="grid-2">
-        <div class="form-group">
-          <label for="organizador_firma_nombre">Nombre para la Firma</label>
-          <input type="text" id="organizador_firma_nombre" name="organizador_firma_nombre" placeholder="Nombre de quien firma">
-        </div>
-        <div class="form-group">
-          <label for="organizador_cargo">Cargo / Puesto</label>
-          <input type="text" id="organizador_cargo" name="organizador_cargo" placeholder="Ej. CEO / Director General">
-        </div>
+      <div class="form-group">
+        <label for="organizador_cargo">Cargo / Puesto</label>
+        <input type="text" id="organizador_cargo" name="organizador_cargo" placeholder="Ej. CEO / Director General">
       </div>
 
       <button type="submit" class="btn-submit" id="submitBtn">Generar Reporte y Enviar</button>
@@ -743,7 +727,6 @@
         nombre_evento: document.getElementById('nombre_evento')?.value || '',
         fecha_realizacion: document.getElementById('fecha_realizacion')?.value || '',
         recinto: document.getElementById('recinto')?.value || '',
-        inversion_estimada: document.getElementById('inversion_estimada')?.value || '',
 
         // Registro de Asistencia
         total_asistentes: document.getElementById('total_asistentes')?.value || '',
@@ -751,7 +734,6 @@
         asistentes_foraneos: document.getElementById('asistentes_foraneos')?.value || '',
         cuartos_noche: document.getElementById('cuartos_noche')?.value || '',
         derrama_economica: document.getElementById('derrama_economica')?.value || '',
-        inversion_privada: document.getElementById('inversion_privada')?.value || '',
 
         // Edades
         distribucion_edad: resumenEdades.join('\n') || 'Sin especificar',
@@ -771,7 +753,6 @@
         contacto_nombre: document.getElementById('contacto_nombre')?.value || '',
         contacto_telefono: document.getElementById('contacto_telefono')?.value || '',
         contacto_mail: document.getElementById('contacto_mail')?.value || '',
-        organizador_firma_nombre: document.getElementById('organizador_firma_nombre')?.value || '',
         organizador_cargo: document.getElementById('organizador_cargo')?.value || '',
 
         // Archivos convertidos
