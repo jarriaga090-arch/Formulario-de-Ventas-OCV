@@ -75,7 +75,15 @@
       font-size: 0.95rem;
       font-weight: 700;
       color: var(--text);
-      margin: 18px 0 10px;
+      margin: 18px 0 6px;
+    }
+
+    .field-hint {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      margin-bottom: 2px;
+      line-height: 1.3;
     }
 
     .grid-2 {
@@ -106,7 +114,7 @@
       font-size: 0.88rem;
       font-weight: 600;
       color: var(--text);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .form-group input[type="text"], 
@@ -204,7 +212,6 @@
       background-color: #f8fafc;
     }
 
-    /* Checkboxes y File Input */
     .checkbox-container {
       display: flex;
       align-items: flex-start;
@@ -239,7 +246,6 @@
       font-size: 0.9rem;
     }
 
-    /* Tabla de Evaluación con Radios */
     .eval-table {
       width: 100%;
       border-collapse: collapse;
@@ -331,31 +337,37 @@
       <div class="section-title">2. Registro de Asistencia y Resultados</div>
       <div class="grid-3">
         <div class="form-group">
-          <label for="total_asistentes">Total de Asistentes</label>
+          <label for="total_asistentes">Número Total de Asistentes</label>
           <input type="text" id="total_asistentes" name="total_asistentes" placeholder="Ej. 50,000">
+          <span class="field-hint">Número total de personas que asistirán al evento.</span>
         </div>
         <div class="form-group">
           <label for="asistentes_locales">Asistentes Locales</label>
           <input type="text" id="asistentes_locales" name="asistentes_locales" placeholder="Ej. 44,000">
+          <span class="field-hint">Personas que residen en Nuevo León.</span>
         </div>
         <div class="form-group">
           <label for="asistentes_foraneos">Asistentes Foráneos</label>
           <input type="text" id="asistentes_foraneos" name="asistentes_foraneos" placeholder="Ej. 6,000">
+          <span class="field-hint">Personas que provienen de fuera de Nuevo León.</span>
         </div>
       </div>
 
       <div class="grid-3">
         <div class="form-group">
-          <label for="cuartos_noche">Cuartos Noche Generados</label>
+          <label for="cuartos_noche">Cuartos-Noche Generados (Total Global)</label>
           <input type="text" id="cuartos_noche" name="cuartos_noche" placeholder="Ej. 4,800">
+          <span class="field-hint">Número de habitaciones de hotel ocupadas por los asistentes foráneos durante el evento.</span>
         </div>
         <div class="form-group">
-          <label for="derrama_economica">Derrama Económica</label>
+          <label for="derrama_economica">Derrama Económica Estimada ($ M.N.)</label>
           <input type="text" id="derrama_economica" name="derrama_economica" placeholder="Ej. $248,400,000 M.N.">
+          <span class="field-hint">Gasto estimado que generará el evento en la ciudad.</span>
         </div>
         <div class="form-group">
-          <label for="inversion_privada">Inversión Privada Estimada</label>
+          <label for="inversion_privada">Inversión Privada Estimada ($ M.N.)</label>
           <input type="text" id="inversion_privada" name="inversion_privada" placeholder="Ej. $32,000,000 M.N.">
+          <span class="field-hint">Monto estimado destinado a la realización del evento.</span>
         </div>
       </div>
 
@@ -410,7 +422,7 @@
 
       <!-- 4. Resumen Demográfico de Asistentes (Anónimo) -->
       <div class="section-title">4. Resumen Demográfico de Asistentes (Anónimo)</div>
-      <p class="subsection-subtitle">Edite o agregue estados y registre el número de asistentes al evento.</p>
+      <p class="subsection-subtitle">Indica de qué estado o país provienen los asistentes y registra el número estimado de personas de cada lugar.</p>
 
       <div class="subsection-heading">Procedencia por Estado / Región (Cantidad de Asistentes):</div>
 
@@ -461,6 +473,8 @@
       <button type="button" class="btn-add-row" onclick="agregarFilaProcedencia()">+ Agregar Procedencia</button>
 
       <div class="subsection-heading">Distribución por Rango de Edad (%):</div>
+      <p class="subsection-subtitle">Indica el porcentaje estimado de asistentes que corresponde a cada rango de edad. La suma de todos los rangos debe ser 100%.</p>
+
       <div class="grid-2">
         <div class="form-group">
           <label for="edad_18_25">18 a 25 años (%)</label>
@@ -492,6 +506,7 @@
 
       <!-- 5. Evidencia Documental -->
       <div class="section-title">5. Evidencia Documental</div>
+      <p class="subsection-subtitle">Selecciona la evidencia disponible y adjunta los archivos que ayuden a complementar la información del evento.</p>
       
       <label class="checkbox-container">
         <input type="checkbox" id="check_bd" value="Base de datos digital original (exportada de sistema de registro: edad, sexo y procedencia sin datos personales).">
@@ -510,6 +525,7 @@
 
       <!-- 6. Experiencia en el Destino y OCV -->
       <div class="section-title">6. Experiencia en el Destino y OCV</div>
+      <p class="subsection-subtitle">Evalúa tu experiencia con la asesoría y acompañamiento recibidos durante el evento.</p>
       
       <div class="form-group">
         <label for="asesora_nombre">Asesora / Ejecutivo que lo atendió:</label>
@@ -711,7 +727,7 @@
       if (c1 && c1.checked) evidencias.push('☒ ' + c1.value);
       if (c2 && c2.checked) evidencias.push('☒ ' + c2.value);
 
-      // 3. Procesar archivos adjuntos seleccionados
+      // 3. Procesar archivos adjuntos
       const fileInput = document.getElementById('archivos_adjuntos');
       let archivosAdjuntos = [];
       if (fileInput && fileInput.files.length > 0) {
