@@ -339,55 +339,55 @@
       <div class="grid-2">
         <div class="form-group">
           <label>Lugar 1</label>
-          <input type="text" name="procedencia_1_lugar" value="Nuevo León">
+          <input type="text" id="procedencia_1_lugar" name="procedencia_1_lugar" value="Nuevo León">
         </div>
         <div class="form-group">
           <label>Cantidad / %</label>
-          <input type="text" name="procedencia_1_cantidad" placeholder="Ej. 53%">
+          <input type="text" id="procedencia_1_cantidad" name="procedencia_1_cantidad" placeholder="Ej. 53%">
         </div>
       </div>
 
       <div class="grid-2">
         <div class="form-group">
           <label>Lugar 2</label>
-          <input type="text" name="procedencia_2_lugar" value="Ciudad de México">
+          <input type="text" id="procedencia_2_lugar" name="procedencia_2_lugar" value="Ciudad de México">
         </div>
         <div class="form-group">
           <label>Cantidad / %</label>
-          <input type="text" name="procedencia_2_cantidad" placeholder="Ej. 27.3%">
+          <input type="text" id="procedencia_2_cantidad" name="procedencia_2_cantidad" placeholder="Ej. 27.3%">
         </div>
       </div>
 
       <div class="grid-2">
         <div class="form-group">
           <label>Lugar 3</label>
-          <input type="text" name="procedencia_3_lugar" value="Tamaulipas">
+          <input type="text" id="procedencia_3_lugar" name="procedencia_3_lugar" value="Tamaulipas">
         </div>
         <div class="form-group">
           <label>Cantidad / %</label>
-          <input type="text" name="procedencia_3_cantidad" placeholder="Ej. 4.6%">
+          <input type="text" id="procedencia_3_cantidad" name="procedencia_3_cantidad" placeholder="Ej. 4.6%">
         </div>
       </div>
 
       <div class="grid-2">
         <div class="form-group">
           <label>Lugar 4</label>
-          <input type="text" name="procedencia_4_lugar" value="Coahuila">
+          <input type="text" id="procedencia_4_lugar" name="procedencia_4_lugar" value="Coahuila">
         </div>
         <div class="form-group">
           <label>Cantidad / %</label>
-          <input type="text" name="procedencia_4_cantidad" placeholder="Ej. 2.9%">
+          <input type="text" id="procedencia_4_cantidad" name="procedencia_4_cantidad" placeholder="Ej. 2.9%">
         </div>
       </div>
 
       <div class="grid-2">
         <div class="form-group">
           <label>Otros lugares (%)</label>
-          <input type="text" name="procedencia_otros_cantidad" placeholder="Ej. 12.3%">
+          <input type="text" id="procedencia_otros_cantidad" name="procedencia_otros_cantidad" placeholder="Ej. 12.3%">
         </div>
         <div class="form-group">
           <label>Total (%)</label>
-          <input type="text" name="procedencia_total" value="100%">
+          <input type="text" id="procedencia_total" name="procedencia_total" value="100%">
         </div>
       </div>
 
@@ -401,7 +401,7 @@
       <div class="grid-2">
         <div class="form-group">
           <label for="asesora_nombre">Asesora que lo atendió</label>
-          <input type="text" id="asesora_nombre" name="asesora_nombre">
+          <input type="text" id="asesora_nombre" name="asesora_nombre" placeholder="Nombre de la asesora">
         </div>
         <div class="form-group">
           <label for="servicio_asesora">Servicio de la Asesora</label>
@@ -487,12 +487,11 @@
   </div>
 
   <script>
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxEkAWblE59-vpxVjKf49xCnMV15j8nHNtP7dYdZPqAY1Fe8L84Fk6x9R-CjEnKtSZF/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNOoZTIL3BpE2FTY5IOkfRADsZoUT1BVI2FTHeX00SIUQgDtL0_EZ21eAlcSNDZ1TE/exec';
 
     const form = document.getElementById('ocvForm');
     const submitBtn = document.getElementById('submitBtn');
 
-    // 1. Agregar fila de hotel
     function agregarFilaHotel() {
       const tbody = document.getElementById('hotelBody');
       const tr = document.createElement('tr');
@@ -504,7 +503,6 @@
       tbody.appendChild(tr);
     }
 
-    // 2. Eliminar fila de hotel
     function eliminarFilaHotel(btn) {
       const tbody = document.getElementById('hotelBody');
       if (tbody.rows.length > 1) {
@@ -515,7 +513,6 @@
       }
     }
 
-    // 3. Sumatoria total de cuartos noche
     function calcularTotalHoteles() {
       const inputs = document.querySelectorAll('.hotel-cuartos');
       let total = 0;
@@ -526,7 +523,6 @@
       document.getElementById('labelTotalHoteles').innerText = total.toLocaleString();
     }
 
-    // 4. Envío del formulario
     form.addEventListener('submit', async function(e) {
       e.preventDefault();
 
@@ -534,10 +530,53 @@
       submitBtn.innerText = 'Generando archivo Word y enviando correo...';
       submitBtn.disabled = true;
 
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
+      // Construcción manual de todos los datos
+      const data = {
+        // Resumen Ejecutivo
+        nombre_evento: document.getElementById('nombre_evento')?.value || '',
+        fecha_realizacion: document.getElementById('fecha_realizacion')?.value || '',
+        recinto: document.getElementById('recinto')?.value || '',
+        inversion_estimada: document.getElementById('inversion_estimada')?.value || '',
 
-      // Mapear filas dinámicas de hoteles
+        // Registro de Asistencia
+        total_asistentes: document.getElementById('total_asistentes')?.value || '',
+        asistentes_locales: document.getElementById('asistentes_locales')?.value || '',
+        asistentes_foraneos: document.getElementById('asistentes_foraneos')?.value || '',
+        cuartos_noche: document.getElementById('cuartos_noche')?.value || '',
+        derrama_economica: document.getElementById('derrama_economica')?.value || '',
+        inversion_privada: document.getElementById('inversion_privada')?.value || '',
+
+        // Procedencia y Edades
+        procedencia_1_lugar: document.getElementById('procedencia_1_lugar')?.value || '',
+        procedencia_1_cantidad: document.getElementById('procedencia_1_cantidad')?.value || '',
+        procedencia_2_lugar: document.getElementById('procedencia_2_lugar')?.value || '',
+        procedencia_2_cantidad: document.getElementById('procedencia_2_cantidad')?.value || '',
+        procedencia_3_lugar: document.getElementById('procedencia_3_lugar')?.value || '',
+        procedencia_3_cantidad: document.getElementById('procedencia_3_cantidad')?.value || '',
+        procedencia_4_lugar: document.getElementById('procedencia_4_lugar')?.value || '',
+        procedencia_4_cantidad: document.getElementById('procedencia_4_cantidad')?.value || '',
+        procedencia_otros_cantidad: document.getElementById('procedencia_otros_cantidad')?.value || '',
+        procedencia_total: document.getElementById('procedencia_total')?.value || '',
+        distribucion_edad: document.getElementById('distribucion_edad')?.value || '',
+
+        // Evaluación de Experiencia
+        asesora_nombre: document.getElementById('asesora_nombre')?.value || '',
+        servicio_asesora: document.getElementById('servicio_asesora')?.value || '',
+        servicio_proveeduria: document.getElementById('servicio_proveeduria')?.value || '',
+        experiencia_recinto: document.getElementById('experiencia_recinto')?.value || '',
+        servicio_hoteles: document.getElementById('servicio_hoteles')?.value || '',
+        evidencia_documental: document.getElementById('evidencia_documental')?.value || '',
+        comentarios: document.getElementById('comentarios')?.value || '',
+
+        // Contacto y Firma
+        contacto_nombre: document.getElementById('contacto_nombre')?.value || '',
+        contacto_telefono: document.getElementById('contacto_telefono')?.value || '',
+        contacto_mail: document.getElementById('contacto_mail')?.value || '',
+        organizador_firma_nombre: document.getElementById('organizador_firma_nombre')?.value || '',
+        organizador_cargo: document.getElementById('organizador_cargo')?.value || ''
+      };
+
+      // Mapear Hoteles Dinámicos
       const nombresHoteles = document.querySelectorAll('.hotel-nombre');
       const cuartosHoteles = document.querySelectorAll('.hotel-cuartos');
 
