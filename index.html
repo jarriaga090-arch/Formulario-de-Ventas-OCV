@@ -65,6 +65,19 @@
       border-bottom: 1px solid var(--border);
     }
 
+    .subsection-subtitle {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .subsection-heading {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 18px 0 10px;
+    }
+
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -114,19 +127,20 @@
       box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
     }
 
-    .hotel-table {
+    .data-table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 12px;
+      margin-top: 10px;
+      margin-bottom: 12px;
     }
 
-    .hotel-table th, .hotel-table td {
+    .data-table th, .data-table td {
       border: 1px solid var(--border);
       padding: 10px 12px;
       vertical-align: middle;
     }
 
-    .hotel-table th {
+    .data-table th {
       background-color: #f8fafc;
       color: var(--text);
       font-size: 0.9rem;
@@ -134,7 +148,7 @@
       text-align: left;
     }
 
-    .hotel-table input {
+    .data-table input {
       width: 100%;
       padding: 8px 10px;
       border: 1px solid var(--border);
@@ -172,11 +186,11 @@
       font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
-      margin-top: 12px;
       display: inline-flex;
       align-items: center;
       gap: 6px;
       transition: background-color 0.2s;
+      margin-bottom: 16px;
     }
 
     .btn-add-row:hover {
@@ -209,13 +223,6 @@
     .btn-submit:disabled {
       background-color: #94a3b8;
       cursor: not-allowed;
-    }
-
-    .note {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-      font-style: italic;
     }
   </style>
 </head>
@@ -286,7 +293,7 @@
       <!-- 3. Hotelería Dinámica -->
       <div class="section-title">3. Relación de Hotelería y Cuartos – Noche</div>
 
-      <table class="hotel-table" id="tablaHoteles">
+      <table class="data-table" id="tablaHoteles">
         <thead>
           <tr>
             <th style="width: 60%;">Nombre del Hotel / Zona de Hospedaje</th>
@@ -332,68 +339,86 @@
 
       <button type="button" class="btn-add-row" onclick="agregarFilaHotel()">+ Agregar Hotel</button>
 
-      <!-- 4. Procedencia y Edades -->
-      <div class="section-title">4. Procedencia y Rango de Edades</div>
-      <p class="note">Registro estadístico anónimo agrupado por lugar de procedencia.</p>
-      
+      <!-- 4. Resumen Demográfico de Asistentes (Anónimo) -->
+      <div class="section-title">4. Resumen Demográfico de Asistentes (Anónimo)</div>
+      <p class="subsection-subtitle">Edite o agregue estados y registre el número de asistentes al evento.</p>
+
+      <div class="subsection-heading">Procedencia por Estado / Región (Cantidad de Asistentes):</div>
+
+      <table class="data-table" id="tablaProcedencias">
+        <thead>
+          <tr>
+            <th style="width: 60%;">Estado / Procedencia</th>
+            <th style="width: 28%;">Número de Asistentes</th>
+            <th style="width: 12%; text-align: center;">Acción</th>
+          </tr>
+        </thead>
+        <tbody id="procedenciaBody">
+          <tr>
+            <td><input type="text" class="procedencia-lugar" placeholder="Estado o Ciudad" value="Nuevo León"></td>
+            <td><input type="number" class="procedencia-cantidad" value="0" min="0" oninput="calcularTotalProcedencias()"></td>
+            <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaProcedencia(this)">✕</button></td>
+          </tr>
+          <tr>
+            <td><input type="text" class="procedencia-lugar" placeholder="Estado o Ciudad" value="Ciudad de México"></td>
+            <td><input type="number" class="procedencia-cantidad" value="0" min="0" oninput="calcularTotalProcedencias()"></td>
+            <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaProcedencia(this)">✕</button></td>
+          </tr>
+          <tr>
+            <td><input type="text" class="procedencia-lugar" placeholder="Estado o Ciudad" value="Tamaulipas"></td>
+            <td><input type="number" class="procedencia-cantidad" value="0" min="0" oninput="calcularTotalProcedencias()"></td>
+            <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaProcedencia(this)">✕</button></td>
+          </tr>
+          <tr>
+            <td><input type="text" class="procedencia-lugar" placeholder="Estado o Ciudad" value="Coahuila"></td>
+            <td><input type="number" class="procedencia-cantidad" value="0" min="0" oninput="calcularTotalProcedencias()"></td>
+            <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaProcedencia(this)">✕</button></td>
+          </tr>
+          <tr>
+            <td><input type="text" class="procedencia-lugar" placeholder="Estado o Ciudad" value="Otros"></td>
+            <td><input type="number" class="procedencia-cantidad" value="0" min="0" oninput="calcularTotalProcedencias()"></td>
+            <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaProcedencia(this)">✕</button></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr class="row-total">
+            <td>Total Asistentes por Procedencia</td>
+            <td id="labelTotalProcedencias">0</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <button type="button" class="btn-add-row" onclick="agregarFilaProcedencia()">+ Agregar Procedencia</button>
+
+      <div class="subsection-heading">Distribución por Rango de Edad (%):</div>
       <div class="grid-2">
         <div class="form-group">
-          <label>Lugar 1</label>
-          <input type="text" id="procedencia_1_lugar" name="procedencia_1_lugar" value="Nuevo León">
+          <label for="edad_18_25">18 a 25 años (%)</label>
+          <input type="number" id="edad_18_25" name="edad_18_25" placeholder="0" min="0" max="100">
         </div>
         <div class="form-group">
-          <label>Cantidad / %</label>
-          <input type="text" id="procedencia_1_cantidad" name="procedencia_1_cantidad" placeholder="Ej. 53%">
+          <label for="edad_26_30">26 a 30 años (%)</label>
+          <input type="number" id="edad_26_30" name="edad_26_30" placeholder="0" min="0" max="100">
         </div>
       </div>
 
       <div class="grid-2">
         <div class="form-group">
-          <label>Lugar 2</label>
-          <input type="text" id="procedencia_2_lugar" name="procedencia_2_lugar" value="Ciudad de México">
+          <label for="edad_31_39">31 a 39 años (%)</label>
+          <input type="number" id="edad_31_39" name="edad_31_39" placeholder="0" min="0" max="100">
         </div>
         <div class="form-group">
-          <label>Cantidad / %</label>
-          <input type="text" id="procedencia_2_cantidad" name="procedencia_2_cantidad" placeholder="Ej. 27.3%">
+          <label for="edad_40_55">40 a 55 años (%)</label>
+          <input type="number" id="edad_40_55" name="edad_40_55" placeholder="0" min="0" max="100">
         </div>
       </div>
 
       <div class="grid-2">
         <div class="form-group">
-          <label>Lugar 3</label>
-          <input type="text" id="procedencia_3_lugar" name="procedencia_3_lugar" value="Tamaulipas">
+          <label for="edad_56_mas">56 años o más (%)</label>
+          <input type="number" id="edad_56_mas" name="edad_56_mas" placeholder="0" min="0" max="100">
         </div>
-        <div class="form-group">
-          <label>Cantidad / %</label>
-          <input type="text" id="procedencia_3_cantidad" name="procedencia_3_cantidad" placeholder="Ej. 4.6%">
-        </div>
-      </div>
-
-      <div class="grid-2">
-        <div class="form-group">
-          <label>Lugar 4</label>
-          <input type="text" id="procedencia_4_lugar" name="procedencia_4_lugar" value="Coahuila">
-        </div>
-        <div class="form-group">
-          <label>Cantidad / %</label>
-          <input type="text" id="procedencia_4_cantidad" name="procedencia_4_cantidad" placeholder="Ej. 2.9%">
-        </div>
-      </div>
-
-      <div class="grid-2">
-        <div class="form-group">
-          <label>Otros lugares (%)</label>
-          <input type="text" id="procedencia_otros_cantidad" name="procedencia_otros_cantidad" placeholder="Ej. 12.3%">
-        </div>
-        <div class="form-group">
-          <label>Total (%)</label>
-          <input type="text" id="procedencia_total" name="procedencia_total" value="100%">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="distribucion_edad">Distribución por Rango de Edad</label>
-        <textarea id="distribucion_edad" name="distribucion_edad" rows="3" placeholder="Ej. 18 a 25 años: 15%&#10;26 a 30 años: 22%&#10;31 a 39 años: 39%"></textarea>
       </div>
 
       <!-- 5. Evaluación de Experiencia -->
@@ -492,6 +517,7 @@
     const form = document.getElementById('ocvForm');
     const submitBtn = document.getElementById('submitBtn');
 
+    // === HOTELES ===
     function agregarFilaHotel() {
       const tbody = document.getElementById('hotelBody');
       const tr = document.createElement('tr');
@@ -523,6 +549,39 @@
       document.getElementById('labelTotalHoteles').innerText = total.toLocaleString();
     }
 
+    // === PROCEDENCIAS ===
+    function agregarFilaProcedencia() {
+      const tbody = document.getElementById('procedenciaBody');
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><input type="text" class="procedencia-lugar" placeholder="Estado o Ciudad"></td>
+        <td><input type="number" class="procedencia-cantidad" value="0" min="0" oninput="calcularTotalProcedencias()"></td>
+        <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaProcedencia(this)">✕</button></td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    function eliminarFilaProcedencia(btn) {
+      const tbody = document.getElementById('procedenciaBody');
+      if (tbody.rows.length > 1) {
+        btn.closest('tr').remove();
+        calcularTotalProcedencias();
+      } else {
+        alert('Debe existir al menos una fila de procedencia.');
+      }
+    }
+
+    function calcularTotalProcedencias() {
+      const inputs = document.querySelectorAll('.procedencia-cantidad');
+      let total = 0;
+      inputs.forEach(input => {
+        const val = parseFloat(input.value) || 0;
+        total += val;
+      });
+      document.getElementById('labelTotalProcedencias').innerText = total.toLocaleString();
+    }
+
+    // === ENVÍO DEL FORMULARIO ===
     form.addEventListener('submit', async function(e) {
       e.preventDefault();
 
@@ -530,7 +589,20 @@
       submitBtn.innerText = 'Generando archivo Word y enviando correo...';
       submitBtn.disabled = true;
 
-      // Construcción manual de todos los datos
+      // 1. Armar bloque de texto para la distribución por edades
+      const e1 = document.getElementById('edad_18_25')?.value;
+      const e2 = document.getElementById('edad_26_30')?.value;
+      const e3 = document.getElementById('edad_31_39')?.value;
+      const e4 = document.getElementById('edad_40_55')?.value;
+      const e5 = document.getElementById('edad_56_mas')?.value;
+
+      let resumenEdades = [];
+      if (e1) resumenEdades.push('18 a 25 años: ' + e1 + '%');
+      if (e2) resumenEdades.push('26 a 30 años: ' + e2 + '%');
+      if (e3) resumenEdades.push('31 a 39 años: ' + e3 + '%');
+      if (e4) resumenEdades.push('40 a 55 años: ' + e4 + '%');
+      if (e5) resumenEdades.push('56 años o más: ' + e5 + '%');
+
       const data = {
         // Resumen Ejecutivo
         nombre_evento: document.getElementById('nombre_evento')?.value || '',
@@ -546,18 +618,8 @@
         derrama_economica: document.getElementById('derrama_economica')?.value || '',
         inversion_privada: document.getElementById('inversion_privada')?.value || '',
 
-        // Procedencia y Edades
-        procedencia_1_lugar: document.getElementById('procedencia_1_lugar')?.value || '',
-        procedencia_1_cantidad: document.getElementById('procedencia_1_cantidad')?.value || '',
-        procedencia_2_lugar: document.getElementById('procedencia_2_lugar')?.value || '',
-        procedencia_2_cantidad: document.getElementById('procedencia_2_cantidad')?.value || '',
-        procedencia_3_lugar: document.getElementById('procedencia_3_lugar')?.value || '',
-        procedencia_3_cantidad: document.getElementById('procedencia_3_cantidad')?.value || '',
-        procedencia_4_lugar: document.getElementById('procedencia_4_lugar')?.value || '',
-        procedencia_4_cantidad: document.getElementById('procedencia_4_cantidad')?.value || '',
-        procedencia_otros_cantidad: document.getElementById('procedencia_otros_cantidad')?.value || '',
-        procedencia_total: document.getElementById('procedencia_total')?.value || '',
-        distribucion_edad: document.getElementById('distribucion_edad')?.value || '',
+        // Edades
+        distribucion_edad: resumenEdades.join('\n') || 'Sin especificar',
 
         // Evaluación de Experiencia
         asesora_nombre: document.getElementById('asesora_nombre')?.value || '',
@@ -584,8 +646,18 @@
         data[`hotel_${i + 1}_nombre`] = nombresHoteles[i] ? nombresHoteles[i].value : '';
         data[`hotel_${i + 1}_cuartos`] = (cuartosHoteles[i] && cuartosHoteles[i].value !== '0') ? cuartosHoteles[i].value : '';
       }
-
       data['total_hoteleria_cuartos'] = document.getElementById('labelTotalHoteles').innerText;
+
+      // Mapear Procedencias Dinámicas
+      const lugaresProcedencia = document.querySelectorAll('.procedencia-lugar');
+      const cantidadesProcedencia = document.querySelectorAll('.procedencia-cantidad');
+
+      for (let i = 0; i < 4; i++) {
+        data[`procedencia_${i + 1}_lugar`] = lugaresProcedencia[i] ? lugaresProcedencia[i].value : '';
+        data[`procedencia_${i + 1}_cantidad`] = (cantidadesProcedencia[i] && cantidadesProcedencia[i].value !== '0') ? cantidadesProcedencia[i].value : '';
+      }
+      data['procedencia_otros_cantidad'] = (cantidadesProcedencia[4] && cantidadesProcedencia[4].value !== '0') ? cantidadesProcedencia[4].value : '';
+      data['procedencia_total'] = document.getElementById('labelTotalProcedencias').innerText;
 
       try {
         await fetch(APPS_SCRIPT_URL, {
@@ -600,6 +672,7 @@
         alert('¡Reporte generado con éxito! El archivo Word ha sido enviado a tu correo.');
         form.reset();
         document.getElementById('labelTotalHoteles').innerText = '0';
+        document.getElementById('labelTotalProcedencias').innerText = '0';
       } catch (error) {
         console.error('Error:', error);
         alert('Ocurrió un error al procesar el formulario.');
