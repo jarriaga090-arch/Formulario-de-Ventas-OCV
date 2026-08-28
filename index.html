@@ -627,6 +627,52 @@
     alert('¡Formulario validado con éxito!');
   });
 </script>
+<script>
+  const form = document.querySelector('form'); // O document.getElementById('tu-id-form')
 
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const btnSubmit = form.querySelector('button[type="submit"]');
+    const originalText = btnSubmit.innerText;
+    btnSubmit.innerText = "Generando y enviando documento...";
+    btnSubmit.disabled = true;
+
+    // Recopilar los datos de los inputs según sus IDs o names
+    const datos = {
+      nombre_evento: document.getElementById('nombre_evento')?.value || '',
+      ejecutivo: document.getElementById('ejecutivo')?.value || '',
+      fecha_evento: document.getElementById('fecha_evento')?.value || '',
+      tipo_evento: document.getElementById('tipo_evento')?.value || '',
+      giro_evento: document.getElementById('giro_evento')?.value || '',
+      alcance: document.getElementById('alcance')?.value || '',
+      cuartos_estimados: document.getElementById('cuartos_estimados')?.value || '',
+      cuartos_reales: document.getElementById('cuartos_reales')?.value || '',
+      derrama: document.getElementById('derrama')?.value || '',
+      organizador: document.getElementById('organizador')?.value || '',
+      observaciones: document.getElementById('observaciones')?.value || ''
+    };
+
+    const SCRIPT_URL = 'PEGA_AQUI_LA_URL_DE_APPS_SCRIPT_QUE_TERMINA_EN_EXEC';
+
+    try {
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos)
+      });
+
+      alert('¡Reporte generado con éxito! Revisa tu bandeja de entrada en Gmail.');
+      form.reset();
+    } catch (error) {
+      console.error(error);
+      alert('Ocurrió un error al enviar el formulario.');
+    } finally {
+      btnSubmit.innerText = originalText;
+      btnSubmit.disabled = false;
+    }
+  });
+</script>
 </body>
 </html>
