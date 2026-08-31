@@ -403,7 +403,7 @@
         </div>
       </div>
 
-      <!-- 3. Hotelería Dinámica -->
+      <!-- 3. Hotelería Dinámica (Inicia con 2 filas) -->
       <div class="section-title">3. Relación de Hotelería y Cuartos – Noche</div>
 
       <table class="data-table" id="tablaHoteles">
@@ -425,21 +425,6 @@
             <td><input type="number" class="hotel-cuartos" value="0" min="0" oninput="calcularTotalHoteles()"></td>
             <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaHotel(this)">✕</button></td>
           </tr>
-          <tr>
-            <td><input type="text" class="hotel-nombre" placeholder="Nombre del hotel o zona"></td>
-            <td><input type="number" class="hotel-cuartos" value="0" min="0" oninput="calcularTotalHoteles()"></td>
-            <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaHotel(this)">✕</button></td>
-          </tr>
-          <tr>
-            <td><input type="text" class="hotel-nombre" placeholder="Nombre del hotel o zona"></td>
-            <td><input type="number" class="hotel-cuartos" value="0" min="0" oninput="calcularTotalHoteles()"></td>
-            <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaHotel(this)">✕</button></td>
-          </tr>
-          <tr>
-            <td><input type="text" class="hotel-nombre" placeholder="Nombre del hotel o zona"></td>
-            <td><input type="number" class="hotel-cuartos" value="0" min="0" oninput="calcularTotalHoteles()"></td>
-            <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaHotel(this)">✕</button></td>
-          </tr>
         </tbody>
         <tfoot>
           <tr class="row-total">
@@ -452,7 +437,7 @@
 
       <button type="button" class="btn-add-row" onclick="agregarFilaHotel()">+ Agregar Hotel</button>
 
-      <!-- 4. Resumen Demográfico de Asistentes (Anónimo) -->
+      <!-- 4. Resumen Demográfico de Asistentes (Inicia con 2 filas) -->
       <div class="section-title">4. Resumen Demográfico de Asistentes (Anónimo)</div>
       <p class="subsection-subtitle">Indica de qué estado o país provienen los asistentes y registra el número estimado de personas de cada lugar.</p>
 
@@ -467,21 +452,6 @@
           </tr>
         </thead>
         <tbody id="procedenciaBody">
-          <tr>
-            <td><input type="text" class="procedencia-lugar" placeholder="Estado o Ciudad"></td>
-            <td><input type="number" class="procedencia-cantidad" value="0" min="0" oninput="calcularTotalProcedencias()"></td>
-            <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaProcedencia(this)">✕</button></td>
-          </tr>
-          <tr>
-            <td><input type="text" class="procedencia-lugar" placeholder="Estado o Ciudad"></td>
-            <td><input type="number" class="procedencia-cantidad" value="0" min="0" oninput="calcularTotalProcedencias()"></td>
-            <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaProcedencia(this)">✕</button></td>
-          </tr>
-          <tr>
-            <td><input type="text" class="procedencia-lugar" placeholder="Estado o Ciudad"></td>
-            <td><input type="number" class="procedencia-cantidad" value="0" min="0" oninput="calcularTotalProcedencias()"></td>
-            <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaProcedencia(this)">✕</button></td>
-          </tr>
           <tr>
             <td><input type="text" class="procedencia-lugar" placeholder="Estado o Ciudad"></td>
             <td><input type="number" class="procedencia-cantidad" value="0" min="0" oninput="calcularTotalProcedencias()"></td>
@@ -851,7 +821,7 @@
         archivos_adjuntos: archivosAdjuntos
       };
 
-      // Mapear Hoteles Dinámicos
+      // Mapear Hoteles Dinámicos (Recorre todas las filas presentes)
       const nombresHoteles = document.querySelectorAll('.hotel-nombre');
       const cuartosHoteles = document.querySelectorAll('.hotel-cuartos');
 
@@ -861,7 +831,7 @@
       }
       data['total_hoteleria_cuartos'] = document.getElementById('labelTotalHoteles').innerText;
 
-      // Mapear Procedencias Dinámicas
+      // Mapear Procedencias Dinámicas (Recorre todas las filas presentes)
       const lugaresProcedencia = document.querySelectorAll('.procedencia-lugar');
       const cantidadesProcedencia = document.querySelectorAll('.procedencia-cantidad');
 
