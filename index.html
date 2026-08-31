@@ -403,7 +403,7 @@
         </div>
       </div>
 
-      <!-- 3. Hotelería Dinámica (Inicia con 2 filas) -->
+      <!-- 3. Hotelería Dinámica -->
       <div class="section-title">3. Relación de Hotelería y Cuartos – Noche</div>
 
       <table class="data-table" id="tablaHoteles">
@@ -437,7 +437,7 @@
 
       <button type="button" class="btn-add-row" onclick="agregarFilaHotel()">+ Agregar Hotel</button>
 
-      <!-- 4. Resumen Demográfico de Asistentes (Inicia con 2 filas) -->
+      <!-- 4. Resumen Demográfico de Asistentes (Anónimo) -->
       <div class="section-title">4. Resumen Demográfico de Asistentes (Anónimo)</div>
       <p class="subsection-subtitle">Indica de qué estado o país provienen los asistentes y registra el número estimado de personas de cada lugar.</p>
 
@@ -479,27 +479,31 @@
 
       <div class="grid-2">
         <div class="form-group">
+          <label for="edad_3_17">3 a 17 años (%)</label>
+          <input type="number" id="edad_3_17" name="edad_3_17" placeholder="0" min="0" max="100">
+        </div>
+        <div class="form-group">
           <label for="edad_18_25">18 a 25 años (%)</label>
           <input type="number" id="edad_18_25" name="edad_18_25" placeholder="0" min="0" max="100">
         </div>
+      </div>
+
+      <div class="grid-2">
         <div class="form-group">
           <label for="edad_26_30">26 a 30 años (%)</label>
           <input type="number" id="edad_26_30" name="edad_26_30" placeholder="0" min="0" max="100">
         </div>
-      </div>
-
-      <div class="grid-2">
         <div class="form-group">
           <label for="edad_31_39">31 a 39 años (%)</label>
           <input type="number" id="edad_31_39" name="edad_31_39" placeholder="0" min="0" max="100">
         </div>
+      </div>
+
+      <div class="grid-2">
         <div class="form-group">
           <label for="edad_40_55">40 a 55 años (%)</label>
           <input type="number" id="edad_40_55" name="edad_40_55" placeholder="0" min="0" max="100">
         </div>
-      </div>
-
-      <div class="grid-2">
         <div class="form-group">
           <label for="edad_56_mas">56 años o más (%)</label>
           <input type="number" id="edad_56_mas" name="edad_56_mas" placeholder="0" min="0" max="100">
@@ -752,7 +756,8 @@
         fechaTexto = fFin;
       }
 
-      // 2. Distribución de edades
+      // 2. Distribución de edades (Incluye 3 a 17 años)
+      const e0 = document.getElementById('edad_3_17')?.value;
       const e1 = document.getElementById('edad_18_25')?.value;
       const e2 = document.getElementById('edad_26_30')?.value;
       const e3 = document.getElementById('edad_31_39')?.value;
@@ -760,6 +765,7 @@
       const e5 = document.getElementById('edad_56_mas')?.value;
 
       let resumenEdades = [];
+      if (e0) resumenEdades.push('3 a 17 años: ' + e0 + '%');
       if (e1) resumenEdades.push('18 a 25 años: ' + e1 + '%');
       if (e2) resumenEdades.push('26 a 30 años: ' + e2 + '%');
       if (e3) resumenEdades.push('31 a 39 años: ' + e3 + '%');
@@ -821,7 +827,7 @@
         archivos_adjuntos: archivosAdjuntos
       };
 
-      // Mapear Hoteles Dinámicos (Recorre todas las filas presentes)
+      // Mapear Hoteles Dinámicos
       const nombresHoteles = document.querySelectorAll('.hotel-nombre');
       const cuartosHoteles = document.querySelectorAll('.hotel-cuartos');
 
@@ -831,7 +837,7 @@
       }
       data['total_hoteleria_cuartos'] = document.getElementById('labelTotalHoteles').innerText;
 
-      // Mapear Procedencias Dinámicas (Recorre todas las filas presentes)
+      // Mapear Procedencias Dinámicas
       const lugaresProcedencia = document.querySelectorAll('.procedencia-lugar');
       const cantidadesProcedencia = document.querySelectorAll('.procedencia-cantidad');
 
