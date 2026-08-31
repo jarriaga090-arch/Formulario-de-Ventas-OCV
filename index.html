@@ -120,6 +120,7 @@
     .form-group input[type="text"], 
     .form-group input[type="email"], 
     .form-group input[type="number"], 
+    .form-group input[type="date"], 
     .form-group select, 
     .form-group textarea {
       padding: 10px 12px;
@@ -318,16 +319,19 @@
       </div>
 
       <div class="grid-2">
-        
-<div class="form-group">
-  <label for="fecha_realizacion">Fecha de Realización</label>
-  <input type="date" id="fecha_realizacion" name="fecha_realizacion">
-</div>
-      
         <div class="form-group">
-          <label for="recinto">Recinto / Sede</label>
-          <input type="text" id="recinto" name="recinto" placeholder="Ej. Parque Cielo Mágico, Santiago, N.L.">
+          <label for="fecha_inicio">Fecha de Inicio</label>
+          <input type="date" id="fecha_inicio" name="fecha_inicio">
         </div>
+        <div class="form-group">
+          <label for="fecha_fin">Fecha de Fin</label>
+          <input type="date" id="fecha_fin" name="fecha_fin">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="recinto">Recinto / Sede</label>
+        <input type="text" id="recinto" name="recinto" placeholder="Ej. Parque Cielo Mágico, Santiago, N.L.">
       </div>
 
       <!-- 2. Asistencia y Resultados -->
@@ -336,7 +340,7 @@
         <div class="form-group">
           <label for="total_asistentes">Número Total de Asistentes</label>
           <input type="text" id="total_asistentes" name="total_asistentes" placeholder="Ej. 50,000">
-          <span class="field-hint">Número total de personas que asistieron al evento.</span>
+          <span class="field-hint">Número total de personas que asistirán al evento.</span>
         </div>
         <div class="form-group">
           <label for="asistentes_locales">Asistentes Locales</label>
@@ -354,12 +358,12 @@
         <div class="form-group">
           <label for="cuartos_noche">Cuartos-Noche Generados (Total Global)</label>
           <input type="text" id="cuartos_noche" name="cuartos_noche" placeholder="Ej. 4,800">
-          <span class="field-hint">Número de cuartos noches generados por los asistentes foráneos durante el evento.</span>
+          <span class="field-hint">Número de habitaciones de hotel ocupadas por los asistentes foráneos durante el evento.</span>
         </div>
         <div class="form-group">
           <label for="derrama_economica">Derrama Económica Estimada ($ M.N.)</label>
           <input type="text" id="derrama_economica" name="derrama_economica" placeholder="Ej. $248,400,000 M.N.">
-          <span class="field-hint">Derrama Económica Turísitica Estimada ($ M.N.) Gasto promedio x Cantidad de foráneos x estadía promedio.</span>
+          <span class="field-hint">Gasto estimado que generará el evento en la ciudad.</span>
         </div>
       </div>
 
@@ -692,7 +696,20 @@
       submitBtn.innerText = 'Procesando archivos y generando Word...';
       submitBtn.disabled = true;
 
-      // 1. Distribución de edades
+      // 1. Procesar Fechas (Inicio y Fin)
+      const fInicio = document.getElementById('fecha_inicio')?.value || '';
+      const fFin = document.getElementById('fecha_fin')?.value || '';
+      
+      let fechaTexto = '';
+      if (fInicio && fFin) {
+        fechaTexto = `Del ${fInicio} al ${fFin}`;
+      } else if (fInicio) {
+        fechaTexto = fInicio;
+      } else if (fFin) {
+        fechaTexto = fFin;
+      }
+
+      // 2. Distribución de edades
       const e1 = document.getElementById('edad_18_25')?.value;
       const e2 = document.getElementById('edad_26_30')?.value;
       const e3 = document.getElementById('edad_31_39')?.value;
@@ -706,14 +723,14 @@
       if (e4) resumenEdades.push('40 a 55 años: ' + e4 + '%');
       if (e5) resumenEdades.push('56 años o más: ' + e5 + '%');
 
-      // 2. Evidencia Documental (Checkboxes)
+      // 3. Evidencia Documental (Checkboxes)
       let evidencias = [];
       const c1 = document.getElementById('check_bd');
       const c2 = document.getElementById('check_testigos');
       if (c1 && c1.checked) evidencias.push('☒ ' + c1.value);
       if (c2 && c2.checked) evidencias.push('☒ ' + c2.value);
 
-      // 3. Procesar archivos adjuntos
+      // 4. Procesar archivos adjuntos
       const fileInput = document.getElementById('archivos_adjuntos');
       let archivosAdjuntos = [];
       if (fileInput && fileInput.files.length > 0) {
@@ -723,11 +740,11 @@
         }
       }
 
-      // 4. Objeto de datos principal
+      // 5. Objeto de datos principal
       const data = {
         // Resumen Ejecutivo
         nombre_evento: document.getElementById('nombre_evento')?.value || '',
-        fecha_realizacion: document.getElementById('fecha_realizacion')?.value || '',
+        fecha_realizacion: fechaTexto,
         recinto: document.getElementById('recinto')?.value || '',
 
         // Registro de Asistencia
