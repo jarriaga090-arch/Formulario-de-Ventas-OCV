@@ -247,6 +247,42 @@
       font-size: 0.9rem;
     }
 
+    /* Caja de Aviso de Drive */
+    .drive-notice {
+      background-color: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-top: 8px;
+      font-size: 0.88rem;
+      color: #1e40af;
+      line-height: 1.4;
+    }
+
+    .drive-notice a {
+      color: #1d4ed8;
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
+    .drive-warning {
+      display: none;
+      background-color: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #991b1b;
+      line-height: 1.4;
+    }
+
+    .drive-warning a {
+      color: #dc2626;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
     .eval-table {
       width: 100%;
       border-collapse: collapse;
@@ -516,7 +552,17 @@
 
       <div class="file-input-wrapper">
         <label for="archivos_adjuntos">Adjuntar Archivos / Reportes (ZIP, PDF, Excel o Imágenes):</label>
-        <input type="file" id="archivos_adjuntos" multiple accept=".zip,.pdf,.xls,.xlsx,.doc,.docx,.png,.jpg,.jpeg">
+        <input type="file" id="archivos_adjuntos" multiple accept=".zip,.pdf,.xls,.xlsx,.doc,.docx,.png,.jpg,.jpeg" onchange="validarTamanoArchivos()">
+        
+        <div class="drive-notice">
+          ℹ️ <strong>Nota:</strong> Si tus archivos pesan más de <strong>15 MB en total</strong>, por favor súbelos directamente a nuestra 
+          <a href="https://drive.google.com/drive/folders/1cXZV0SWfkk-V8m69QT-jBj4LVOvEdC0q?usp=sharing" target="_blank" rel="noopener">carpeta compartida de Google Drive aquí</a>.
+        </div>
+
+        <div class="drive-warning" id="driveWarning">
+          ⚠️ <strong>Archivos muy pesados:</strong> El peso total de tus archivos seleccionados es de <span id="pesoTotalArchivos">0</span> MB (supera el límite de 15 MB).<br>
+          Por favor deselecciónalos y cáargalos directamente en la <a href="https://drive.google.com/drive/folders/1cXZV0SWfkk-V8m69QT-jBj4LVOvEdC0q?usp=sharing" target="_blank" rel="noopener">Carpeta Compartida de Google Drive</a> para poder enviar tu reporte.
+        </div>
       </div>
 
       <!-- 6. Experiencia en el Destino y OCV -->
@@ -606,6 +652,33 @@
 
     const form = document.getElementById('ocvForm');
     const submitBtn = document.getElementById('submitBtn');
+    const MAX_SIZE_BYTES = 15 * 1024 * 1024; // 15 Megabytes
+
+    // === VALIDAR TAMAÑO DE ARCHIVOS ===
+    function validarTamanoArchivos() {
+      const fileInput = document.getElementById('archivos_adjuntos');
+      const warningBox = document.getElementById('driveWarning');
+      const pesoSpan = document.getElementById('pesoTotalArchivos');
+
+      let totalBytes = 0;
+      if (fileInput && fileInput.files.length > 0) {
+        for (let i = 0; i < fileInput.files.length; i++) {
+          totalBytes += fileInput.files[i].size;
+        }
+      }
+
+      const totalMB = (totalBytes / (1024 * 1024)).toFixed(2);
+
+      if (totalBytes > MAX_SIZE_BYTES) {
+        warningBox.style.display = 'block';
+        pesoSpan.innerText = totalMB;
+        submitBtn.disabled = true;
+        alert(`Tus archivos pesan ${totalMB} MB en total, superando el límite de 15 MB.\n\nPor favor súbelos a la carpeta de Google Drive indicada.`);
+      } else {
+        warningBox.style.display = 'none';
+        submitBtn.disabled = false;
+      }
+    }
 
     // === HOTELES ===
     function agregarFilaHotel() {
@@ -813,6 +886,7 @@
         form.reset();
         document.getElementById('labelTotalHoteles').innerText = '0';
         document.getElementById('labelTotalProcedencias').innerText = '0';
+        document.getElementById('driveWarning').style.display = 'none';
       } catch (error) {
         console.error('Error:', error);
         alert('Ocurrió un error al procesar el formulario.');
