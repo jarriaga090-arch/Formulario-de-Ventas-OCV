@@ -45,6 +45,14 @@
       margin-bottom: 24px;
     }
 
+    /* Estilo para el Logo */
+    .form-logo {
+      max-height: 80px;
+      width: auto;
+      display: block;
+      margin-bottom: 16px;
+    }
+
     .form-header h1 {
       font-size: 1.6rem;
       color: var(--primary);
@@ -247,7 +255,7 @@
       font-size: 0.9rem;
     }
 
-    /* Caja de Aviso de Drive */
+    /* Avisos de Drive */
     .drive-notice {
       background-color: #eff6ff;
       border: 1px solid #bfdbfe;
@@ -342,6 +350,9 @@
 
   <div class="form-container">
     <div class="form-header">
+      <!-- Reemplaza la URL src por el enlace de tu logo en AWS o GitHub -->
+      <!-- <img src="URL_DE_TU_IMAGEN" alt="Logo OCV" class="form-logo"> -->
+      
       <h1>Reporte de Resultados y Evaluación OCV</h1>
       <p>Completa los campos para generar automáticamente el documento Word oficial.</p>
     </div>
@@ -356,12 +367,12 @@
 
       <div class="grid-2">
         <div class="form-group">
-          <label for="fecha_inicio">Fecha de Inicio</label>
-          <input type="date" id="fecha_inicio" name="fecha_inicio">
+          <label for="fecha_inicio">Fecha de Inicio *</label>
+          <input type="date" id="fecha_inicio" name="fecha_inicio" required>
         </div>
         <div class="form-group">
-          <label for="fecha_fin">Fecha de Fin</label>
-          <input type="date" id="fecha_fin" name="fecha_fin">
+          <label for="fecha_fin">Fecha de Fin *</label>
+          <input type="date" id="fecha_fin" name="fecha_fin" required>
         </div>
       </div>
 
@@ -595,27 +606,33 @@
         <textarea id="comentarios" name="comentarios" rows="3" placeholder="Escriba aquí sus observaciones..."></textarea>
       </div>
 
-      <!-- 7. Datos del Contacto y Firma -->
-      <div class="section-title">7. Datos de Contacto y Firma</div>
+      <!-- 7. Datos de Contacto y Declaración -->
+      <div class="section-title">7. Datos de Contacto y Declaración</div>
       <div class="grid-3">
         <div class="form-group">
-          <label for="contacto_nombre">Nombre Completo</label>
-          <input type="text" id="contacto_nombre" name="contacto_nombre" placeholder="Nombre de contacto">
+          <label for="contacto_nombre">Nombre Completo *</label>
+          <input type="text" id="contacto_nombre" name="contacto_nombre" placeholder="Nombre de contacto" required>
         </div>
         <div class="form-group">
-          <label for="contacto_telefono">Teléfono</label>
-          <input type="text" id="contacto_telefono" name="contacto_telefono" placeholder="Ej. 81 1234 5678">
+          <label for="contacto_telefono">Teléfono *</label>
+          <input type="text" id="contacto_telefono" name="contacto_telefono" placeholder="Ej. 81 1234 5678" required>
         </div>
         <div class="form-group">
-          <label for="contacto_mail">Correo Electrónico</label>
-          <input type="email" id="contacto_mail" name="contacto_mail" placeholder="correo@ejemplo.com">
+          <label for="contacto_mail">Correo Electrónico *</label>
+          <input type="email" id="contacto_mail" name="contacto_mail" placeholder="correo@ejemplo.com" required>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="organizador_cargo">Cargo / Puesto</label>
-        <input type="text" id="organizador_cargo" name="organizador_cargo" placeholder="Ej. CEO / Director General">
+        <label for="organizador_cargo">Cargo / Puesto *</label>
+        <input type="text" id="organizador_cargo" name="organizador_cargo" placeholder="Ej. CEO / Director General" required>
       </div>
+
+      <!-- Declaración que sustituye la firma -->
+      <label class="checkbox-container" style="margin-top: 16px;">
+        <input type="checkbox" id="declaracion_veracidad" name="declaracion_veracidad" required>
+        <span>Declaro que la información y los datos proporcionados en el presente formulario son completos, correctos y verídicos, y manifiesto mi conformidad y responsabilidad respecto de la exactitud de la información ingresada.</span>
+      </label>
 
       <button type="submit" class="btn-submit" id="submitBtn">Generar Reporte y Enviar</button>
     </form>
@@ -756,7 +773,7 @@
         fechaTexto = fFin;
       }
 
-      // 2. Distribución de edades (Incluye 3 a 17 años)
+      // 2. Distribución de edades
       const e0 = document.getElementById('edad_3_17')?.value;
       const e1 = document.getElementById('edad_18_25')?.value;
       const e2 = document.getElementById('edad_26_30')?.value;
@@ -822,6 +839,7 @@
         contacto_telefono: document.getElementById('contacto_telefono')?.value || '',
         contacto_mail: document.getElementById('contacto_mail')?.value || '',
         organizador_cargo: document.getElementById('organizador_cargo')?.value || '',
+        declaracion_veracidad: document.getElementById('declaracion_veracidad')?.checked ? 'Aceptada' : 'No aceptada',
 
         // Archivos convertidos
         archivos_adjuntos: archivosAdjuntos
