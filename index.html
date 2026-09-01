@@ -29,6 +29,60 @@
       line-height: 1.5;
     }
 
+    /* === ESTILOS DEL SPLASH SCREEN === */
+    #splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #1e3a8a;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 99999;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    .splash-content {
+      text-align: center;
+    }
+
+    .splash-content h2 {
+      font-size: 1.4rem;
+      margin-top: 20px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .splash-content p {
+      font-size: 0.9rem;
+      opacity: 0.85;
+      margin-top: 6px;
+    }
+
+    .splash-spinner {
+      width: 60px;
+      height: 60px;
+      border: 5px solid rgba(255, 255, 255, 0.2);
+      border-top: 5px solid #ffffff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #splash-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    /* === CONTENEDOR Y CABECERA === */
     .form-container {
       max-width: 860px;
       margin: 0 auto;
@@ -41,26 +95,42 @@
 
     .form-header {
       border-bottom: 2px solid var(--border);
-      padding-bottom: 16px;
+      padding-bottom: 20px;
       margin-bottom: 24px;
     }
 
-    .form-logo {
-      max-height: 80px;
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .header-logo {
+      height: 65px;
       width: auto;
-      display: block;
-      margin-bottom: 16px;
+      object-fit: contain;
     }
 
-    .form-header h1 {
-      font-size: 1.6rem;
+    .header-text h1 {
+      font-size: 1.5rem;
       color: var(--primary);
+      margin-bottom: 4px;
     }
 
-    .form-header p {
+    .header-text p {
       color: var(--text-muted);
-      font-size: 0.95rem;
-      margin-top: 4px;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 600px) {
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      .header-logo {
+        height: 50px;
+      }
     }
 
     .section-title {
@@ -346,13 +416,25 @@
 </head>
 <body>
 
+  <!-- SPLASH SCREEN / PANTALLA DE CARGA -->
+  <div id="splash-screen">
+    <div class="splash-content">
+      <div class="splash-spinner"></div>
+      <h2>Reporte de Resultados OCV</h2>
+      <p>Cargando el formulario, por favor espera...</p>
+    </div>
+  </div>
+
   <div class="form-container">
     <div class="form-header">
-      <!-- Reemplaza la URL src por el enlace de tu logo -->
-      <!-- <img src="URL_DE_TU_IMAGEN" alt="Logo OCV" class="form-logo"> -->
-      
-      <h1>Reporte de Resultados y Evaluación OCV</h1>
-      <p>Completa los campos para generar automáticamente el documento Word oficial.</p>
+      <div class="header-content">
+        <!-- Logo de la OCV subido a GitHub -->
+        <img src="LOGO-OCV-1-300x151.png" alt="Logo OCV Monterrey" class="header-logo">
+        <div class="header-text">
+          <h1>Reporte de Resultados y Evaluación OCV</h1>
+          <p>Completa los campos para generar automáticamente el documento Word oficial.</p>
+        </div>
+      </div>
     </div>
 
     <form id="ocvForm">
@@ -665,7 +747,15 @@
 
     const form = document.getElementById('ocvForm');
     const submitBtn = document.getElementById('submitBtn');
-    const MAX_SIZE_BYTES = 15 * 1024 * 1024; // 15 Megabytes
+    const MAX_SIZE_BYTES = 15 * 1024 * 1024;
+
+    // === CONTROL DEL SPLASH SCREEN ===
+    window.addEventListener('load', function() {
+      const splash = document.getElementById('splash-screen');
+      setTimeout(() => {
+        splash.classList.add('hidden');
+      }, 600);
+    });
 
     // === MOSTRAR / OCULTAR CAMPO DE "OTRO" EN BOLETERA ===
     function toggleOtroBoletera() {
@@ -798,13 +888,11 @@
       submitBtn.innerText = 'Procesando archivos y generando Word...';
       submitBtn.disabled = true;
 
-      // 1. Obtener valor final de Boletera
       const selBoletera = document.getElementById('boletera_select')?.value || '';
       const boleteraFinal = selBoletera === 'Otro' 
         ? (document.getElementById('boletera_otro')?.value || 'Otro') 
         : selBoletera;
 
-      // 2. Procesar Fechas
       const fInicio = document.getElementById('fecha_inicio')?.value || '';
       const fFin = document.getElementById('fecha_fin')?.value || '';
       let fechaTexto = '';
@@ -816,7 +904,6 @@
         fechaTexto = fFin;
       }
 
-      // 3. Distribución de edades
       const e0 = document.getElementById('edad_3_17')?.value;
       const e1 = document.getElementById('edad_18_25')?.value;
       const e2 = document.getElementById('edad_26_30')?.value;
@@ -832,14 +919,12 @@
       if (e4) resumenEdades.push('40 a 55 años: ' + e4 + '%');
       if (e5) resumenEdades.push('56 años o más: ' + e5 + '%');
 
-      // 4. Evidencias
       let evidencias = [];
       const c1 = document.getElementById('check_bd');
       const c2 = document.getElementById('check_testigos');
       if (c1 && c1.checked) evidencias.push('☒ ' + c1.value);
       if (c2 && c2.checked) evidencias.push('☒ ' + c2.value);
 
-      // 5. Archivos
       const fileInput = document.getElementById('archivos_adjuntos');
       let archivosAdjuntos = [];
       if (fileInput && fileInput.files.length > 0) {
@@ -849,7 +934,6 @@
         }
       }
 
-      // 6. Construcción del objeto de datos
       const data = {
         nombre_evento: document.getElementById('nombre_evento')?.value || '',
         nombre_organizador: document.getElementById('nombre_organizador')?.value || '',
@@ -882,7 +966,6 @@
         archivos_adjuntos: archivosAdjuntos
       };
 
-      // Hoteles
       const nombresHoteles = document.querySelectorAll('.hotel-nombre');
       const cuartosHoteles = document.querySelectorAll('.hotel-cuartos');
       for (let i = 0; i < 5; i++) {
@@ -891,7 +974,6 @@
       }
       data['total_hoteleria_cuartos'] = document.getElementById('labelTotalHoteles').innerText;
 
-      // Procedencias
       const lugaresProcedencia = document.querySelectorAll('.procedencia-lugar');
       const cantidadesProcedencia = document.querySelectorAll('.procedencia-cantidad');
       for (let i = 0; i < 4; i++) {
