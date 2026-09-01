@@ -45,7 +45,6 @@
       margin-bottom: 24px;
     }
 
-    /* Estilo para el Logo */
     .form-logo {
       max-height: 80px;
       width: auto;
@@ -255,7 +254,6 @@
       font-size: 0.9rem;
     }
 
-    /* Avisos de Drive */
     .drive-notice {
       background-color: #eff6ff;
       border: 1px solid #bfdbfe;
@@ -350,7 +348,7 @@
 
   <div class="form-container">
     <div class="form-header">
-      <!-- Reemplaza la URL src por el enlace de tu logo en AWS o GitHub -->
+      <!-- Reemplaza la URL src por el enlace de tu logo -->
       <!-- <img src="URL_DE_TU_IMAGEN" alt="Logo OCV" class="form-logo"> -->
       
       <h1>Reporte de Resultados y Evaluación OCV</h1>
@@ -358,11 +356,17 @@
     </div>
 
     <form id="ocvForm">
-      <!-- 1. Resumen Ejecutivo -->
+      <!-- 1. Resumen Ejecutivo del Evento -->
       <div class="section-title">1. Resumen Ejecutivo del Evento</div>
+      
       <div class="form-group">
         <label for="nombre_evento">Nombre del Evento *</label>
         <input type="text" id="nombre_evento" name="nombre_evento" placeholder="Ej. Festival Cielo Mágico" required>
+      </div>
+
+      <div class="form-group">
+        <label for="nombre_organizador">Nombre del Organizador *</label>
+        <input type="text" id="nombre_organizador" name="nombre_organizador" placeholder="Ej. Patronato Cielo Mágico A.C." required>
       </div>
 
       <div class="grid-2">
@@ -377,8 +381,27 @@
       </div>
 
       <div class="form-group">
-        <label for="recinto">Recinto / Sede</label>
-        <input type="text" id="recinto" name="recinto" placeholder="Ej. Parque Cielo Mágico, Santiago, N.L.">
+        <label for="recinto">Recinto / Sede *</label>
+        <input type="text" id="recinto" name="recinto" placeholder="Ej. Parque Cielo Mágico, Santiago, N.L." required>
+      </div>
+
+      <div class="form-group">
+        <label for="boletera_select">Boletera *</label>
+        <select id="boletera_select" name="boletera_select" onchange="toggleOtroBoletera()" required>
+          <option value="" disabled selected>Selecciona una boletera</option>
+          <option value="Ticketmaster">Ticketmaster</option>
+          <option value="Superboletos">Superboletos</option>
+          <option value="Eticket">Eticket</option>
+          <option value="Boletia">Boletia</option>
+          <option value="Boletea Tickets">Boletea Tickets</option>
+          <option value="AREMA Ticket">AREMA Ticket</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+
+      <div class="form-group" id="grupo_boletera_otro" style="display: none;">
+        <label for="boletera_otro">Especifica cuál boletera *</label>
+        <input type="text" id="boletera_otro" name="boletera_otro" placeholder="Escribe el nombre de la boletera">
       </div>
 
       <!-- 2. Asistencia y Resultados -->
@@ -448,7 +471,7 @@
 
       <button type="button" class="btn-add-row" onclick="agregarFilaHotel()">+ Agregar Hotel</button>
 
-      <!-- 4. Resumen Demográfico de Asistentes (Anónimo) -->
+      <!-- 4. Resumen Demográfico de Asistentes -->
       <div class="section-title">4. Resumen Demográfico de Asistentes (Anónimo)</div>
       <p class="subsection-subtitle">Indica de qué estado o país provienen los asistentes y registra el número estimado de personas de cada lugar.</p>
 
@@ -628,7 +651,6 @@
         <input type="text" id="organizador_cargo" name="organizador_cargo" placeholder="Ej. CEO / Director General" required>
       </div>
 
-      <!-- Declaración que sustituye la firma -->
       <label class="checkbox-container" style="margin-top: 16px;">
         <input type="checkbox" id="declaracion_veracidad" name="declaracion_veracidad" required>
         <span>Declaro que la información y los datos proporcionados en el presente formulario son completos, correctos y verídicos, y manifiesto mi conformidad y responsabilidad respecto de la exactitud de la información ingresada.</span>
@@ -644,6 +666,22 @@
     const form = document.getElementById('ocvForm');
     const submitBtn = document.getElementById('submitBtn');
     const MAX_SIZE_BYTES = 15 * 1024 * 1024; // 15 Megabytes
+
+    // === MOSTRAR / OCULTAR CAMPO DE "OTRO" EN BOLETERA ===
+    function toggleOtroBoletera() {
+      const select = document.getElementById('boletera_select');
+      const grupoOtro = document.getElementById('grupo_boletera_otro');
+      const inputOtro = document.getElementById('boletera_otro');
+
+      if (select.value === 'Otro') {
+        grupoOtro.style.display = 'flex';
+        inputOtro.required = true;
+      } else {
+        grupoOtro.style.display = 'none';
+        inputOtro.required = false;
+        inputOtro.value = '';
+      }
+    }
 
     // === VALIDAR TAMAÑO DE ARCHIVOS ===
     function validarTamanoArchivos() {
@@ -760,10 +798,15 @@
       submitBtn.innerText = 'Procesando archivos y generando Word...';
       submitBtn.disabled = true;
 
-      // 1. Procesar Fechas (Inicio y Fin)
+      // 1. Obtener valor final de Boletera
+      const selBoletera = document.getElementById('boletera_select')?.value || '';
+      const boleteraFinal = selBoletera === 'Otro' 
+        ? (document.getElementById('boletera_otro')?.value || 'Otro') 
+        : selBoletera;
+
+      // 2. Procesar Fechas
       const fInicio = document.getElementById('fecha_inicio')?.value || '';
       const fFin = document.getElementById('fecha_fin')?.value || '';
-      
       let fechaTexto = '';
       if (fInicio && fFin) {
         fechaTexto = `Del ${fInicio} al ${fFin}`;
@@ -773,7 +816,7 @@
         fechaTexto = fFin;
       }
 
-      // 2. Distribución de edades
+      // 3. Distribución de edades
       const e0 = document.getElementById('edad_3_17')?.value;
       const e1 = document.getElementById('edad_18_25')?.value;
       const e2 = document.getElementById('edad_26_30')?.value;
@@ -789,14 +832,14 @@
       if (e4) resumenEdades.push('40 a 55 años: ' + e4 + '%');
       if (e5) resumenEdades.push('56 años o más: ' + e5 + '%');
 
-      // 3. Evidencia Documental (Checkboxes)
+      // 4. Evidencias
       let evidencias = [];
       const c1 = document.getElementById('check_bd');
       const c2 = document.getElementById('check_testigos');
       if (c1 && c1.checked) evidencias.push('☒ ' + c1.value);
       if (c2 && c2.checked) evidencias.push('☒ ' + c2.value);
 
-      // 4. Procesar archivos adjuntos
+      // 5. Archivos
       const fileInput = document.getElementById('archivos_adjuntos');
       let archivosAdjuntos = [];
       if (fileInput && fileInput.files.length > 0) {
@@ -806,27 +849,23 @@
         }
       }
 
-      // 5. Objeto de datos principal
+      // 6. Construcción del objeto de datos
       const data = {
-        // Resumen Ejecutivo
         nombre_evento: document.getElementById('nombre_evento')?.value || '',
+        nombre_organizador: document.getElementById('nombre_organizador')?.value || '',
         fecha_realizacion: fechaTexto,
         recinto: document.getElementById('recinto')?.value || '',
+        boletera: boleteraFinal,
 
-        // Registro de Asistencia
         total_asistentes: document.getElementById('total_asistentes')?.value || '',
         asistentes_locales: document.getElementById('asistentes_locales')?.value || '',
         asistentes_foraneos: document.getElementById('asistentes_foraneos')?.value || '',
         cuartos_noche: document.getElementById('cuartos_noche')?.value || '',
         derrama_economica: document.getElementById('derrama_economica')?.value || '',
 
-        // Edades
         distribucion_edad: resumenEdades.join('\n') || 'Sin especificar',
-
-        // Evidencia
         evidencia_documental: evidencias.join('\n') || 'Sin evidencia documental marcada',
 
-        // Evaluación de Experiencia (Radio buttons)
         asesora_nombre: document.getElementById('asesora_nombre')?.value || '',
         servicio_asesora: document.querySelector('input[name="servicio_asesora"]:checked')?.value || '',
         servicio_proveeduria: document.querySelector('input[name="servicio_proveeduria"]:checked')?.value || '',
@@ -834,31 +873,27 @@
         servicio_hoteles: document.querySelector('input[name="servicio_hoteles"]:checked')?.value || '',
         comentarios: document.getElementById('comentarios')?.value || '',
 
-        // Contacto y Firma
         contacto_nombre: document.getElementById('contacto_nombre')?.value || '',
         contacto_telefono: document.getElementById('contacto_telefono')?.value || '',
         contacto_mail: document.getElementById('contacto_mail')?.value || '',
         organizador_cargo: document.getElementById('organizador_cargo')?.value || '',
         declaracion_veracidad: document.getElementById('declaracion_veracidad')?.checked ? 'Aceptada' : 'No aceptada',
 
-        // Archivos convertidos
         archivos_adjuntos: archivosAdjuntos
       };
 
-      // Mapear Hoteles Dinámicos
+      // Hoteles
       const nombresHoteles = document.querySelectorAll('.hotel-nombre');
       const cuartosHoteles = document.querySelectorAll('.hotel-cuartos');
-
       for (let i = 0; i < 5; i++) {
         data[`hotel_${i + 1}_nombre`] = nombresHoteles[i] ? nombresHoteles[i].value : '';
         data[`hotel_${i + 1}_cuartos`] = (cuartosHoteles[i] && cuartosHoteles[i].value !== '0') ? cuartosHoteles[i].value : '';
       }
       data['total_hoteleria_cuartos'] = document.getElementById('labelTotalHoteles').innerText;
 
-      // Mapear Procedencias Dinámicas
+      // Procedencias
       const lugaresProcedencia = document.querySelectorAll('.procedencia-lugar');
       const cantidadesProcedencia = document.querySelectorAll('.procedencia-cantidad');
-
       for (let i = 0; i < 4; i++) {
         data[`procedencia_${i + 1}_lugar`] = lugaresProcedencia[i] ? lugaresProcedencia[i].value : '';
         data[`procedencia_${i + 1}_cantidad`] = (cantidadesProcedencia[i] && cantidadesProcedencia[i].value !== '0') ? cantidadesProcedencia[i].value : '';
@@ -878,6 +913,7 @@
 
         alert('¡Reporte generado con éxito! Se ha enviado el documento Word y los archivos adjuntos a tu correo.');
         form.reset();
+        document.getElementById('grupo_boletera_otro').style.display = 'none';
         document.getElementById('labelTotalHoteles').innerText = '0';
         document.getElementById('labelTotalProcedencias').innerText = '0';
         document.getElementById('driveWarning').style.display = 'none';
