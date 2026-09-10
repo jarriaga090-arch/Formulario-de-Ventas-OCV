@@ -45,23 +45,9 @@
       transition: opacity 0.6s ease, visibility 0.6s ease;
     }
 
-    .splash-content {
-      text-align: center;
-    }
-
-    .splash-content h2 {
-      font-size: 1.4rem;
-      margin-top: 20px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-
-    .splash-content p {
-      font-size: 0.9rem;
-      opacity: 0.85;
-      margin-top: 6px;
-    }
-
+    .splash-content { text-align: center; }
+    .splash-content h2 { font-size: 1.4rem; margin-top: 20px; font-weight: 600; letter-spacing: 0.5px; }
+    .splash-content p { font-size: 0.9rem; opacity: 0.85; margin-top: 6px; }
     .splash-spinner {
       width: 60px;
       height: 60px;
@@ -128,9 +114,7 @@
         align-items: flex-start;
         gap: 12px;
       }
-      .header-logo {
-        height: 50px;
-      }
+      .header-logo { height: 50px; }
     }
 
     .section-title {
@@ -176,9 +160,7 @@
     }
 
     @media (max-width: 640px) {
-      .grid-2, .grid-3 {
-        grid-template-columns: 1fr;
-      }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
     }
 
     .form-group {
@@ -261,9 +243,7 @@
       transition: background-color 0.2s;
     }
 
-    .btn-remove-row:hover {
-      background-color: #b91c1c;
-    }
+    .btn-remove-row:hover { background-color: #b91c1c; }
 
     .btn-add-row {
       background-color: #059669;
@@ -281,9 +261,7 @@
       margin-bottom: 16px;
     }
 
-    .btn-add-row:hover {
-      background-color: #047857;
-    }
+    .btn-add-row:hover { background-color: #047857; }
 
     .row-total td {
       font-weight: bold;
@@ -320,10 +298,6 @@
       color: var(--text);
     }
 
-    .file-input-wrapper input[type="file"] {
-      font-size: 0.9rem;
-    }
-
     .drive-notice {
       background-color: #eff6ff;
       border: 1px solid #bfdbfe;
@@ -353,12 +327,6 @@
       line-height: 1.4;
     }
 
-    .drive-warning a {
-      color: #dc2626;
-      font-weight: bold;
-      text-decoration: underline;
-    }
-
     .eval-table {
       width: 100%;
       border-collapse: collapse;
@@ -373,9 +341,7 @@
       vertical-align: middle;
     }
 
-    .eval-table th:first-child, .eval-table td:first-child {
-      text-align: left;
-    }
+    .eval-table th:first-child, .eval-table td:first-child { text-align: left; }
 
     .eval-table th {
       background-color: #f8fafc;
@@ -404,9 +370,7 @@
       transition: background-color 0.2s;
     }
 
-    .btn-submit:hover {
-      background-color: var(--primary-hover);
-    }
+    .btn-submit:hover { background-color: var(--primary-hover); }
 
     .btn-submit:disabled {
       background-color: #94a3b8;
@@ -428,7 +392,6 @@
   <div class="form-container">
     <div class="form-header">
       <div class="header-content">
-        <!-- Logo de la OCV subido a GitHub -->
         <img src="LOGO-OCV-1-300x151.png" alt="Logo OCV Monterrey" class="header-logo">
         <div class="header-text">
           <h1>Reporte de Resultados y Evaluación OCV</h1>
@@ -490,31 +453,31 @@
       <div class="section-title">2. Registro de Asistencia y Resultados</div>
       <div class="grid-3">
         <div class="form-group">
-          <label for="total_asistentes">Número Total de Asistentes</label>
-          <input type="text" id="total_asistentes" name="total_asistentes" placeholder="Ej. 50,000">
+          <label for="total_asistentes">Número Total de Asistentes *</label>
+          <input type="text" id="total_asistentes" name="total_asistentes" placeholder="Ej. 50,000" required>
           <span class="field-hint">Número total de personas que asistirán al evento.</span>
         </div>
         <div class="form-group">
-          <label for="asistentes_locales">Asistentes Locales</label>
-          <input type="text" id="asistentes_locales" name="asistentes_locales" placeholder="Ej. 44,000">
+          <label for="asistentes_locales">Asistentes Locales *</label>
+          <input type="text" id="asistentes_locales" name="asistentes_locales" placeholder="Ej. 44,000" required>
           <span class="field-hint">Personas que residen en Nuevo León.</span>
         </div>
         <div class="form-group">
-          <label for="asistentes_foraneos">Asistentes Foráneos</label>
-          <input type="text" id="asistentes_foraneos" name="asistentes_foraneos" placeholder="Ej. 6,000">
+          <label for="asistentes_foraneos">Asistentes Foráneos *</label>
+          <input type="text" id="asistentes_foraneos" name="asistentes_foraneos" placeholder="Ej. 6,000" required>
           <span class="field-hint">Personas que provienen de fuera de Nuevo León.</span>
         </div>
       </div>
 
       <div class="grid-2">
         <div class="form-group">
-          <label for="cuartos_noche">Cuartos-Noche Generados (Total Global)</label>
-          <input type="text" id="cuartos_noche" name="cuartos_noche" placeholder="Ej. 4,800">
-          <span class="field-hint">Número de habitaciones de hotel ocupadas por los asistentes foráneos durante el evento.</span>
+          <label for="cuartos_noche">Cuartos-Noche Generados (Total Global) *</label>
+          <input type="text" id="cuartos_noche" name="cuartos_noche" placeholder="Ej. 4,800" required>
+          <span class="field-hint">Número de habitaciones de hotel ocupadas por los asistentes foráneos.</span>
         </div>
         <div class="form-group">
-          <label for="derrama_economica">Derrama Económica Estimada ($ M.N.)</label>
-          <input type="text" id="derrama_economica" name="derrama_economica" placeholder="Ej. $248,400,000 M.N.">
+          <label for="derrama_economica">Derrama Económica Estimada ($ M.N.) *</label>
+          <input type="text" id="derrama_economica" name="derrama_economica" placeholder="Ej. $248,400,000 M.N." required>
           <span class="field-hint">Gasto estimado que generará el evento en la ciudad.</span>
         </div>
       </div>
@@ -525,20 +488,20 @@
       <table class="data-table" id="tablaHoteles">
         <thead>
           <tr>
-            <th style="width: 60%;">Nombre del Hotel / Zona de Hospedaje</th>
-            <th style="width: 28%;">Cuartos - Noche Estimados</th>
+            <th style="width: 60%;">Nombre del Hotel / Zona de Hospedaje *</th>
+            <th style="width: 28%;">Cuartos - Noche Estimados *</th>
             <th style="width: 12%; text-align: center;">Acción</th>
           </tr>
         </thead>
         <tbody id="hotelBody">
           <tr>
-            <td><input type="text" class="hotel-nombre" placeholder="Nombre del hotel"></td>
-            <td><input type="number" class="hotel-cuartos" value="0" min="0" oninput="calcularTotalHoteles()"></td>
+            <td><input type="text" class="hotel-nombre" placeholder="Nombre del hotel" required></td>
+            <td><input type="number" class="hotel-cuartos" value="0" min="0" oninput="calcularTotalHoteles()" required></td>
             <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaHotel(this)">✕</button></td>
           </tr>
           <tr>
-            <td><input type="text" class="hotel-nombre" placeholder="Nombre del hotel o zona"></td>
-            <td><input type="number" class="hotel-cuartos" value="0" min="0" oninput="calcularTotalHoteles()"></td>
+            <td><input type="text" class="hotel-nombre" placeholder="Nombre del hotel o zona" required></td>
+            <td><input type="number" class="hotel-cuartos" value="0" min="0" oninput="calcularTotalHoteles()" required></td>
             <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaHotel(this)">✕</button></td>
           </tr>
         </tbody>
@@ -562,20 +525,20 @@
       <table class="data-table" id="tablaProcedencias">
         <thead>
           <tr>
-            <th style="width: 60%;">Estado / Procedencia</th>
-            <th style="width: 28%;">Número de Asistentes</th>
+            <th style="width: 60%;">Estado / Procedencia *</th>
+            <th style="width: 28%;">Número de Asistentes *</th>
             <th style="width: 12%; text-align: center;">Acción</th>
           </tr>
         </thead>
         <tbody id="procedenciaBody">
           <tr>
-            <td><input type="text" class="procedencia-lugar" placeholder="Estado o Ciudad"></td>
-            <td><input type="number" class="procedencia-cantidad" value="0" min="0" oninput="calcularTotalProcedencias()"></td>
+            <td><input type="text" class="procedencia-lugar" placeholder="Estado o Ciudad" required></td>
+            <td><input type="number" class="procedencia-cantidad" value="0" min="0" oninput="calcularTotalProcedencias()" required></td>
             <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaProcedencia(this)">✕</button></td>
           </tr>
           <tr>
-            <td><input type="text" class="procedencia-lugar" placeholder="Estado o Ciudad"></td>
-            <td><input type="number" class="procedencia-cantidad" value="0" min="0" oninput="calcularTotalProcedencias()"></td>
+            <td><input type="text" class="procedencia-lugar" placeholder="Estado o Ciudad" required></td>
+            <td><input type="number" class="procedencia-cantidad" value="0" min="0" oninput="calcularTotalProcedencias()" required></td>
             <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaProcedencia(this)">✕</button></td>
           </tr>
         </tbody>
@@ -591,38 +554,38 @@
       <button type="button" class="btn-add-row" onclick="agregarFilaProcedencia()">+ Agregar Procedencia</button>
 
       <div class="subsection-heading">Distribución por Rango de Edad (%):</div>
-      <p class="subsection-subtitle">Indica el porcentaje estimado de asistentes que corresponde a cada rango de edad. La suma de todos los rangos debe ser 100%.</p>
+      <p class="subsection-subtitle">Indica el porcentaje estimado de asistentes que corresponde a cada rango de edad. La suma debe ser 100%.</p>
 
       <div class="grid-2">
         <div class="form-group">
-          <label for="edad_3_17">3 a 17 años (%)</label>
-          <input type="number" id="edad_3_17" name="edad_3_17" placeholder="0" min="0" max="100">
+          <label for="edad_3_17">3 a 17 años (%) *</label>
+          <input type="number" id="edad_3_17" name="edad_3_17" placeholder="0" min="0" max="100" required>
         </div>
         <div class="form-group">
-          <label for="edad_18_25">18 a 25 años (%)</label>
-          <input type="number" id="edad_18_25" name="edad_18_25" placeholder="0" min="0" max="100">
+          <label for="edad_18_25">18 a 25 años (%) *</label>
+          <input type="number" id="edad_18_25" name="edad_18_25" placeholder="0" min="0" max="100" required>
         </div>
       </div>
 
       <div class="grid-2">
         <div class="form-group">
-          <label for="edad_26_30">26 a 30 años (%)</label>
-          <input type="number" id="edad_26_30" name="edad_26_30" placeholder="0" min="0" max="100">
+          <label for="edad_26_30">26 a 30 años (%) *</label>
+          <input type="number" id="edad_26_30" name="edad_26_30" placeholder="0" min="0" max="100" required>
         </div>
         <div class="form-group">
-          <label for="edad_31_39">31 a 39 años (%)</label>
-          <input type="number" id="edad_31_39" name="edad_31_39" placeholder="0" min="0" max="100">
+          <label for="edad_31_39">31 a 39 años (%) *</label>
+          <input type="number" id="edad_31_39" name="edad_31_39" placeholder="0" min="0" max="100" required>
         </div>
       </div>
 
       <div class="grid-2">
         <div class="form-group">
-          <label for="edad_40_55">40 a 55 años (%)</label>
-          <input type="number" id="edad_40_55" name="edad_40_55" placeholder="0" min="0" max="100">
+          <label for="edad_40_55">40 a 55 años (%) *</label>
+          <input type="number" id="edad_40_55" name="edad_40_55" placeholder="0" min="0" max="100" required>
         </div>
         <div class="form-group">
-          <label for="edad_56_mas">56 años o más (%)</label>
-          <input type="number" id="edad_56_mas" name="edad_56_mas" placeholder="0" min="0" max="100">
+          <label for="edad_56_mas">56 años o más (%) *</label>
+          <input type="number" id="edad_56_mas" name="edad_56_mas" placeholder="0" min="0" max="100" required>
         </div>
       </div>
 
@@ -641,8 +604,8 @@
       </label>
 
       <div class="file-input-wrapper">
-        <label for="archivos_adjuntos">Adjuntar Archivos / Reportes (ZIP, PDF, Excel o Imágenes):</label>
-        <input type="file" id="archivos_adjuntos" multiple accept=".zip,.pdf,.xls,.xlsx,.doc,.docx,.png,.jpg,.jpeg" onchange="validarTamanoArchivos()">
+        <label for="archivos_adjuntos">Adjuntar Archivos / Reportes (ZIP, PDF, Excel o Imágenes) *:</label>
+        <input type="file" id="archivos_adjuntos" multiple accept=".zip,.pdf,.xls,.xlsx,.doc,.docx,.png,.jpg,.jpeg" onchange="validarTamanoArchivos()" required>
         
         <div class="drive-notice">
           ℹ️ <strong>Nota:</strong> Si tus archivos pesan más de <strong>15 MB en total</strong>, por favor súbelos directamente a nuestra 
@@ -675,7 +638,7 @@
       <table class="eval-table">
         <thead>
           <tr>
-            <th style="width: 44%;">Concepto a Evaluar</th>
+            <th style="width: 44%;">Concepto a Evaluar *</th>
             <th style="width: 14%;">Excelente</th>
             <th style="width: 14%;">Bueno</th>
             <th style="width: 14%;">Regular</th>
@@ -685,28 +648,28 @@
         <tbody>
           <tr>
             <td>Servicio de la Asesora / OCV</td>
-            <td><input type="radio" name="servicio_asesora" value="Excelente" checked></td>
+            <td><input type="radio" name="servicio_asesora" value="Excelente" checked required></td>
             <td><input type="radio" name="servicio_asesora" value="Bueno"></td>
             <td><input type="radio" name="servicio_asesora" value="Regular"></td>
             <td><input type="radio" name="servicio_asesora" value="Malo"></td>
           </tr>
           <tr>
             <td>Servicio de Proveeduría Local</td>
-            <td><input type="radio" name="servicio_proveeduria" value="Excelente" checked></td>
+            <td><input type="radio" name="servicio_proveeduria" value="Excelente" checked required></td>
             <td><input type="radio" name="servicio_proveeduria" value="Bueno"></td>
             <td><input type="radio" name="servicio_proveeduria" value="Regular"></td>
             <td><input type="radio" name="servicio_proveeduria" value="Malo"></td>
           </tr>
           <tr>
             <td>Experiencia en el Recinto</td>
-            <td><input type="radio" name="experiencia_recinto" value="Excelente" checked></td>
+            <td><input type="radio" name="experiencia_recinto" value="Excelente" checked required></td>
             <td><input type="radio" name="experiencia_recinto" value="Bueno"></td>
             <td><input type="radio" name="experiencia_recinto" value="Regular"></td>
             <td><input type="radio" name="experiencia_recinto" value="Malo"></td>
           </tr>
           <tr>
             <td>Servicio en Hoteles</td>
-            <td><input type="radio" name="servicio_hoteles" value="Excelente" checked></td>
+            <td><input type="radio" name="servicio_hoteles" value="Excelente" checked required></td>
             <td><input type="radio" name="servicio_hoteles" value="Bueno"></td>
             <td><input type="radio" name="servicio_hoteles" value="Regular"></td>
             <td><input type="radio" name="servicio_hoteles" value="Malo"></td>
@@ -714,8 +677,9 @@
         </tbody>
       </table>
 
+      <!-- ÚNICO CAMPO OPCIONAL / NO OBLIGATORIO -->
       <div class="form-group">
-        <label for="comentarios">Comentarios y Retroalimentación Adicional:</label>
+        <label for="comentarios">Comentarios y Retroalimentación Adicional (Opcional):</label>
         <textarea id="comentarios" name="comentarios" rows="3" placeholder="Escriba aquí sus observaciones..."></textarea>
       </div>
 
@@ -743,7 +707,7 @@
 
       <label class="checkbox-container" style="margin-top: 16px;">
         <input type="checkbox" id="declaracion_veracidad" name="declaracion_veracidad" required>
-        <span>Declaro que la información y los datos proporcionados en el presente formulario son completos, correctos y verídicos, y manifiesto mi conformidad y responsabilidad respecto de la exactitud de la información ingresada.</span>
+        <span>Declaro que la información y los datos proporcionados en el presente formulario son completos, correctos y verídicos, y manifiesto mi conformidad y responsabilidad respecto de la exactitud de la información ingresada. *</span>
       </label>
 
       <button type="submit" class="btn-submit" id="submitBtn">Generar Reporte y Enviar</button>
@@ -751,7 +715,7 @@
   </div>
 
   <script>
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzNjmNfiwQCfS5am4JVZjf4UIr5B6Xnb1-wVbURYvs2viuaVH-2zrJBRO0CbJ8og0B2/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxRj6-Ergku3UQU8f_e3uJlCQ7u4TGGxNDKQjQyK39rtafENpDOIXBmVQiIRMMU6NNj/exec';
 
     const form = document.getElementById('ocvForm');
     const submitBtn = document.getElementById('submitBtn');
@@ -812,8 +776,8 @@
       const tbody = document.getElementById('hotelBody');
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td><input type="text" class="hotel-nombre" placeholder="Nombre del hotel o zona"></td>
-        <td><input type="number" class="hotel-cuartos" value="0" min="0" oninput="calcularTotalHoteles()"></td>
+        <td><input type="text" class="hotel-nombre" placeholder="Nombre del hotel o zona" required></td>
+        <td><input type="number" class="hotel-cuartos" value="0" min="0" oninput="calcularTotalHoteles()" required></td>
         <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaHotel(this)">✕</button></td>
       `;
       tbody.appendChild(tr);
@@ -844,8 +808,8 @@
       const tbody = document.getElementById('procedenciaBody');
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td><input type="text" class="procedencia-lugar" placeholder="Estado o Ciudad"></td>
-        <td><input type="number" class="procedencia-cantidad" value="0" min="0" oninput="calcularTotalProcedencias()"></td>
+        <td><input type="text" class="procedencia-lugar" placeholder="Estado o Ciudad" required></td>
+        <td><input type="number" class="procedencia-cantidad" value="0" min="0" oninput="calcularTotalProcedencias()" required></td>
         <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaProcedencia(this)">✕</button></td>
       `;
       tbody.appendChild(tr);
