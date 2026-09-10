@@ -589,8 +589,8 @@
         </div>
       </div>
 
-      <!-- 5. Evidencia Documental -->
-      <div class="section-title">5. Evidencia Documental</div>
+      <!-- 5. Evidencia Documental (OPCIONAL) -->
+      <div class="section-title">5. Evidencia Documental (Opcional)</div>
       <p class="subsection-subtitle">Selecciona la evidencia disponible y adjunta los archivos que ayuden a complementar la información del evento.</p>
       
       <label class="checkbox-container">
@@ -604,8 +604,9 @@
       </label>
 
       <div class="file-input-wrapper">
-        <label for="archivos_adjuntos">Adjuntar Archivos / Reportes (ZIP, PDF, Excel o Imágenes) *:</label>
-        <input type="file" id="archivos_adjuntos" multiple accept=".zip,.pdf,.xls,.xlsx,.doc,.docx,.png,.jpg,.jpeg" onchange="validarTamanoArchivos()" required>
+        <label for="archivos_adjuntos">Adjuntar Archivos / Reportes (ZIP, PDF, Excel o Imágenes) (Opcional):</label>
+        <!-- SE REMOVIÓ EL ATRIBUTO REQUIRED PARA HACERLO OPCIONAL -->
+        <input type="file" id="archivos_adjuntos" multiple accept=".zip,.pdf,.xls,.xlsx,.doc,.docx,.png,.jpg,.jpeg" onchange="validarTamanoArchivos()">
         
         <div class="drive-notice">
           ℹ️ <strong>Nota:</strong> Si tus archivos pesan más de <strong>15 MB en total</strong>, por favor súbelos directamente a nuestra 
@@ -677,7 +678,7 @@
         </tbody>
       </table>
 
-      <!-- ÚNICO CAMPO OPCIONAL / NO OBLIGATORIO -->
+      <!-- CAMPO OPCIONAL -->
       <div class="form-group">
         <label for="comentarios">Comentarios y Retroalimentación Adicional (Opcional):</label>
         <textarea id="comentarios" name="comentarios" rows="3" placeholder="Escriba aquí sus observaciones..."></textarea>
