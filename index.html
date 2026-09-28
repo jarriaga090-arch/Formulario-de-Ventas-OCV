@@ -469,6 +469,25 @@
         </div>
       </div>
 
+      <!-- CAMPOS CON ICONOS DISTINTIVOS (♀ Y ♂) -->
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="mujeres_asistentes">
+            <span style="color: #ec4899; font-weight: bold; font-size: 1.05rem; margin-right: 2px;">♀</span> Mujeres Asistentes *
+          </label>
+          <input type="text" id="mujeres_asistentes" name="mujeres_asistentes" placeholder="Ej. 26,000" required>
+          <span class="field-hint">Número estimado de mujeres asistentes.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="hombres_asistentes">
+            <span style="color: #3b82f6; font-weight: bold; font-size: 1.05rem; margin-right: 2px;">♂</span> Hombres Asistentes *
+          </label>
+          <input type="text" id="hombres_asistentes" name="hombres_asistentes" placeholder="Ej. 24,000" required>
+          <span class="field-hint">Número estimado de hombres asistentes.</span>
+        </div>
+      </div>
+
       <div class="grid-2">
         <div class="form-group">
           <label for="cuartos_noche">Cuartos-Noche Generados (Total Global) *</label>
@@ -517,7 +536,7 @@
       <button type="button" class="btn-add-row" onclick="agregarFilaHotel()">+ Agregar Hotel</button>
 
       <!-- 4. Resumen Demográfico de Asistentes -->
-      <div class="section-title">4. Resumen Demográfico de Asistentes (Anónimo)</div>
+      <div class="section-title">4. Resumen Demográfico de Asistentes </div>
       <p class="subsection-subtitle">Indica de qué estado o país provienen los asistentes y registra el número estimado de personas de cada lugar.</p>
 
       <div class="subsection-heading">Procedencia por Estado / Región (Cantidad de Asistentes):</div>
@@ -590,7 +609,7 @@
       </div>
 
       <!-- 5. Evidencia Documental -->
-      <div class="section-title">5. Evidencia Documental</div>
+      <div class="section-title">5. Evidencia Documental </div>
       <p class="subsection-subtitle">Selecciona la evidencia disponible y adjunta los archivos que ayuden a complementar la información del evento.</p>
       
       <label class="checkbox-container">
@@ -604,8 +623,8 @@
       </label>
 
       <div class="file-input-wrapper">
-        <label for="archivos_adjuntos">Adjuntar Archivos / Reportes (ZIP, PDF, Excel o Imágenes) *:</label>
-        <input type="file" id="archivos_adjuntos" multiple accept=".zip,.pdf,.xls,.xlsx,.doc,.docx,.png,.jpg,.jpeg" onchange="validarTamanoArchivos()" required>
+        <label for="archivos_adjuntos">Adjuntar Archivos / Reportes (ZIP, PDF, Excel o Imágenes):</label>
+        <input type="file" id="archivos_adjuntos" multiple accept=".zip,.pdf,.xls,.xlsx,.doc,.docx,.png,.jpg,.jpeg" onchange="validarTamanoArchivos()">
         
         <div class="drive-notice">
           ℹ️ <strong>Nota:</strong> Si tus archivos pesan más de <strong>15 MB en total</strong>, por favor súbelos directamente a nuestra 
@@ -677,7 +696,7 @@
         </tbody>
       </table>
 
-      <!-- ÚNICO CAMPO OPCIONAL / NO OBLIGATORIO -->
+      <!-- CAMPO OPCIONAL -->
       <div class="form-group">
         <label for="comentarios">Comentarios y Retroalimentación Adicional (Opcional):</label>
         <textarea id="comentarios" name="comentarios" rows="3" placeholder="Escriba aquí sus observaciones..."></textarea>
@@ -715,7 +734,7 @@
   </div>
 
   <script>
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzNjmNfiwQCfS5am4JVZjf4UIr5B6Xnb1-wVbURYvs2viuaVH-2zrJBRO0CbJ8og0B2/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxRj6-Ergku3UQU8f_e3uJlCQ7u4TGGxNDKQjQyK39rtafENpDOIXBmVQiIRMMU6NNj/exec';
 
     const form = document.getElementById('ocvForm');
     const submitBtn = document.getElementById('submitBtn');
@@ -916,6 +935,8 @@
         total_asistentes: document.getElementById('total_asistentes')?.value || '',
         asistentes_locales: document.getElementById('asistentes_locales')?.value || '',
         asistentes_foraneos: document.getElementById('asistentes_foraneos')?.value || '',
+        mujeres_asistentes: document.getElementById('mujeres_asistentes')?.value || '',
+        hombres_asistentes: document.getElementById('hombres_asistentes')?.value || '',
         cuartos_noche: document.getElementById('cuartos_noche')?.value || '',
         derrama_economica: document.getElementById('derrama_economica')?.value || '',
 
