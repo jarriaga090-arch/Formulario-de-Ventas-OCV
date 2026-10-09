@@ -159,8 +159,15 @@
       gap: 16px;
     }
 
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
     @media (max-width: 640px) {
       .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .grid-4 { grid-template-columns: 1fr 1fr; }
     }
 
     .form-group {
@@ -283,6 +290,19 @@
       width: 17px;
       height: 17px;
       cursor: pointer;
+    }
+
+    .room-type-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      background-color: #ffffff;
+      transition: border-color 0.2s, background-color 0.2s;
+    }
+
+    .room-type-card:hover {
+      border-color: var(--primary);
+      background-color: #f0f4ff;
     }
 
     .file-input-wrapper {
@@ -467,6 +487,33 @@
           <input type="text" id="asistentes_foraneos" name="asistentes_foraneos" placeholder="Ej. 6,000" required>
           <span class="field-hint">Personas que provienen de fuera de Nuevo León.</span>
         </div>
+      </div>
+
+      <!-- NUEVO CAMPO: SELECCIÓN DEL TIPO DE HABITACIÓN MÁS UTILIZADA -->
+      <div class="form-group" style="margin-bottom: 18px;">
+        <label style="margin-bottom: 8px;">Selecciona qué tipo de habitación utilizará más tu evento: *</label>
+        <div class="grid-4">
+          <label class="checkbox-container room-type-card">
+            <input type="checkbox" name="tipo_habitacion" value="Sencilla" onchange="validarSeleccionHabitacion(this)">
+            <span>1. Sencilla</span>
+          </label>
+
+          <label class="checkbox-container room-type-card">
+            <input type="checkbox" name="tipo_habitacion" value="Doble" onchange="validarSeleccionHabitacion(this)">
+            <span>2. Doble</span>
+          </label>
+
+          <label class="checkbox-container room-type-card">
+            <input type="checkbox" name="tipo_habitacion" value="Triple" onchange="validarSeleccionHabitacion(this)">
+            <span>3. Triple</span>
+          </label>
+
+          <label class="checkbox-container room-type-card">
+            <input type="checkbox" name="tipo_habitacion" value="Cuádrulpe" onchange="validarSeleccionHabitacion(this)">
+            <span>4. Cuádruple</span>
+          </label>
+        </div>
+        <span class="field-hint">Selecciona la opción predominante para la logística de hospedaje del evento.</span>
       </div>
 
       <!-- CAMPOS CON ICONOS DISTINTIVOS (♀ Y ♂) -->
@@ -748,6 +795,16 @@
       }, 600);
     });
 
+    // === SELECCIÓN ÚNICA EN CHECKBOXES DE TIPO DE HABITACIÓN ===
+    function validarSeleccionHabitacion(checkboxActual) {
+      const checkboxes = document.querySelectorAll('input[name="tipo_habitacion"]');
+      if (checkboxActual.checked) {
+        checkboxes.forEach(cb => {
+          if (cb !== checkboxActual) cb.checked = false;
+        });
+      }
+    }
+
     // === MOSTRAR / OCULTAR CAMPO DE "OTRO" EN BOLETERA ===
     function toggleOtroBoletera() {
       const select = document.getElementById('boletera_select');
@@ -875,6 +932,12 @@
     form.addEventListener('submit', async function(e) {
       e.preventDefault();
 
+      const tipoHabitacionSel = document.querySelector('input[name="tipo_habitacion"]:checked')?.value;
+      if (!tipoHabitacionSel) {
+        alert('Por favor selecciona el tipo de habitación que utilizará más tu evento.');
+        return;
+      }
+
       const originalText = submitBtn.innerText;
       submitBtn.innerText = 'Procesando archivos y generando Word...';
       submitBtn.disabled = true;
@@ -935,6 +998,7 @@
         total_asistentes: document.getElementById('total_asistentes')?.value || '',
         asistentes_locales: document.getElementById('asistentes_locales')?.value || '',
         asistentes_foraneos: document.getElementById('asistentes_foraneos')?.value || '',
+        tipo_habitacion_predominante: tipoHabitacionSel,
         mujeres_asistentes: document.getElementById('mujeres_asistentes')?.value || '',
         hombres_asistentes: document.getElementById('hombres_asistentes')?.value || '',
         cuartos_noche: document.getElementById('cuartos_noche')?.value || '',
