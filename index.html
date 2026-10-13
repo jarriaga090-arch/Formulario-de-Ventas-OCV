@@ -589,4 +589,618 @@
           </tr>
           <tr>
             <td><input type="text" class="hotel-nombre" placeholder="Nombre del hotel o zona" required></td>
-            <td><input type="number" class="hotel-cuartos" value="0" min="0" oninput="calcularTotalHoteles()" required>
+            <td><input type="number" class="hotel-cuartos" value="0" min="0" oninput="calcularTotalHoteles()" required></td>
+            <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaHotel(this)">✕</button></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr class="row-total">
+            <td>Total Hotelería Estimado</td>
+            <td id="labelTotalHoteles">0</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <button type="button" class="btn-add-row" onclick="agregarFilaHotel()">+ Agregar Hotel</button>
+
+      <!-- 4. Resumen Demográfico de Asistentes -->
+      <div class="section-title">4. Resumen Demográfico de Asistentes </div>
+      <p class="subsection-subtitle">Indica de qué estado o país provienen los asistentes y registra el número estimado de personas de cada lugar.</p>
+
+      <div class="subsection-heading">Procedencia por Estado / Región (Cantidad de Asistentes):</div>
+
+      <table class="data-table" id="tablaProcedencias">
+        <thead>
+          <tr>
+            <th style="width: 60%;">Estado / Procedencia *</th>
+            <th style="width: 28%;">Número de Asistentes *</th>
+            <th style="width: 12%; text-align: center;">Acción</th>
+          </tr>
+        </thead>
+        <tbody id="procedenciaBody">
+          <tr>
+            <td><input type="text" class="procedencia-lugar" placeholder="Estado o Ciudad" required></td>
+            <td><input type="number" class="procedencia-cantidad" value="0" min="0" oninput="calcularTotalProcedencias()" required></td>
+            <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaProcedencia(this)">✕</button></td>
+          </tr>
+          <tr>
+            <td><input type="text" class="procedencia-lugar" placeholder="Estado o Ciudad" required></td>
+            <td><input type="number" class="procedencia-cantidad" value="0" min="0" oninput="calcularTotalProcedencias()" required></td>
+            <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaProcedencia(this)">✕</button></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr class="row-total">
+            <td>Total Asistentes por Procedencia</td>
+            <td id="labelTotalProcedencias">0</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <button type="button" class="btn-add-row" onclick="agregarFilaProcedencia()">+ Agregar Procedencia</button>
+
+      <div class="subsection-heading">Distribución por Rango de Edad (%):</div>
+      <p class="subsection-subtitle">Indica el porcentaje estimado de asistentes que corresponde a cada rango de edad. La suma debe ser 100%.</p>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="edad_3_17">3 a 17 años (%) *</label>
+          <input type="number" id="edad_3_17" name="edad_3_17" placeholder="0" min="0" max="100" required>
+        </div>
+        <div class="form-group">
+          <label for="edad_18_25">18 a 25 años (%) *</label>
+          <input type="number" id="edad_18_25" name="edad_18_25" placeholder="0" min="0" max="100" required>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="edad_26_30">26 a 30 años (%) *</label>
+          <input type="number" id="edad_26_30" name="edad_26_30" placeholder="0" min="0" max="100" required>
+        </div>
+        <div class="form-group">
+          <label for="edad_31_39">31 a 39 años (%) *</label>
+          <input type="number" id="edad_31_39" name="edad_31_39" placeholder="0" min="0" max="100" required>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="edad_40_55">40 a 55 años (%) *</label>
+          <input type="number" id="edad_40_55" name="edad_40_55" placeholder="0" min="0" max="100" required>
+        </div>
+        <div class="form-group">
+          <label for="edad_56_mas">56 años o más (%) *</label>
+          <input type="number" id="edad_56_mas" name="edad_56_mas" placeholder="0" min="0" max="100" required>
+        </div>
+      </div>
+
+      <!-- 5. Evidencia Documental -->
+      <div class="section-title">5. Evidencia Documental </div>
+      <p class="subsection-subtitle">Selecciona la evidencia disponible y adjunta los archivos que ayuden a complementar la información del evento.</p>
+      
+      <label class="checkbox-container">
+        <input type="checkbox" id="check_bd" value="Base de datos digital original (exportada de sistema de registro: edad, sexo y procedencia sin datos personales).">
+        <span>Base de datos digital original (exportada de sistema de registro: edad, sexo y procedencia sin datos personales).</span>
+      </label>
+
+      <label class="checkbox-container">
+        <input type="checkbox" id="check_testigos" value="Testigos fotográficos (gafetes, presencia de marca/logos, aforos, memorias del evento).">
+        <span>Testigos fotográficos (gafetes, presencia de marca/logos, aforos, memorias del evento).</span>
+      </label>
+
+      <div class="file-input-wrapper">
+        <label for="archivos_adjuntos">Adjuntar Archivos / Reportes (ZIP, PDF, Excel o Imágenes):</label>
+        <input type="file" id="archivos_adjuntos" multiple accept=".zip,.pdf,.xls,.xlsx,.doc,.docx,.png,.jpg,.jpeg" onchange="validarTamanoArchivos()">
+        
+        <div class="drive-notice">
+          ℹ️ <strong>Nota:</strong> Si tus archivos pesan más de <strong>15 MB en total</strong>, por favor súbelos directamente a nuestra 
+          <a href="https://drive.google.com/drive/folders/1cXZV0SWfkk-V8m69QT-jBj4LVOvEdC0q?usp=sharing" target="_blank" rel="noopener">carpeta compartida de Google Drive aquí</a>.
+        </div>
+
+        <div class="drive-warning" id="driveWarning">
+          ⚠️ <strong>Archivos muy pesados:</strong> El peso total de tus archivos seleccionados es de <span id="pesoTotalArchivos">0</span> MB (supera el límite de 15 MB).<br>
+          Por favor deselecciónalos y cáargalos directamente en la <a href="https://drive.google.com/drive/folders/1cXZV0SWfkk-V8m69QT-jBj4LVOvEdC0q?usp=sharing" target="_blank" rel="noopener">Carpeta Compartida de Google Drive</a> para poder enviar tu reporte.
+        </div>
+      </div>
+
+      <!-- 6. Experiencia en el Destino y OCV -->
+      <div class="section-title">6. Experiencia en el Destino y OCV</div>
+      <p class="subsection-subtitle">Evalúa tu experiencia con la asesoría y acompañamiento recibidos durante el evento.</p>
+      
+      <div class="form-group">
+        <label for="asesora_nombre">Asesora / Ejecutivo que lo atendió *</label>
+        <select id="asesora_nombre" name="asesora_nombre" required>
+          <option value="" disabled selected>Selecciona una persona asesora</option>
+          <option value="Brenda Ruiz">Brenda Ruiz</option>
+          <option value="Gabriela Santillán">Gabriela Santillán</option>
+          <option value="Samantha Moncayo">Samantha Moncayo</option>
+          <option value="Laura Sánchez">Laura Sánchez</option>
+          <option value="Erika López">Erika López</option>
+          <option value="Berenice Yépez">Berenice Yépez</option>
+        </select>
+      </div>
+
+      <table class="eval-table">
+        <thead>
+          <tr>
+            <th style="width: 44%;">Concepto a Evaluar *</th>
+            <th style="width: 14%;">Excelente</th>
+            <th style="width: 14%;">Bueno</th>
+            <th style="width: 14%;">Regular</th>
+            <th style="width: 14%;">Malo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Servicio de la Asesora / OCV</td>
+            <td><input type="radio" name="servicio_asesora" value="Excelente" checked required></td>
+            <td><input type="radio" name="servicio_asesora" value="Bueno"></td>
+            <td><input type="radio" name="servicio_asesora" value="Regular"></td>
+            <td><input type="radio" name="servicio_asesora" value="Malo"></td>
+          </tr>
+          <tr>
+            <td>Servicio de Proveeduría Local</td>
+            <td><input type="radio" name="servicio_proveeduria" value="Excelente" checked required></td>
+            <td><input type="radio" name="servicio_proveeduria" value="Bueno"></td>
+            <td><input type="radio" name="servicio_proveeduria" value="Regular"></td>
+            <td><input type="radio" name="servicio_proveeduria" value="Malo"></td>
+          </tr>
+          <tr>
+            <td>Experiencia en el Recinto</td>
+            <td><input type="radio" name="experiencia_recinto" value="Excelente" checked required></td>
+            <td><input type="radio" name="experiencia_recinto" value="Bueno"></td>
+            <td><input type="radio" name="experiencia_recinto" value="Regular"></td>
+            <td><input type="radio" name="experiencia_recinto" value="Malo"></td>
+          </tr>
+          <tr>
+            <td>Servicio en Hoteles</td>
+            <td><input type="radio" name="servicio_hoteles" value="Excelente" checked required></td>
+            <td><input type="radio" name="servicio_hoteles" value="Bueno"></td>
+            <td><input type="radio" name="servicio_hoteles" value="Regular"></td>
+            <td><input type="radio" name="servicio_hoteles" value="Malo"></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- CAMPO OPCIONAL -->
+      <div class="form-group">
+        <label for="comentarios">Comentarios y Retroalimentación Adicional (Opcional):</label>
+        <textarea id="comentarios" name="comentarios" rows="3" placeholder="Escriba aquí sus observaciones..."></textarea>
+      </div>
+
+      <!-- 7. Datos de Contacto y Declaración -->
+      <div class="section-title">7. Datos de Contacto y Declaración</div>
+      <div class="grid-3">
+        <div class="form-group">
+          <label for="contacto_nombre">Nombre Completo *</label>
+          <input type="text" id="contacto_nombre" name="contacto_nombre" placeholder="Nombre de contacto" required>
+        </div>
+        <div class="form-group">
+          <label for="contacto_telefono">Teléfono *</label>
+          <input type="text" id="contacto_telefono" name="contacto_telefono" placeholder="Ej. 81 1234 5678" required>
+        </div>
+        <div class="form-group">
+          <label for="contacto_mail">Correo Electrónico *</label>
+          <input type="email" id="contacto_mail" name="contacto_mail" placeholder="correo@ejemplo.com" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="organizador_cargo">Cargo / Puesto *</label>
+        <input type="text" id="organizador_cargo" name="organizador_cargo" placeholder="Ej. CEO / Director General" required>
+      </div>
+
+      <label class="checkbox-container" style="margin-top: 16px;">
+        <input type="checkbox" id="declaracion_veracidad" name="declaracion_veracidad" required>
+        <span>Declaro que la información y los datos proporcionados en el presente formulario son completos, correctos y verídicos, y manifiesto mi conformidad y responsabilidad respecto de la exactitud de la información ingresada. *</span>
+      </label>
+
+      <button type="submit" class="btn-submit" id="submitBtn">Generar Reporte y Enviar</button>
+    </form>
+  </div>
+
+  <script>
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxRj6-Ergku3UQU8f_e3uJlCQ7u4TGGxNDKQjQyK39rtafENpDOIXBmVQiIRMMU6NNj/exec';
+
+    const form = document.getElementById('ocvForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const MAX_SIZE_BYTES = 15 * 1024 * 1024;
+
+    // === CONTROL DEL SPLASH SCREEN ===
+    function ocultarSplashScreen() {
+      const splash = document.getElementById('splash-screen');
+      if (splash) {
+        splash.classList.add('hidden');
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', function() {
+      setTimeout(ocultarSplashScreen, 1500);
+    });
+
+    // === CÁLCULO AUTOMÁTICO DE DERRAMA ECONÓMICA (RESTA DIRECTA EN DÍAS) ===
+    function calcularDerramaEconomica() {
+      const inputInicio = document.getElementById('fecha_inicio').value;
+      const inputFin = document.getElementById('fecha_fin').value;
+      const inputForaneos = document.getElementById('asistentes_foraneos').value;
+      const checkboxConsumo = document.querySelector('input[name="consumo_diario"]:checked');
+      const inputDerrama = document.getElementById('derrama_economica');
+
+      if (!inputInicio || !inputFin || !inputForaneos || !checkboxConsumo) {
+        inputDerrama.value = '';
+        return;
+      }
+
+      // 1. Valor numérico del consumo diario
+      const consumoTexto = checkboxConsumo.value;
+      const consumoDiario = parseFloat(consumoTexto.replace(/[^0-9.]/g, '')) || 0;
+
+      // 2. Asistentes foráneos
+      const asistentesForaneos = parseFloat(inputForaneos.replace(/[^0-9.]/g, '')) || 0;
+
+      // 3. Noches de Estadía = Fecha Fin - Fecha Inicio (Resta directa en días)
+      const fechaInicio = new Date(inputInicio);
+      const fechaFin = new Date(inputFin);
+      const diferenciaMs = fechaFin - fechaInicio;
+      
+      let noches = 0;
+      if (diferenciaMs > 0) {
+        noches = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24)); // Resta directa pura
+      } else if (diferenciaMs === 0) {
+        noches = 1; // Mismo día = 1 día/noche
+      }
+
+      if (noches > 0 && consumoDiario > 0 && asistentesForaneos > 0) {
+        const totalDerrama = consumoDiario * noches * asistentesForaneos;
+        inputDerrama.value = `$${totalDerrama.toLocaleString('en-US')} M.N.`;
+      } else {
+        inputDerrama.value = '';
+      }
+    }
+
+    // === SELECCIÓN ÚNICA EN CHECKBOXES DE TIPO DE HABITACIÓN ===
+    function validarSeleccionHabitacion(checkboxActual) {
+      const checkboxes = document.querySelectorAll('input[name="tipo_habitacion"]');
+      if (checkboxActual.checked) {
+        checkboxes.forEach(cb => {
+          if (cb !== checkboxActual) cb.checked = false;
+        });
+      }
+    }
+
+    // === CAMBIO DINÁMICO SEGÚN TIPO DE EVENTO ===
+    const MONTOS_POR_EVENTO = {
+      'Deportivo': ['$2,350', '$6,900'],
+      'Médico': ['$4,600', '$8,800'],
+      'Corporativo': ['$5,000', '$10,273'],
+      'Otro': ['$2,350', '$6,900', '$4,600', '$8,800', '$5,000', '$10,273']
+    };
+
+    function cambiarTipoEvento() {
+      const selectEvento = document.getElementById('tipo_evento_select');
+      const grupoOtro = document.getElementById('grupo_tipo_evento_otro');
+      const inputOtro = document.getElementById('tipo_evento_otro');
+      const grupoConsumo = document.getElementById('grupo_consumo_diario');
+      const contenedorCantidades = document.getElementById('contenedor_cantidades');
+
+      const seleccion = selectEvento.value;
+
+      if (seleccion === 'Otro') {
+        grupoOtro.style.display = 'flex';
+        inputOtro.required = true;
+      } else {
+        grupoOtro.style.display = 'none';
+        inputOtro.required = false;
+        inputOtro.value = '';
+      }
+
+      const montos = MONTOS_POR_EVENTO[seleccion] || [];
+      contenedorCantidades.innerHTML = '';
+
+      if (montos.length > 0) {
+        montos.forEach(monto => {
+          const label = document.createElement('label');
+          label.className = 'checkbox-container custom-card';
+          label.innerHTML = `
+            <input type="checkbox" name="consumo_diario" value="${monto}" onchange="validarSeleccionConsumo(this)">
+            <span>${monto}</span>
+          `;
+          contenedorCantidades.appendChild(label);
+        });
+        grupoConsumo.style.display = 'block';
+      } else {
+        grupoConsumo.style.display = 'none';
+      }
+
+      calcularDerramaEconomica();
+    }
+
+    // === SELECCIÓN ÚNICA EN CHECKBOXES DE CONSUMO PROMEDIO DIARIO ===
+    function validarSeleccionConsumo(checkboxActual) {
+      const checkboxes = document.querySelectorAll('input[name="consumo_diario"]');
+      if (checkboxActual.checked) {
+        checkboxes.forEach(cb => {
+          if (cb !== checkboxActual) cb.checked = false;
+        });
+      }
+      calcularDerramaEconomica();
+    }
+
+    // === MOSTRAR / OCULTAR CAMPO DE "OTRO" EN BOLETERA ===
+    function toggleOtroBoletera() {
+      const select = document.getElementById('boletera_select');
+      const grupoOtro = document.getElementById('grupo_boletera_otro');
+      const inputOtro = document.getElementById('boletera_otro');
+
+      if (select.value === 'Otro') {
+        grupoOtro.style.display = 'flex';
+        inputOtro.required = true;
+      } else {
+        grupoOtro.style.display = 'none';
+        inputOtro.required = false;
+        inputOtro.value = '';
+      }
+    }
+
+    // === VALIDAR TAMAÑO DE ARCHIVOS ===
+    function validarTamanoArchivos() {
+      const fileInput = document.getElementById('archivos_adjuntos');
+      const warningBox = document.getElementById('driveWarning');
+      const pesoSpan = document.getElementById('pesoTotalArchivos');
+
+      let totalBytes = 0;
+      if (fileInput && fileInput.files.length > 0) {
+        for (let i = 0; i < fileInput.files.length; i++) {
+          totalBytes += fileInput.files[i].size;
+        }
+      }
+
+      const totalMB = (totalBytes / (1024 * 1024)).toFixed(2);
+
+      if (totalBytes > MAX_SIZE_BYTES) {
+        warningBox.style.display = 'block';
+        pesoSpan.innerText = totalMB;
+        submitBtn.disabled = true;
+        alert(`Tus archivos pesan ${totalMB} MB en total, superando el límite de 15 MB.\n\nPor favor súbelos a la carpeta de Google Drive indicada.`);
+      } else {
+        warningBox.style.display = 'none';
+        submitBtn.disabled = false;
+      }
+    }
+
+    // === HOTELES ===
+    function agregarFilaHotel() {
+      const tbody = document.getElementById('hotelBody');
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><input type="text" class="hotel-nombre" placeholder="Nombre del hotel o zona" required></td>
+        <td><input type="number" class="hotel-cuartos" value="0" min="0" oninput="calcularTotalHoteles()" required></td>
+        <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaHotel(this)">✕</button></td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    function eliminarFilaHotel(btn) {
+      const tbody = document.getElementById('hotelBody');
+      if (tbody.rows.length > 1) {
+        btn.closest('tr').remove();
+        calcularTotalHoteles();
+      } else {
+        alert('Debe existir al menos una fila en la relación de hoteles.');
+      }
+    }
+
+    function calcularTotalHoteles() {
+      const inputs = document.querySelectorAll('.hotel-cuartos');
+      let total = 0;
+      inputs.forEach(input => {
+        const val = parseFloat(input.value) || 0;
+        total += val;
+      });
+      document.getElementById('labelTotalHoteles').innerText = total.toLocaleString();
+    }
+
+    // === PROCEDENCIAS ===
+    function agregarFilaProcedencia() {
+      const tbody = document.getElementById('procedenciaBody');
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><input type="text" class="procedencia-lugar" placeholder="Estado o Ciudad" required></td>
+        <td><input type="number" class="procedencia-cantidad" value="0" min="0" oninput="calcularTotalProcedencias()" required></td>
+        <td style="text-align: center;"><button type="button" class="btn-remove-row" onclick="eliminarFilaProcedencia(this)">✕</button></td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    function eliminarFilaProcedencia(btn) {
+      const tbody = document.getElementById('procedenciaBody');
+      if (tbody.rows.length > 1) {
+        btn.closest('tr').remove();
+        calcularTotalProcedencias();
+      } else {
+        alert('Debe existir al menos una fila de procedencia.');
+      }
+    }
+
+    function calcularTotalProcedencias() {
+      const inputs = document.querySelectorAll('.procedencia-cantidad');
+      let total = 0;
+      inputs.forEach(input => {
+        const val = parseFloat(input.value) || 0;
+        total += val;
+      });
+      document.getElementById('labelTotalProcedencias').innerText = total.toLocaleString();
+    }
+
+    // === CONVERSIÓN DE ARCHIVOS A BASE64 ===
+    function readFileAsBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const base64String = reader.result.split(',')[1];
+          resolve({
+            name: file.name,
+            type: file.type,
+            base64: base64String
+          });
+        };
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // === ENVÍO DEL FORMULARIO ===
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const tipoHabitacionSel = document.querySelector('input[name="tipo_habitacion"]:checked')?.value;
+      if (!tipoHabitacionSel) {
+        alert('Por favor selecciona el tipo de habitación que utilizará más tu evento.');
+        return;
+      }
+
+      const selTipoEvento = document.getElementById('tipo_evento_select')?.value;
+      const tipoEventoFinal = selTipoEvento === 'Otro'
+        ? (document.getElementById('tipo_evento_otro')?.value || 'Otro')
+        : selTipoEvento;
+
+      const consumoDiarioSel = document.querySelector('input[name="consumo_diario"]:checked')?.value;
+      if (!consumoDiarioSel) {
+        alert('Por favor selecciona el consumo promedio por día de tus asistentes.');
+        return;
+      }
+
+      const originalText = submitBtn.innerText;
+      submitBtn.innerText = 'Procesando archivos y generando Word...';
+      submitBtn.disabled = true;
+
+      const selBoletera = document.getElementById('boletera_select')?.value || '';
+      const boleteraFinal = selBoletera === 'Otro' 
+        ? (document.getElementById('boletera_otro')?.value || 'Otro') 
+        : selBoletera;
+
+      const fInicio = document.getElementById('fecha_inicio')?.value || '';
+      const fFin = document.getElementById('fecha_fin')?.value || '';
+      let fechaTexto = '';
+      if (fInicio && fFin) {
+        fechaTexto = `Del ${fInicio} al ${fFin}`;
+      } else if (fInicio) {
+        fechaTexto = fInicio;
+      } else if (fFin) {
+        fechaTexto = fFin;
+      }
+
+      const e0 = document.getElementById('edad_3_17')?.value;
+      const e1 = document.getElementById('edad_18_25')?.value;
+      const e2 = document.getElementById('edad_26_30')?.value;
+      const e3 = document.getElementById('edad_31_39')?.value;
+      const e4 = document.getElementById('edad_40_55')?.value;
+      const e5 = document.getElementById('edad_56_mas')?.value;
+
+      let resumenEdades = [];
+      if (e0) resumenEdades.push('3 a 17 años: ' + e0 + '%');
+      if (e1) resumenEdades.push('18 a 25 años: ' + e1 + '%');
+      if (e2) resumenEdades.push('26 a 30 años: ' + e2 + '%');
+      if (e3) resumenEdades.push('31 a 39 años: ' + e3 + '%');
+      if (e4) resumenEdades.push('40 a 55 años: ' + e4 + '%');
+      if (e5) resumenEdades.push('56 años o más: ' + e5 + '%');
+
+      let evidencias = [];
+      const c1 = document.getElementById('check_bd');
+      const c2 = document.getElementById('check_testigos');
+      if (c1 && c1.checked) evidencias.push('☒ ' + c1.value);
+      if (c2 && c2.checked) evidencias.push('☒ ' + c2.value);
+
+      const fileInput = document.getElementById('archivos_adjuntos');
+      let archivosAdjuntos = [];
+      if (fileInput && fileInput.files.length > 0) {
+        for (let i = 0; i < fileInput.files.length; i++) {
+          const fileData = await readFileAsBase64(fileInput.files[i]);
+          archivosAdjuntos.push(fileData);
+        }
+      }
+
+      const data = {
+        nombre_evento: document.getElementById('nombre_evento')?.value || '',
+        nombre_organizador: document.getElementById('nombre_organizador')?.value || '',
+        fecha_realizacion: fechaTexto,
+        recinto: document.getElementById('recinto')?.value || '',
+        boletera: boleteraFinal,
+
+        total_asistentes: document.getElementById('total_asistentes')?.value || '',
+        asistentes_locales: document.getElementById('asistentes_locales')?.value || '',
+        asistentes_foraneos: document.getElementById('asistentes_foraneos')?.value || '',
+        tipo_habitacion_predominante: tipoHabitacionSel,
+        tipo_evento: tipoEventoFinal,
+        consumo_diario_asistentes: consumoDiarioSel,
+        cuartos_noche: document.getElementById('cuartos_noche')?.value || '',
+        derrama_economica: document.getElementById('derrama_economica')?.value || '',
+
+        distribucion_edad: resumenEdades.join('\n') || 'Sin especificar',
+        evidencia_documental: evidencias.join('\n') || 'Sin evidencia documental marcada',
+
+        asesora_nombre: document.getElementById('asesora_nombre')?.value || '',
+        servicio_asesora: document.querySelector('input[name="servicio_asesora"]:checked')?.value || '',
+        servicio_proveeduria: document.querySelector('input[name="servicio_proveeduria"]:checked')?.value || '',
+        experiencia_recinto: document.querySelector('input[name="experiencia_recinto"]:checked')?.value || '',
+        servicio_hoteles: document.querySelector('input[name="servicio_hoteles"]:checked')?.value || '',
+        comentarios: document.getElementById('comentarios')?.value || '',
+
+        contacto_nombre: document.getElementById('contacto_nombre')?.value || '',
+        contacto_telefono: document.getElementById('contacto_telefono')?.value || '',
+        contacto_mail: document.getElementById('contacto_mail')?.value || '',
+        organizador_cargo: document.getElementById('organizador_cargo')?.value || '',
+        declaracion_veracidad: document.getElementById('declaracion_veracidad')?.checked ? 'Aceptada' : 'No aceptada',
+
+        archivos_adjuntos: archivosAdjuntos
+      };
+
+      const nombresHoteles = document.querySelectorAll('.hotel-nombre');
+      const cuartosHoteles = document.querySelectorAll('.hotel-cuartos');
+      for (let i = 0; i < 5; i++) {
+        data[`hotel_${i + 1}_nombre`] = nombresHoteles[i] ? nombresHoteles[i].value : '';
+        data[`hotel_${i + 1}_cuartos`] = (cuartosHoteles[i] && cuartosHoteles[i].value !== '0') ? cuartosHoteles[i].value : '';
+      }
+      data['total_hoteleria_cuartos'] = document.getElementById('labelTotalHoteles').innerText;
+
+      const lugaresProcedencia = document.querySelectorAll('.procedencia-lugar');
+      const cantidadesProcedencia = document.querySelectorAll('.procedencia-cantidad');
+      for (let i = 0; i < 4; i++) {
+        data[`procedencia_${i + 1}_lugar`] = lugaresProcedencia[i] ? lugaresProcedencia[i].value : '';
+        data[`procedencia_${i + 1}_cantidad`] = (cantidadesProcedencia[i] && cantidadesProcedencia[i].value !== '0') ? cantidadesProcedencia[i].value : '';
+      }
+      data['procedencia_otros_cantidad'] = (cantidadesProcedencia[4] && cantidadesProcedencia[4].value !== '0') ? cantidadesProcedencia[4].value : '';
+      data['procedencia_total'] = document.getElementById('labelTotalProcedencias').innerText;
+
+      try {
+        await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8'
+          },
+          body: JSON.stringify(data)
+        });
+
+        alert('¡Reporte generado con éxito! Se ha enviado el documento Word y los archivos adjuntos a tu correo.');
+        form.reset();
+        document.getElementById('grupo_boletera_otro').style.display = 'none';
+        document.getElementById('grupo_tipo_evento_otro').style.display = 'none';
+        document.getElementById('grupo_consumo_diario').style.display = 'none';
+        document.getElementById('labelTotalHoteles').innerText = '0';
+        document.getElementById('labelTotalProcedencias').innerText = '0';
+        document.getElementById('driveWarning').style.display = 'none';
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Ocurrió un error al procesar el formulario.');
+      } finally {
+        submitBtn.innerText = originalText;
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
