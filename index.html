@@ -591,31 +591,31 @@
         </div>
       </div>
 
-      <!-- TIPO DE HABITACIÓN MÁS UTILIZADA -->
+      <!-- TIPO DE HABITACIÓN MÁS UTILIZADA (SELECCIÓN MÚLTIPLE PERMITIDA) -->
       <div class="form-group" style="margin-bottom: 18px;">
         <label style="margin-bottom: 8px;">Selecciona qué tipo de habitación utilizará más tu evento: *</label>
         <div class="grid-4">
           <label class="checkbox-container custom-card">
-            <input type="checkbox" name="tipo_habitacion" value="Sencilla" data-factor="1.5" onchange="validarSeleccionHabitacion(this)">
+            <input type="checkbox" name="tipo_habitacion" value="Sencilla" data-factor="1.5" onchange="ejecutarCalculos()">
             <span>1. Sencilla (1.5)</span>
           </label>
 
           <label class="checkbox-container custom-card">
-            <input type="checkbox" name="tipo_habitacion" value="Doble" data-factor="2" onchange="validarSeleccionHabitacion(this)">
+            <input type="checkbox" name="tipo_habitacion" value="Doble" data-factor="2" onchange="ejecutarCalculos()">
             <span>2. Doble (2)</span>
           </label>
 
           <label class="checkbox-container custom-card">
-            <input type="checkbox" name="tipo_habitacion" value="Triple" data-factor="3" onchange="validarSeleccionHabitacion(this)">
+            <input type="checkbox" name="tipo_habitacion" value="Triple" data-factor="3" onchange="ejecutarCalculos()">
             <span>3. Triple (3)</span>
           </label>
 
           <label class="checkbox-container custom-card">
-            <input type="checkbox" name="tipo_habitacion" value="Cuádrulpe" data-factor="4" onchange="validarSeleccionHabitacion(this)">
+            <input type="checkbox" name="tipo_habitacion" value="Cuádrulpe" data-factor="4" onchange="ejecutarCalculos()">
             <span>4. Cuádruple (4)</span>
           </label>
         </div>
-        <span class="field-hint">Selecciona la opción predominante para la logística de hospedaje del evento.</span>
+        <span class="field-hint">Puedes seleccionar una o varias opciones para calcular los cuartos-noche de cada una.</span>
       </div>
 
       <!-- SECTOR DINÁMICO: TIPO DE EVENTO Y CONSUMO PROMEDIO DIARIO -->
@@ -649,7 +649,7 @@
         <div class="form-group">
           <label for="cuartos_noche">Cuartos-Noche Generados (Total Global) *</label>
           <input type="text" id="cuartos_noche" name="cuartos_noche" placeholder="Cálculo automático" readonly required>
-          <span class="field-hint">Se calcula automáticamente: (Noches × Asistentes Foráneos) / Factor Habitación.</span>
+          <span class="field-hint">Muestra los cuartos-noche exactos desglosados para cada tipo de habitación seleccionado.</span>
         </div>
         <div class="form-group">
           <label for="derrama_economica">Derrama Económica Estimada ($ M.N.) *</label>
@@ -1020,7 +1020,7 @@
       const inputInicio = document.getElementById('fecha_inicio').value;
       const inputFin = document.getElementById('fecha_fin').value;
       const checkboxConsumo = document.querySelector('input[name="consumo_diario"]:checked');
-      const checkboxHabitacion = document.querySelector('input[name="tipo_habitacion"]:checked');
+      const checkboxesHabitacion = document.querySelectorAll('input[name="tipo_habitacion"]:checked');
       
       const inputDerrama = document.getElementById('derrama_economica');
       const inputCuartosNoche = document.getElementById('cuartos_noche');
@@ -1067,25 +1067,21 @@
         inputDerrama.value = '';
       }
 
-      // B) CÁLCULO DE CUARTOS-NOCHE GENERADOS ((Noches × Foráneos) / Factor Habitación)
-      if (checkboxHabitacion && noches > 0) {
-        const factor = parseFloat(checkboxHabitacion.getAttribute('data-factor')) || 1;
-        const totalCuartos = Math.round((noches * asistentesForaneos) / factor);
-        inputCuartosNoche.value = totalCuartos.toLocaleString('en-US');
+      // B) CÁLCULO DESGLOSADO DE CUARTOS-NOCHE POR TIPO DE HABITACIÓN SELECCIONADO
+      if (checkboxesHabitacion.length > 0 && noches > 0) {
+        let resultadosDesglosados = [];
+
+        checkboxesHabitacion.forEach(cb => {
+          const nombreHab = cb.value;
+          const factor = parseFloat(cb.getAttribute('data-factor')) || 1;
+          const cuartosCalculados = Math.round((noches * asistentesForaneos) / factor);
+          resultadosDesglosados.push(`${nombreHab}: ${cuartosCalculados.toLocaleString('en-US')}`);
+        });
+
+        inputCuartosNoche.value = resultadosDesglosados.join(' | ');
       } else {
         inputCuartosNoche.value = '';
       }
-    }
-
-    // === SELECCIÓN ÚNICA EN CHECKBOXES DE TIPO DE HABITACIÓN ===
-    function validarSeleccionHabitacion(checkboxActual) {
-      const checkboxes = document.querySelectorAll('input[name="tipo_habitacion"]');
-      if (checkboxActual.checked) {
-        checkboxes.forEach(cb => {
-          if (cb !== checkboxActual) cb.checked = false;
-        });
-      }
-      ejecutarCalculos();
     }
 
     // === CAMBIO DINÁMICO SEGÚN TIPO DE EVENTO ===
@@ -1285,11 +1281,15 @@
         return;
       }
 
-      const tipoHabitacionSel = document.querySelector('input[name="tipo_habitacion"]:checked')?.value;
-      if (!tipoHabitacionSel) {
-        alert('Por favor selecciona el tipo de habitación que utilizará más tu evento.');
+      const checkboxesHabitacion = document.querySelectorAll('input[name="tipo_habitacion"]:checked');
+      if (checkboxesHabitacion.length === 0) {
+        alert('Por favor selecciona al menos un tipo de habitación que utilizará tu evento.');
         return;
       }
+
+      let habitacionesSeleccionadas = [];
+      checkboxesHabitacion.forEach(cb => habitacionesSeleccionadas.push(cb.value));
+      const tipoHabitacionSelText = habitacionesSeleccionadas.join(', ');
 
       const selTipoEvento = document.getElementById('tipo_evento_select')?.value;
       const tipoEventoFinal = selTipoEvento === 'Otro'
@@ -1362,7 +1362,7 @@
         total_asistentes: document.getElementById('total_asistentes')?.value || '',
         asistentes_locales: document.getElementById('asistentes_locales')?.value || '',
         asistentes_foraneos: document.getElementById('asistentes_foraneos')?.value || '',
-        tipo_habitacion_predominante: tipoHabitacionSel,
+        tipo_habitacion_predominante: tipoHabitacionSelText,
         tipo_evento: tipoEventoFinal,
         consumo_diario_asistentes: consumoDiarioSel,
         cuartos_noche: document.getElementById('cuartos_noche')?.value || '',
