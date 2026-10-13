@@ -551,25 +551,6 @@
         <span class="field-hint">Gasto diario estimado por asistente dentro del destino.</span>
       </div>
 
-      <!-- CAMPOS CON ICONOS DISTINTIVOS (♀ Y ♂) -->
-      <div class="grid-2">
-        <div class="form-group">
-          <label for="mujeres_asistentes">
-            <span style="color: #ec4899; font-weight: bold; font-size: 1.05rem; margin-right: 2px;">♀</span> Mujeres Asistentes *
-          </label>
-          <input type="text" id="mujeres_asistentes" name="mujeres_asistentes" placeholder="Ej. 26,000" required>
-          <span class="field-hint">Número estimado de mujeres asistentes.</span>
-        </div>
-
-        <div class="form-group">
-          <label for="hombres_asistentes">
-            <span style="color: #3b82f6; font-weight: bold; font-size: 1.05rem; margin-right: 2px;">♂</span> Hombres Asistentes *
-          </label>
-          <input type="text" id="hombres_asistentes" name="hombres_asistentes" placeholder="Ej. 24,000" required>
-          <span class="field-hint">Número estimado de hombres asistentes.</span>
-        </div>
-      </div>
-
       <div class="grid-2">
         <div class="form-group">
           <label for="cuartos_noche">Cuartos-Noche Generados (Total Global) *</label>
@@ -1107,8 +1088,6 @@
         tipo_habitacion_predominante: tipoHabitacionSel,
         tipo_evento: tipoEventoFinal,
         consumo_diario_asistentes: consumoDiarioSel,
-        mujeres_asistentes: document.getElementById('mujeres_asistentes')?.value || '',
-        hombres_asistentes: document.getElementById('hombres_asistentes')?.value || '',
         cuartos_noche: document.getElementById('cuartos_noche')?.value || '',
         derrama_economica: document.getElementById('derrama_economica')?.value || '',
 
