@@ -29,7 +29,7 @@
       line-height: 1.5;
     }
 
-    /* === ESTILOS DEL SPLASH SCREEN ROBUSTO === */
+    /* === ESTILOS DEL SPLASH SCREEN === */
     #splash-screen {
       position: fixed;
       top: 0;
@@ -63,7 +63,6 @@
       100% { transform: rotate(360deg); }
     }
 
-    /* SOLUCIÓN AL BLOQUEO Y PANTALLA EN BLANCO */
     #splash-screen.hidden {
       opacity: 0;
       display: none !important;
@@ -202,6 +201,13 @@
       border-radius: 6px;
       font-size: 0.95rem;
       background-color: #fff;
+    }
+
+    .form-group input[readonly] {
+      background-color: #f1f5f9;
+      color: #334155;
+      font-weight: 700;
+      cursor: not-allowed;
     }
 
     .form-group input:focus, 
@@ -445,11 +451,11 @@
       <div class="grid-2">
         <div class="form-group">
           <label for="fecha_inicio">Fecha de Inicio *</label>
-          <input type="date" id="fecha_inicio" name="fecha_inicio" required>
+          <input type="date" id="fecha_inicio" name="fecha_inicio" onchange="calcularDerramaEconomica()" required>
         </div>
         <div class="form-group">
           <label for="fecha_fin">Fecha de Fin *</label>
-          <input type="date" id="fecha_fin" name="fecha_fin" required>
+          <input type="date" id="fecha_fin" name="fecha_fin" onchange="calcularDerramaEconomica()" required>
         </div>
       </div>
 
@@ -492,7 +498,7 @@
         </div>
         <div class="form-group">
           <label for="asistentes_foraneos">Asistentes Foráneos *</label>
-          <input type="text" id="asistentes_foraneos" name="asistentes_foraneos" placeholder="Ej. 6,000" required>
+          <input type="text" id="asistentes_foraneos" name="asistentes_foraneos" placeholder="Ej. 6,000" oninput="calcularDerramaEconomica()" required>
           <span class="field-hint">Personas que provienen de fuera de Nuevo León.</span>
         </div>
       </div>
@@ -559,8 +565,8 @@
         </div>
         <div class="form-group">
           <label for="derrama_economica">Derrama Económica Estimada ($ M.N.) *</label>
-          <input type="text" id="derrama_economica" name="derrama_economica" placeholder="Ej. $248,400,000 M.N." required>
-          <span class="field-hint">Gasto estimado que generará el evento en la ciudad.</span>
+          <input type="text" id="derrama_economica" name="derrama_economica" placeholder="Cálculo automático" readonly required>
+          <span class="field-hint">Se calcula automáticamente: Consumo Diario × Noches de Estadía × Asistentes Foráneos.</span>
         </div>
       </div>
 
@@ -803,7 +809,7 @@
     const submitBtn = document.getElementById('submitBtn');
     const MAX_SIZE_BYTES = 15 * 1024 * 1024;
 
-    // === CONTROL DEL SPLASH SCREEN SIN BLOQUEO DE PANTALLA ===
+    // === CONTROL DEL SPLASH SCREEN ===
     function ocultarSplashScreen() {
       const splash = document.getElementById('splash-screen');
       if (splash) {
@@ -811,10 +817,51 @@
       }
     }
 
-    // Ocultar a los 1.5 segundos asegurando fluidez en la carga
     window.addEventListener('DOMContentLoaded', function() {
       setTimeout(ocultarSplashScreen, 1500);
     });
+
+    // === CÁLCULO AUTOMÁTICO DE DERRAMA ECONÓMICA ===
+    function calcularDerramaEconomica() {
+      const inputInicio = document.getElementById('fecha_inicio').value;
+      const inputFin = document.getElementById('fecha_fin').value;
+      const inputForaneos = document.getElementById('asistentes_foraneos').value;
+      const checkboxConsumo = document.querySelector('input[name="consumo_diario"]:checked');
+      const inputDerrama = document.getElementById('derrama_economica');
+
+      if (!inputInicio || !inputFin || !inputForaneos || !checkboxConsumo) {
+        inputDerrama.value = '';
+        return;
+      }
+
+      // 1. Extraer el valor numérico del consumo diario
+      const consumoTexto = checkboxConsumo.value;
+      const consumoDiario = parseFloat(consumoTexto.replace(/[^0-9.]/g, '')) || 0;
+
+      // 2. Extraer valor de asistentes foráneos
+      const asistentesForaneos = parseFloat(inputForaneos.replace(/[^0-9.]/g, '')) || 0;
+
+      // 3. Calcular Noches de Estadía ((Fecha Fin - Fecha Inicio) - 1)
+      const fechaInicio = new Date(inputInicio);
+      const fechaFin = new Date(inputFin);
+      const diferenciaMs = fechaFin - fechaInicio;
+      
+      let noches = 0;
+      if (diferenciaMs > 0) {
+        const diasDiferencia = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
+        noches = diasDiferencia - 1;
+        if (noches < 1) noches = 1; // Si el evento dura 1 o 2 días se considera al menos 1 noche
+      } else if (diferenciaMs === 0) {
+        noches = 1; // Mismo día
+      }
+
+      if (noches > 0 && consumoDiario > 0 && asistentesForaneos > 0) {
+        const totalDerrama = consumoDiario * noches * asistentesForaneos;
+        inputDerrama.value = `$${totalDerrama.toLocaleString('en-US')} M.N.`;
+      } else {
+        inputDerrama.value = '';
+      }
+    }
 
     // === SELECCIÓN ÚNICA EN CHECKBOXES DE TIPO DE HABITACIÓN ===
     function validarSeleccionHabitacion(checkboxActual) {
@@ -869,6 +916,8 @@
       } else {
         grupoConsumo.style.display = 'none';
       }
+
+      calcularDerramaEconomica();
     }
 
     // === SELECCIÓN ÚNICA EN CHECKBOXES DE CONSUMO PROMEDIO DIARIO ===
@@ -879,6 +928,7 @@
           if (cb !== checkboxActual) cb.checked = false;
         });
       }
+      calcularDerramaEconomica();
     }
 
     // === MOSTRAR / OCULTAR CAMPO DE "OTRO" EN BOLETERA ===
