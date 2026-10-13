@@ -451,11 +451,11 @@
       <div class="grid-2">
         <div class="form-group">
           <label for="fecha_inicio">Fecha de Inicio *</label>
-          <input type="date" id="fecha_inicio" name="fecha_inicio" onchange="calcularDerramaEconomica()" required>
+          <input type="date" id="fecha_inicio" name="fecha_inicio" onchange="ejecutarCalculos()" required>
         </div>
         <div class="form-group">
           <label for="fecha_fin">Fecha de Fin *</label>
-          <input type="date" id="fecha_fin" name="fecha_fin" onchange="calcularDerramaEconomica()" required>
+          <input type="date" id="fecha_fin" name="fecha_fin" onchange="ejecutarCalculos()" required>
         </div>
       </div>
 
@@ -498,7 +498,7 @@
         </div>
         <div class="form-group">
           <label for="asistentes_foraneos">Asistentes Foráneos *</label>
-          <input type="text" id="asistentes_foraneos" name="asistentes_foraneos" placeholder="Ej. 6,000" oninput="calcularDerramaEconomica()" required>
+          <input type="text" id="asistentes_foraneos" name="asistentes_foraneos" placeholder="Ej. 6,000" oninput="ejecutarCalculos()" required>
           <span class="field-hint">Personas que provienen de fuera de Nuevo León.</span>
         </div>
       </div>
@@ -508,23 +508,23 @@
         <label style="margin-bottom: 8px;">Selecciona qué tipo de habitación utilizará más tu evento: *</label>
         <div class="grid-4">
           <label class="checkbox-container custom-card">
-            <input type="checkbox" name="tipo_habitacion" value="Sencilla" onchange="validarSeleccionHabitacion(this)">
-            <span>1. Sencilla</span>
+            <input type="checkbox" name="tipo_habitacion" value="Sencilla" data-factor="1.5" onchange="validarSeleccionHabitacion(this)">
+            <span>1. Sencilla (1.5)</span>
           </label>
 
           <label class="checkbox-container custom-card">
-            <input type="checkbox" name="tipo_habitacion" value="Doble" onchange="validarSeleccionHabitacion(this)">
-            <span>2. Doble</span>
+            <input type="checkbox" name="tipo_habitacion" value="Doble" data-factor="2" onchange="validarSeleccionHabitacion(this)">
+            <span>2. Doble (2)</span>
           </label>
 
           <label class="checkbox-container custom-card">
-            <input type="checkbox" name="tipo_habitacion" value="Triple" onchange="validarSeleccionHabitacion(this)">
-            <span>3. Triple</span>
+            <input type="checkbox" name="tipo_habitacion" value="Triple" data-factor="3" onchange="validarSeleccionHabitacion(this)">
+            <span>3. Triple (3)</span>
           </label>
 
           <label class="checkbox-container custom-card">
-            <input type="checkbox" name="tipo_habitacion" value="Cuádrulpe" onchange="validarSeleccionHabitacion(this)">
-            <span>4. Cuádruple</span>
+            <input type="checkbox" name="tipo_habitacion" value="Cuádrulpe" data-factor="4" onchange="validarSeleccionHabitacion(this)">
+            <span>4. Cuádruple (4)</span>
           </label>
         </div>
         <span class="field-hint">Selecciona la opción predominante para la logística de hospedaje del evento.</span>
@@ -560,13 +560,13 @@
       <div class="grid-2">
         <div class="form-group">
           <label for="cuartos_noche">Cuartos-Noche Generados (Total Global) *</label>
-          <input type="text" id="cuartos_noche" name="cuartos_noche" placeholder="Ej. 4,800" required>
-          <span class="field-hint">Número de habitaciones de hotel ocupadas por los asistentes foráneos.</span>
+          <input type="text" id="cuartos_noche" name="cuartos_noche" placeholder="Cálculo automático" readonly required>
+          <span class="field-hint">Se calcula automáticamente: (Noches × Asistentes Foráneos) / Factor Habitación.</span>
         </div>
         <div class="form-group">
           <label for="derrama_economica">Derrama Económica Estimada ($ M.N.) *</label>
           <input type="text" id="derrama_economica" name="derrama_economica" placeholder="Cálculo automático" readonly required>
-          <span class="field-hint">Se calcula automáticamente: Consumo Diario × Noches de Estadía × Asistentes Foráneos.</span>
+          <span class="field-hint">Se calcula automáticamente: Consumo Diario × Noches × Asistentes Foráneos.</span>
         </div>
       </div>
 
@@ -821,43 +821,55 @@
       setTimeout(ocultarSplashScreen, 1500);
     });
 
-    // === CÁLCULO AUTOMÁTICO DE DERRAMA ECONÓMICA (RESTA DIRECTA EN DÍAS) ===
-    function calcularDerramaEconomica() {
+    // === CÁLCULOS AUTOMÁTICOS INTEGRADOS ===
+    function ejecutarCalculos() {
       const inputInicio = document.getElementById('fecha_inicio').value;
       const inputFin = document.getElementById('fecha_fin').value;
       const inputForaneos = document.getElementById('asistentes_foraneos').value;
       const checkboxConsumo = document.querySelector('input[name="consumo_diario"]:checked');
+      const checkboxHabitacion = document.querySelector('input[name="tipo_habitacion"]:checked');
+      
       const inputDerrama = document.getElementById('derrama_economica');
+      const inputCuartosNoche = document.getElementById('cuartos_noche');
 
-      if (!inputInicio || !inputFin || !inputForaneos || !checkboxConsumo) {
+      // Si no están los campos base completos, limpiar resultados
+      if (!inputInicio || !inputFin || !inputForaneos) {
         inputDerrama.value = '';
+        inputCuartosNoche.value = '';
         return;
       }
 
-      // 1. Valor numérico del consumo diario
-      const consumoTexto = checkboxConsumo.value;
-      const consumoDiario = parseFloat(consumoTexto.replace(/[^0-9.]/g, '')) || 0;
-
-      // 2. Asistentes foráneos
-      const asistentesForaneos = parseFloat(inputForaneos.replace(/[^0-9.]/g, '')) || 0;
-
-      // 3. Noches de Estadía = Fecha Fin - Fecha Inicio (Resta directa en días)
+      // 1. Extraer Noches de Estadía = Fecha Fin - Fecha Inicio
       const fechaInicio = new Date(inputInicio);
       const fechaFin = new Date(inputFin);
       const diferenciaMs = fechaFin - fechaInicio;
       
       let noches = 0;
       if (diferenciaMs > 0) {
-        noches = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24)); // Resta directa pura
+        noches = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
       } else if (diferenciaMs === 0) {
-        noches = 1; // Mismo día = 1 día/noche
+        noches = 1; // Mismo día
       }
 
-      if (noches > 0 && consumoDiario > 0 && asistentesForaneos > 0) {
+      const asistentesForaneos = parseFloat(inputForaneos.replace(/[^0-9.]/g, '')) || 0;
+
+      // A) CÁLCULO DE DERRAMA ECONÓMICA (Consumo Diario × Noches × Foráneos)
+      if (checkboxConsumo && noches > 0 && asistentesForaneos > 0) {
+        const consumoTexto = checkboxConsumo.value;
+        const consumoDiario = parseFloat(consumoTexto.replace(/[^0-9.]/g, '')) || 0;
         const totalDerrama = consumoDiario * noches * asistentesForaneos;
         inputDerrama.value = `$${totalDerrama.toLocaleString('en-US')} M.N.`;
       } else {
         inputDerrama.value = '';
+      }
+
+      // B) CÁLCULO DE CUARTOS-NOCHE GENERADOS ((Noches × Foráneos) / Factor Habitacional)
+      if (checkboxHabitacion && noches > 0 && asistentesForaneos > 0) {
+        const factor = parseFloat(checkboxHabitacion.getAttribute('data-factor')) || 1;
+        const totalCuartos = Math.round((noches * asistentesForaneos) / factor);
+        inputCuartosNoche.value = totalCuartos.toLocaleString('en-US');
+      } else {
+        inputCuartosNoche.value = '';
       }
     }
 
@@ -869,6 +881,7 @@
           if (cb !== checkboxActual) cb.checked = false;
         });
       }
+      ejecutarCalculos();
     }
 
     // === CAMBIO DINÁMICO SEGÚN TIPO DE EVENTO ===
@@ -915,7 +928,7 @@
         grupoConsumo.style.display = 'none';
       }
 
-      calcularDerramaEconomica();
+      ejecutarCalculos();
     }
 
     // === SELECCIÓN ÚNICA EN CHECKBOXES DE CONSUMO PROMEDIO DIARIO ===
@@ -926,7 +939,7 @@
           if (cb !== checkboxActual) cb.checked = false;
         });
       }
-      calcularDerramaEconomica();
+      ejecutarCalculos();
     }
 
     // === MOSTRAR / OCULTAR CAMPO DE "OTRO" EN BOLETERA ===
