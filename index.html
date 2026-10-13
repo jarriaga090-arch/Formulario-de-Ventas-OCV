@@ -218,6 +218,94 @@
       box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
     }
 
+    /* === ESTILOS PARA LOS RANGE SLIDERS Y CONTADOR DINÁMICO === */
+    .slider-box {
+      background-color: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .slider-header label {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 0;
+    }
+
+    .slider-val {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--primary);
+      background-color: #eff6ff;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid #bfdbfe;
+    }
+
+    .slider-input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .slider-input-wrapper input[type="range"] {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: #cbd5e1;
+      outline: none;
+      cursor: pointer;
+      accent-color: var(--primary);
+    }
+
+    .slider-num-input {
+      width: 60px !important;
+      padding: 6px 8px !important;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .total-percent-container {
+      background-color: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-top: 10px;
+      margin-bottom: 18px;
+    }
+
+    .total-percent-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 10px;
+      background-color: #e2e8f0;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background-color: #059669;
+      transition: width 0.2s ease, background-color 0.2s ease;
+    }
+
     .data-table {
       width: 100%;
       border-collapse: collapse;
@@ -641,39 +729,90 @@
 
       <button type="button" class="btn-add-row" onclick="agregarFilaProcedencia()">+ Agregar Procedencia</button>
 
+      <!-- DISTRIBUCIÓN DINÁMICA POR EDAD CON RANGE SLIDERS -->
       <div class="subsection-heading">Distribución por Rango de Edad (%):</div>
-      <p class="subsection-subtitle">Indica el porcentaje estimado de asistentes que corresponde a cada rango de edad. La suma debe ser 100%.</p>
+      <p class="subsection-subtitle">Arrastra la barra para asignar el porcentaje estimado a cada rango de edad. La suma total debe ser 100%.</p>
 
       <div class="grid-2">
-        <div class="form-group">
-          <label for="edad_3_17">3 a 17 años (%) *</label>
-          <input type="number" id="edad_3_17" name="edad_3_17" placeholder="0" min="0" max="100" required>
+        <div class="slider-box">
+          <div class="slider-header">
+            <label for="edad_3_17">3 a 17 años</label>
+            <span class="slider-val" id="val_edad_3_17">0%</span>
+          </div>
+          <div class="slider-input-wrapper">
+            <input type="range" id="edad_3_17" name="edad_3_17" min="0" max="100" value="0" oninput="sincronizarEdad('edad_3_17', 'num_edad_3_17', 'val_edad_3_17', true)">
+            <input type="number" id="num_edad_3_17" class="slider-num-input" min="0" max="100" value="0" oninput="sincronizarEdad('edad_3_17', 'num_edad_3_17', 'val_edad_3_17', false)">
+          </div>
         </div>
-        <div class="form-group">
-          <label for="edad_18_25">18 a 25 años (%) *</label>
-          <input type="number" id="edad_18_25" name="edad_18_25" placeholder="0" min="0" max="100" required>
+
+        <div class="slider-box">
+          <div class="slider-header">
+            <label for="edad_18_25">18 a 25 años</label>
+            <span class="slider-val" id="val_edad_18_25">0%</span>
+          </div>
+          <div class="slider-input-wrapper">
+            <input type="range" id="edad_18_25" name="edad_18_25" min="0" max="100" value="0" oninput="sincronizarEdad('edad_18_25', 'num_edad_18_25', 'val_edad_18_25', true)">
+            <input type="number" id="num_edad_18_25" class="slider-num-input" min="0" max="100" value="0" oninput="sincronizarEdad('edad_18_25', 'num_edad_18_25', 'val_edad_18_25', false)">
+          </div>
         </div>
       </div>
 
-      <div class="grid-2">
-        <div class="form-group">
-          <label for="edad_26_30">26 a 30 años (%) *</label>
-          <input type="number" id="edad_26_30" name="edad_26_30" placeholder="0" min="0" max="100" required>
+      <div class="grid-2" style="margin-top: 12px;">
+        <div class="slider-box">
+          <div class="slider-header">
+            <label for="edad_26_30">26 a 30 años</label>
+            <span class="slider-val" id="val_edad_26_30">0%</span>
+          </div>
+          <div class="slider-input-wrapper">
+            <input type="range" id="edad_26_30" name="edad_26_30" min="0" max="100" value="0" oninput="sincronizarEdad('edad_26_30', 'num_edad_26_30', 'val_edad_26_30', true)">
+            <input type="number" id="num_edad_26_30" class="slider-num-input" min="0" max="100" value="0" oninput="sincronizarEdad('edad_26_30', 'num_edad_26_30', 'val_edad_26_30', false)">
+          </div>
         </div>
-        <div class="form-group">
-          <label for="edad_31_39">31 a 39 años (%) *</label>
-          <input type="number" id="edad_31_39" name="edad_31_39" placeholder="0" min="0" max="100" required>
+
+        <div class="slider-box">
+          <div class="slider-header">
+            <label for="edad_31_39">31 a 39 años</label>
+            <span class="slider-val" id="val_edad_31_39">0%</span>
+          </div>
+          <div class="slider-input-wrapper">
+            <input type="range" id="edad_31_39" name="edad_31_39" min="0" max="100" value="0" oninput="sincronizarEdad('edad_31_39', 'num_edad_31_39', 'val_edad_31_39', true)">
+            <input type="number" id="num_edad_31_39" class="slider-num-input" min="0" max="100" value="0" oninput="sincronizarEdad('edad_31_39', 'num_edad_31_39', 'val_edad_31_39', false)">
+          </div>
         </div>
       </div>
 
-      <div class="grid-2">
-        <div class="form-group">
-          <label for="edad_40_55">40 a 55 años (%) *</label>
-          <input type="number" id="edad_40_55" name="edad_40_55" placeholder="0" min="0" max="100" required>
+      <div class="grid-2" style="margin-top: 12px;">
+        <div class="slider-box">
+          <div class="slider-header">
+            <label for="edad_40_55">40 a 55 años</label>
+            <span class="slider-val" id="val_edad_40_55">0%</span>
+          </div>
+          <div class="slider-input-wrapper">
+            <input type="range" id="edad_40_55" name="edad_40_55" min="0" max="100" value="0" oninput="sincronizarEdad('edad_40_55', 'num_edad_40_55', 'val_edad_40_55', true)">
+            <input type="number" id="num_edad_40_55" class="slider-num-input" min="0" max="100" value="0" oninput="sincronizarEdad('edad_40_55', 'num_edad_40_55', 'val_edad_40_55', false)">
+          </div>
         </div>
-        <div class="form-group">
-          <label for="edad_56_mas">56 años o más (%) *</label>
-          <input type="number" id="edad_56_mas" name="edad_56_mas" placeholder="0" min="0" max="100" required>
+
+        <div class="slider-box">
+          <div class="slider-header">
+            <label for="edad_56_mas">56 años o más</label>
+            <span class="slider-val" id="val_edad_56_mas">0%</span>
+          </div>
+          <div class="slider-input-wrapper">
+            <input type="range" id="edad_56_mas" name="edad_56_mas" min="0" max="100" value="0" oninput="sincronizarEdad('edad_56_mas', 'num_edad_56_mas', 'val_edad_56_mas', true)">
+            <input type="number" id="num_edad_56_mas" class="slider-num-input" min="0" max="100" value="0" oninput="sincronizarEdad('edad_56_mas', 'num_edad_56_mas', 'val_edad_56_mas', false)">
+          </div>
+        </div>
+      </div>
+
+      <!-- BARRA DE SUMA TOTAL DE PORCENTAJE DE EDAD -->
+      <div class="total-percent-container">
+        <div class="total-percent-header">
+          <span>Suma Acumulada de Edad:</span>
+          <span id="label_total_edad" style="color: #dc2626;">0% / 100% (Incompleto)</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="bar_total_edad"></div>
         </div>
       </div>
 
@@ -819,7 +958,58 @@
 
     window.addEventListener('DOMContentLoaded', function() {
       setTimeout(ocultarSplashScreen, 1500);
+      calcularSumaEdad();
     });
+
+    // === LÓGICA DE RANGE SLIDERS Y EDADES ===
+    function sincronizarEdad(rangeId, numId, valSpanId, desdeRange) {
+      const rangeEl = document.getElementById(rangeId);
+      const numEl = document.getElementById(numId);
+      const valSpan = document.getElementById(valSpanId);
+
+      let valor = 0;
+      if (desdeRange) {
+        valor = parseInt(rangeEl.value) || 0;
+        numEl.value = valor;
+      } else {
+        valor = parseInt(numEl.value) || 0;
+        if (valor < 0) valor = 0;
+        if (valor > 100) valor = 100;
+        numEl.value = valor;
+        rangeEl.value = valor;
+      }
+
+      valSpan.innerText = valor + '%';
+      calcularSumaEdad();
+    }
+
+    function calcularSumaEdad() {
+      const ids = ['edad_3_17', 'edad_18_25', 'edad_26_30', 'edad_31_39', 'edad_40_55', 'edad_56_mas'];
+      let suma = 0;
+
+      ids.forEach(id => {
+        suma += parseInt(document.getElementById(id).value) || 0;
+      });
+
+      const labelTotal = document.getElementById('label_total_edad');
+      const barFill = document.getElementById('bar_total_edad');
+
+      barFill.style.width = Math.min(suma, 100) + '%';
+
+      if (suma === 100) {
+        labelTotal.innerText = '100% (¡Suma Correcta!)';
+        labelTotal.style.color = '#059669';
+        barFill.style.backgroundColor = '#059669';
+      } else if (suma < 100) {
+        labelTotal.innerText = `${suma}% / 100% (Falta un ${100 - suma}%)`;
+        labelTotal.style.color = '#d97706';
+        barFill.style.backgroundColor = '#d97706';
+      } else {
+        labelTotal.innerText = `${suma}% / 100% (Excede por un ${suma - 100}%)`;
+        labelTotal.style.color = '#dc2626';
+        barFill.style.backgroundColor = '#dc2626';
+      }
+    }
 
     // === CÁLCULOS AUTOMÁTICOS INTEGRADOS ===
     function ejecutarCalculos() {
@@ -1083,6 +1273,18 @@
     form.addEventListener('submit', async function(e) {
       e.preventDefault();
 
+      // Validar que la suma de porcentajes de edad sea 100%
+      const idsEdad = ['edad_3_17', 'edad_18_25', 'edad_26_30', 'edad_31_39', 'edad_40_55', 'edad_56_mas'];
+      let sumaEdad = 0;
+      idsEdad.forEach(id => {
+        sumaEdad += parseInt(document.getElementById(id).value) || 0;
+      });
+
+      if (sumaEdad !== 100) {
+        alert(`La suma de los porcentajes de edad debe ser exactamente 100%.\nActualmente suma: ${sumaEdad}%`);
+        return;
+      }
+
       const tipoHabitacionSel = document.querySelector('input[name="tipo_habitacion"]:checked')?.value;
       if (!tipoHabitacionSel) {
         alert('Por favor selecciona el tipo de habitación que utilizará más tu evento.');
@@ -1128,12 +1330,12 @@
       const e5 = document.getElementById('edad_56_mas')?.value;
 
       let resumenEdades = [];
-      if (e0) resumenEdades.push('3 a 17 años: ' + e0 + '%');
-      if (e1) resumenEdades.push('18 a 25 años: ' + e1 + '%');
-      if (e2) resumenEdades.push('26 a 30 años: ' + e2 + '%');
-      if (e3) resumenEdades.push('31 a 39 años: ' + e3 + '%');
-      if (e4) resumenEdades.push('40 a 55 años: ' + e4 + '%');
-      if (e5) resumenEdades.push('56 años o más: ' + e5 + '%');
+      if (e0 && e0 !== '0') resumenEdades.push('3 a 17 años: ' + e0 + '%');
+      if (e1 && e1 !== '0') resumenEdades.push('18 a 25 años: ' + e1 + '%');
+      if (e2 && e2 !== '0') resumenEdades.push('26 a 30 años: ' + e2 + '%');
+      if (e3 && e3 !== '0') resumenEdades.push('31 a 39 años: ' + e3 + '%');
+      if (e4 && e4 !== '0') resumenEdades.push('40 a 55 años: ' + e4 + '%');
+      if (e5 && e5 !== '0') resumenEdades.push('56 años o más: ' + e5 + '%');
 
       let evidencias = [];
       const c1 = document.getElementById('check_bd');
@@ -1220,6 +1422,15 @@
         document.getElementById('labelTotalHoteles').innerText = '0';
         document.getElementById('labelTotalProcedencias').innerText = '0';
         document.getElementById('driveWarning').style.display = 'none';
+
+        // Reiniciar sliders y barra de edad
+        idsEdad.forEach(id => {
+          document.getElementById(id).value = 0;
+          document.getElementById('num_' + id).value = 0;
+          document.getElementById('val_' + id).innerText = '0%';
+        });
+        calcularSumaEdad();
+
       } catch (error) {
         console.error('Error:', error);
         alert('Ocurrió un error al procesar el formulario.');
