@@ -488,18 +488,18 @@
       <div class="grid-3">
         <div class="form-group">
           <label for="total_asistentes">Número Total de Asistentes *</label>
-          <input type="text" id="total_asistentes" name="total_asistentes" placeholder="Ej. 50,000" required>
+          <input type="text" id="total_asistentes" name="total_asistentes" placeholder="Ej. 50,000" oninput="ejecutarCalculos()" required>
           <span class="field-hint">Número total de personas que asistirán al evento.</span>
         </div>
         <div class="form-group">
           <label for="asistentes_locales">Asistentes Locales *</label>
-          <input type="text" id="asistentes_locales" name="asistentes_locales" placeholder="Ej. 44,000" required>
+          <input type="text" id="asistentes_locales" name="asistentes_locales" placeholder="Ej. 44,000" oninput="ejecutarCalculos()" required>
           <span class="field-hint">Personas que residen en Nuevo León.</span>
         </div>
         <div class="form-group">
           <label for="asistentes_foraneos">Asistentes Foráneos *</label>
-          <input type="text" id="asistentes_foraneos" name="asistentes_foraneos" placeholder="Ej. 6,000" oninput="ejecutarCalculos()" required>
-          <span class="field-hint">Personas que provienen de fuera de Nuevo León.</span>
+          <input type="text" id="asistentes_foraneos" name="asistentes_foraneos" placeholder="Cálculo automático" readonly required>
+          <span class="field-hint">Se calcula automáticamente: Total Asistentes − Asistentes Locales.</span>
         </div>
       </div>
 
@@ -823,23 +823,39 @@
 
     // === CÁLCULOS AUTOMÁTICOS INTEGRADOS ===
     function ejecutarCalculos() {
+      const inputTotal = document.getElementById('total_asistentes').value;
+      const inputLocales = document.getElementById('asistentes_locales').value;
+      const inputForaneos = document.getElementById('asistentes_foraneos');
+      
       const inputInicio = document.getElementById('fecha_inicio').value;
       const inputFin = document.getElementById('fecha_fin').value;
-      const inputForaneos = document.getElementById('asistentes_foraneos').value;
       const checkboxConsumo = document.querySelector('input[name="consumo_diario"]:checked');
       const checkboxHabitacion = document.querySelector('input[name="tipo_habitacion"]:checked');
       
       const inputDerrama = document.getElementById('derrama_economica');
       const inputCuartosNoche = document.getElementById('cuartos_noche');
 
-      // Si no están los campos base completos, limpiar resultados
-      if (!inputInicio || !inputFin || !inputForaneos) {
+      // 1. CÁLCULO AUTOMÁTICO DE ASISTENTES FORÁNEOS (Total − Locales)
+      const totalAsistentesNum = parseFloat(inputTotal.replace(/[^0-9.]/g, '')) || 0;
+      const localesAsistentesNum = parseFloat(inputLocales.replace(/[^0-9.]/g, '')) || 0;
+      let asistentesForaneos = 0;
+
+      if (inputTotal !== '' && inputLocales !== '') {
+        asistentesForaneos = totalAsistentesNum - localesAsistentesNum;
+        if (asistentesForaneos < 0) asistentesForaneos = 0;
+        inputForaneos.value = asistentesForaneos.toLocaleString('en-US');
+      } else {
+        inputForaneos.value = '';
+      }
+
+      // Si faltan fechas o datos de asistencia, limpiar derrama y cuartos-noche
+      if (!inputInicio || !inputFin || asistentesForaneos <= 0) {
         inputDerrama.value = '';
         inputCuartosNoche.value = '';
         return;
       }
 
-      // 1. Extraer Noches de Estadía = Fecha Fin - Fecha Inicio
+      // 2. EXTRAER NOCHES DE ESTADÍA = Fecha Fin - Fecha Inicio
       const fechaInicio = new Date(inputInicio);
       const fechaFin = new Date(inputFin);
       const diferenciaMs = fechaFin - fechaInicio;
@@ -851,10 +867,8 @@
         noches = 1; // Mismo día
       }
 
-      const asistentesForaneos = parseFloat(inputForaneos.replace(/[^0-9.]/g, '')) || 0;
-
       // A) CÁLCULO DE DERRAMA ECONÓMICA (Consumo Diario × Noches × Foráneos)
-      if (checkboxConsumo && noches > 0 && asistentesForaneos > 0) {
+      if (checkboxConsumo && noches > 0) {
         const consumoTexto = checkboxConsumo.value;
         const consumoDiario = parseFloat(consumoTexto.replace(/[^0-9.]/g, '')) || 0;
         const totalDerrama = consumoDiario * noches * asistentesForaneos;
@@ -863,8 +877,8 @@
         inputDerrama.value = '';
       }
 
-      // B) CÁLCULO DE CUARTOS-NOCHE GENERADOS ((Noches × Foráneos) / Factor Habitacional)
-      if (checkboxHabitacion && noches > 0 && asistentesForaneos > 0) {
+      // B) CÁLCULO DE CUARTOS-NOCHE GENERADOS ((Noches × Foráneos) / Factor Habitación)
+      if (checkboxHabitacion && noches > 0) {
         const factor = parseFloat(checkboxHabitacion.getAttribute('data-factor')) || 1;
         const totalCuartos = Math.round((noches * asistentesForaneos) / factor);
         inputCuartosNoche.value = totalCuartos.toLocaleString('en-US');
