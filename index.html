@@ -478,6 +478,42 @@
       cursor: pointer;
     }
 
+    /* === ESTILOS PARA LA FIRMA DIGITAL === */
+    .signature-container {
+      background-color: #ffffff;
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      margin-top: 6px;
+      position: relative;
+    }
+
+    .signature-canvas {
+      width: 100%;
+      height: 160px;
+      background-color: #fff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      touch-action: none; /* Previene scroll en pantallas táctiles mientras se firma */
+      cursor: crosshair;
+    }
+
+    .btn-clear-signature {
+      background-color: #64748b;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      padding: 6px 12px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background-color 0.2s;
+    }
+
+    .btn-clear-signature:hover { background-color: #475569; }
+
     .btn-submit {
       width: 100%;
       background-color: var(--primary);
@@ -592,9 +628,9 @@
         </div>
       </div>
 
-      <!-- TIPO DE HABITACIÓN MÁS UTILIZADA (SELECCIÓN MÚLTIPLE PERMITIDA) -->
+      <!-- TIPO DE HABITACIÓN MÁS UTILIZADA -->
       <div class="form-group" style="margin-bottom: 18px;">
-        <label style="margin-bottom: 8px;">Selecciona qué tipo de habitación utilizo más tu evento: *</label>
+        <label style="margin-bottom: 8px;">Selecciona qué tipo de habitación utilizó más tu evento: *</label>
         <div class="grid-4">
           <label class="checkbox-container custom-card">
             <input type="checkbox" name="tipo_habitacion" value="Sencilla" data-factor="1.5" onchange="ejecutarCalculos()">
@@ -933,6 +969,18 @@
         <input type="text" id="organizador_cargo" name="organizador_cargo" placeholder="Ej. CEO / Director General" required>
       </div>
 
+      <!-- CAMPO DE FIRMA DIGITAL (NUEVO) -->
+      <div class="form-group">
+        <label>Firma Electrónica / Autógrafa Digital *</label>
+        <span class="field-hint">Dibuja tu firma en el recuadro usando tu mouse o dedo (en dispositivos táctiles).</span>
+        <div class="signature-container">
+          <canvas id="signatureCanvas" class="signature-canvas"></canvas>
+          <div>
+            <button type="button" class="btn-clear-signature" onclick="limpiarFirma()">Borrar / Repetir Firma</button>
+          </div>
+        </div>
+      </div>
+
       <label class="checkbox-container" style="margin-top: 16px;">
         <input type="checkbox" id="declaracion_veracidad" name="declaracion_veracidad" required>
         <span>Declaro que la información y los datos proporcionados en el presente formulario son completos, correctos y verídicos, y manifiesto mi conformidad y responsabilidad respecto de la exactitud de la información ingresada. *</span>
@@ -960,7 +1008,97 @@
     window.addEventListener('DOMContentLoaded', function() {
       setTimeout(ocultarSplashScreen, 1500);
       calcularSumaEdad();
+      inicializarFirmaCanvas();
     });
+
+    // === LÓGICA Y DIBUJO DE LA FIRMA DIGITAL ===
+    let canvas, ctx;
+    let isDrawing = false;
+    let tieneFirma = false;
+
+    function inicializarFirmaCanvas() {
+      canvas = document.getElementById('signatureCanvas');
+      if (!canvas) return;
+      ctx = canvas.getContext('2d');
+
+      // Ajustar resolución interna del canvas
+      canvas.width = canvas.offsetWidth || 500;
+      canvas.height = canvas.offsetHeight || 160;
+
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = '#0f172a';
+
+      // Eventos de ratón
+      canvas.addEventListener('mousedown', startDrawing);
+      canvas.addEventListener('mousemove', draw);
+      canvas.addEventListener('mouseup', stopDrawing);
+      canvas.addEventListener('mouseleave', stopDrawing);
+
+      // Eventos táctiles para dispositivos móviles
+      canvas.addEventListener('touchstart', startDrawingTouch, { passive: false });
+      canvas.addEventListener('touchmove', drawTouch, { passive: false });
+      canvas.addEventListener('touchend', stopDrawing);
+    }
+
+    function getCanvasCoordinates(e) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
+    }
+
+    function startDrawing(e) {
+      isDrawing = true;
+      tieneFirma = true;
+      const pos = getCanvasCoordinates(e);
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+    }
+
+    function draw(e) {
+      if (!isDrawing) return;
+      const pos = getCanvasCoordinates(e);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+    }
+
+    function startDrawingTouch(e) {
+      e.preventDefault();
+      if (e.touches.length === 1) {
+        isDrawing = true;
+        tieneFirma = true;
+        const touch = e.touches[0];
+        const rect = canvas.getBoundingClientRect();
+        ctx.beginPath();
+        ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+      }
+    }
+
+    function drawTouch(e) {
+      e.preventDefault();
+      if (!isDrawing || e.touches.length !== 1) return;
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+      ctx.stroke();
+    }
+
+    function stopDrawing() {
+      if (isDrawing) {
+        ctx.closePath();
+        isDrawing = false;
+      }
+    }
+
+    function limpiarFirma() {
+      if (ctx && canvas) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        tieneFirma = false;
+      }
+    }
 
     // === LÓGICA DE RANGE SLIDERS Y EDADES ===
     function sincronizarEdad(rangeId, numId, valSpanId, desdeRange) {
@@ -1012,7 +1150,7 @@
       }
     }
 
-    // === CÁLCULOS AUTOMÁTICOS INTEGRADOS ===
+    // === CÁLCULOS AUTOMÁTICOS INTEGRADOS Y CORREGIDOS ===
     function ejecutarCalculos() {
       const inputTotal = document.getElementById('total_asistentes').value;
       const inputLocales = document.getElementById('asistentes_locales').value;
@@ -1027,8 +1165,8 @@
       const inputCuartosNoche = document.getElementById('cuartos_noche');
 
       // 1. CÁLCULO AUTOMÁTICO DE ASISTENTES FORÁNEOS (Total − Locales)
-      const totalAsistentesNum = parseFloat(inputTotal.replace(/[^0-9.]/g, '')) || 0;
-      const localesAsistentesNum = parseFloat(inputLocales.replace(/[^0-9.]/g, '')) || 0;
+      const totalAsistentesNum = parseFloat(inputTotal.replace(/,/g, '').replace(/[^0-9.]/g, '')) || 0;
+      const localesAsistentesNum = parseFloat(inputLocales.replace(/,/g, '').replace(/[^0-9.]/g, '')) || 0;
       let asistentesForaneos = 0;
 
       if (inputTotal !== '' && inputLocales !== '') {
@@ -1046,9 +1184,12 @@
         return;
       }
 
-      // 2. EXTRAER NOCHES DE ESTADÍA = Fecha Fin - Fecha Inicio
-      const fechaInicio = new Date(inputInicio);
-      const fechaFin = new Date(inputFin);
+      // 2. EXTRAER NOCHES DE ESTADÍA EN UTC (Evita desfases de zonas horarias)
+      const fIniPartes = inputInicio.split('-');
+      const fFinPartes = inputFin.split('-');
+      const fechaInicio = new Date(Date.UTC(fIniPartes[0], fIniPartes[1] - 1, fIniPartes[2]));
+      const fechaFin = new Date(Date.UTC(fFinPartes[0], fFinPartes[1] - 1, fFinPartes[2]));
+      
       const diferenciaMs = fechaFin - fechaInicio;
       
       let noches = 0;
@@ -1061,7 +1202,7 @@
       // A) CÁLCULO DE DERRAMA ECONÓMICA (Consumo Diario × Noches × Foráneos)
       if (checkboxConsumo && noches > 0) {
         const consumoTexto = checkboxConsumo.value;
-        const consumoDiario = parseFloat(consumoTexto.replace(/[^0-9.]/g, '')) || 0;
+        const consumoDiario = parseFloat(consumoTexto.replace(/,/g, '').replace(/[^0-9.]/g, '')) || 0;
         const totalDerrama = consumoDiario * noches * asistentesForaneos;
         inputDerrama.value = `$${totalDerrama.toLocaleString('en-US')} M.N.`;
       } else {
@@ -1270,7 +1411,13 @@
     form.addEventListener('submit', async function(e) {
       e.preventDefault();
 
-      // Validar que la suma de porcentajes de edad sea 100%
+      // 1. Validar Firma Digital
+      if (!tieneFirma) {
+        alert('Por favor agrega tu firma electrónica en el recuadro antes de enviar el reporte.');
+        return;
+      }
+
+      // 2. Validar que la suma de porcentajes de edad sea 100%
       const idsEdad = ['edad_3_17', 'edad_18_25', 'edad_26_30', 'edad_31_39', 'edad_40_55', 'edad_56_mas'];
       let sumaEdad = 0;
       idsEdad.forEach(id => {
@@ -1353,6 +1500,9 @@
         }
       }
 
+      // Convertir el trazo del Canvas a Imagen Base64
+      const firmaDataUrl = canvas.toDataURL('image/png');
+
       const data = {
         nombre_evento: document.getElementById('nombre_evento')?.value || '',
         nombre_organizador: document.getElementById('nombre_organizador')?.value || '',
@@ -1385,6 +1535,7 @@
         organizador_cargo: document.getElementById('organizador_cargo')?.value || '',
         declaracion_veracidad: document.getElementById('declaracion_veracidad')?.checked ? 'Aceptada' : 'No aceptada',
 
+        firma_base64: firmaDataUrl, // Campo con la firma en formato Base64
         archivos_adjuntos: archivosAdjuntos
       };
 
@@ -1417,6 +1568,7 @@
 
         alert('¡Reporte generado con éxito! Se ha enviado el documento Word y los archivos adjuntos a tu correo.');
         form.reset();
+        limpiarFirma();
         document.getElementById('grupo_boletera_otro').style.display = 'none';
         document.getElementById('grupo_tipo_evento_otro').style.display = 'none';
         document.getElementById('grupo_consumo_diario').style.display = 'none';
