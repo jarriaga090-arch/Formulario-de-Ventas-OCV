@@ -495,7 +495,7 @@
       background-color: #fff;
       border: 1px solid #cbd5e1;
       border-radius: 6px;
-      touch-action: none; /* Previene scroll en pantallas táctiles mientras se firma */
+      touch-action: none;
       cursor: crosshair;
     }
 
@@ -686,7 +686,7 @@
         <div class="form-group">
           <label for="cuartos_noche">Cuartos-Noche Generados (Total Global) *</label>
           <input type="text" id="cuartos_noche" name="cuartos_noche" placeholder="Cálculo automático" readonly required>
-          <span class="field-hint">Muestra los cuartos-noche exactos desglosados para cada tipo de habitación seleccionado.</span>
+          <span class="field-hint">Muestra la sumatoria total de cuartos-noche generados según las habitaciones seleccionadas.</span>
         </div>
         <div class="form-group">
           <label for="derrama_economica">Derrama Económica Estimada ($ M.N.) *</label>
@@ -695,10 +695,10 @@
         </div>
       </div>
 
-      <!-- 3. Hotelería Dinámica -->
-      <!-- 3. Hotelería Dinámica -->
-<div class="section-title">3. Relación de Hotelería y Cuartos – Noche</div>
-<p class="subsection-subtitle">Enlista los hoteles o zonas de hospedaje que se tienen mapeados y que fueron utilizados durante el evento, indicando el número estimado de cuartos-noche correspondientes a cada uno.</p>
+      <!-- 3. Hotelería Dinámica con la nueva descripción -->
+      <div class="section-title">3. Relación de Hotelería y Cuartos – Noche</div>
+      <p class="subsection-subtitle">Enlista los hoteles o zonas de hospedaje que se tienen mapeados y que fueron utilizados durante el evento, indicando el número estimado de cuartos-noche correspondientes a cada uno.</p>
+
       <table class="data-table" id="tablaHoteles">
         <thead>
           <tr>
@@ -883,7 +883,7 @@
         </div>
       </div>
 
-      <!-- 6. Experiencia en el Destino y OCV -->
+      <!-- 6. Experiencia en el Destino y OCV con Berenice Yépez incluida -->
       <div class="section-title">6. Experiencia en el Destino y OCV</div>
       <p class="subsection-subtitle">Evalúa tu experiencia con la asesoría y acompañamiento recibidos durante el evento.</p>
       
@@ -970,7 +970,7 @@
         <input type="text" id="organizador_cargo" name="organizador_cargo" placeholder="Ej. CEO / Director General" required>
       </div>
 
-      <!-- CAMPO DE FIRMA DIGITAL (NUEVO) -->
+      <!-- LIENZO DE FIRMA DIGITAL -->
       <div class="form-group">
         <label>Firma Electrónica / Autógrafa Digital *</label>
         <span class="field-hint">Dibuja tu firma en el recuadro usando tu mouse o dedo (en dispositivos táctiles).</span>
@@ -1022,7 +1022,6 @@
       if (!canvas) return;
       ctx = canvas.getContext('2d');
 
-      // Ajustar resolución interna del canvas
       canvas.width = canvas.offsetWidth || 500;
       canvas.height = canvas.offsetHeight || 160;
 
@@ -1031,13 +1030,13 @@
       ctx.lineJoin = 'round';
       ctx.strokeStyle = '#0f172a';
 
-      // Eventos de ratón
+      // Ratón
       canvas.addEventListener('mousedown', startDrawing);
       canvas.addEventListener('mousemove', draw);
       canvas.addEventListener('mouseup', stopDrawing);
       canvas.addEventListener('mouseleave', stopDrawing);
 
-      // Eventos táctiles para dispositivos móviles
+      // Táctil
       canvas.addEventListener('touchstart', startDrawingTouch, { passive: false });
       canvas.addEventListener('touchmove', drawTouch, { passive: false });
       canvas.addEventListener('touchend', stopDrawing);
@@ -1151,7 +1150,7 @@
       }
     }
 
-    // === CÁLCULOS AUTOMÁTICOS INTEGRADOS Y CORREGIDOS ===
+    // === CÁLCULOS AUTOMÁTICOS INTEGRADOS (SUMATORIA TOTAL DE CUARTOS-NOCHE) ===
     function ejecutarCalculos() {
       const inputTotal = document.getElementById('total_asistentes').value;
       const inputLocales = document.getElementById('asistentes_locales').value;
@@ -1165,7 +1164,7 @@
       const inputDerrama = document.getElementById('derrama_economica');
       const inputCuartosNoche = document.getElementById('cuartos_noche');
 
-      // 1. CÁLCULO AUTOMÁTICO DE ASISTENTES FORÁNEOS (Total − Locales)
+      // 1. CÁLCULO AUTOMÁTICO DE ASISTENTES FORÁNEOS
       const totalAsistentesNum = parseFloat(inputTotal.replace(/,/g, '').replace(/[^0-9.]/g, '')) || 0;
       const localesAsistentesNum = parseFloat(inputLocales.replace(/,/g, '').replace(/[^0-9.]/g, '')) || 0;
       let asistentesForaneos = 0;
@@ -1178,14 +1177,13 @@
         inputForaneos.value = '';
       }
 
-      // Si faltan fechas o datos de asistencia, limpiar derrama y cuartos-noche
       if (!inputInicio || !inputFin || asistentesForaneos <= 0) {
         inputDerrama.value = '';
         inputCuartosNoche.value = '';
         return;
       }
 
-      // 2. EXTRAER NOCHES DE ESTADÍA EN UTC (Evita desfases de zonas horarias)
+      // 2. EXTRAER NOCHES DE ESTADÍA EN UTC
       const fIniPartes = inputInicio.split('-');
       const fFinPartes = inputFin.split('-');
       const fechaInicio = new Date(Date.UTC(fIniPartes[0], fIniPartes[1] - 1, fIniPartes[2]));
@@ -1197,10 +1195,10 @@
       if (diferenciaMs > 0) {
         noches = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
       } else if (diferenciaMs === 0) {
-        noches = 1; // Mismo día
+        noches = 1;
       }
 
-      // A) CÁLCULO DE DERRAMA ECONÓMICA (Consumo Diario × Noches × Foráneos)
+      // A) CÁLCULO DE DERRAMA ECONÓMICA
       if (checkboxConsumo && noches > 0) {
         const consumoTexto = checkboxConsumo.value;
         const consumoDiario = parseFloat(consumoTexto.replace(/,/g, '').replace(/[^0-9.]/g, '')) || 0;
@@ -1210,18 +1208,17 @@
         inputDerrama.value = '';
       }
 
-      // B) CÁLCULO DESGLOSADO DE CUARTOS-NOCHE POR TIPO DE HABITACIÓN SELECCIONADO
+      // B) CÁLCULO SUMATORIA TOTAL DE CUARTOS-NOCHE (SUMA ACUMULADA)
       if (checkboxesHabitacion.length > 0 && noches > 0) {
-        let resultadosDesglosados = [];
+        let totalCuartosNoche = 0;
 
         checkboxesHabitacion.forEach(cb => {
-          const nombreHab = cb.value;
           const factor = parseFloat(cb.getAttribute('data-factor')) || 1;
           const cuartosCalculados = Math.round((noches * asistentesForaneos) / factor);
-          resultadosDesglosados.push(`${nombreHab}: ${cuartosCalculados.toLocaleString('en-US')}`);
+          totalCuartosNoche += cuartosCalculados;
         });
 
-        inputCuartosNoche.value = resultadosDesglosados.join(' | ');
+        inputCuartosNoche.value = totalCuartosNoche.toLocaleString('en-US');
       } else {
         inputCuartosNoche.value = '';
       }
@@ -1412,13 +1409,11 @@
     form.addEventListener('submit', async function(e) {
       e.preventDefault();
 
-      // 1. Validar Firma Digital
       if (!tieneFirma) {
         alert('Por favor agrega tu firma electrónica en el recuadro antes de enviar el reporte.');
         return;
       }
 
-      // 2. Validar que la suma de porcentajes de edad sea 100%
       const idsEdad = ['edad_3_17', 'edad_18_25', 'edad_26_30', 'edad_31_39', 'edad_40_55', 'edad_56_mas'];
       let sumaEdad = 0;
       idsEdad.forEach(id => {
@@ -1501,7 +1496,6 @@
         }
       }
 
-      // Convertir el trazo del Canvas a Imagen Base64
       const firmaDataUrl = canvas.toDataURL('image/png');
 
       const data = {
@@ -1536,7 +1530,7 @@
         organizador_cargo: document.getElementById('organizador_cargo')?.value || '',
         declaracion_veracidad: document.getElementById('declaracion_veracidad')?.checked ? 'Aceptada' : 'No aceptada',
 
-        firma_base64: firmaDataUrl, // Campo con la firma en formato Base64
+        firma_base64: firmaDataUrl,
         archivos_adjuntos: archivosAdjuntos
       };
 
@@ -1577,7 +1571,6 @@
         document.getElementById('labelTotalProcedencias').innerText = '0';
         document.getElementById('driveWarning').style.display = 'none';
 
-        // Reiniciar sliders y barra de edad
         idsEdad.forEach(id => {
           document.getElementById(id).value = 0;
           document.getElementById('num_' + id).value = 0;
