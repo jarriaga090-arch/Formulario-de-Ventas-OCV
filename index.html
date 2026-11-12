@@ -218,7 +218,100 @@
       box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
     }
 
-    /* === ESTILOS PARA LOS RANGE SLIDERS Y CONTADOR DINÁMICO === */
+    /* === TARJETAS DE HABITACIÓN CON BARRA DE PORCENTAJE === */
+    .room-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      background-color: #ffffff;
+      transition: border-color 0.2s, background-color 0.2s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .room-card:hover {
+      border-color: var(--primary);
+      background-color: #f8fafc;
+    }
+
+    .room-card.active {
+      border-color: var(--primary);
+      background-color: #f0f4ff;
+    }
+
+    .room-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .room-card-header input[type="checkbox"] {
+      width: 17px;
+      height: 17px;
+      cursor: pointer;
+    }
+
+    .room-slider-panel {
+      display: none;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #cbd5e1;
+    }
+
+    .room-slider-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .room-slider-badge {
+      font-weight: 700;
+      color: var(--primary);
+      background-color: #ffffff;
+      border: 1px solid #bfdbfe;
+      padding: 1px 7px;
+      border-radius: 4px;
+      font-size: 0.82rem;
+    }
+
+    .room-range {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #cbd5e1;
+      outline: none;
+      cursor: pointer;
+      accent-color: var(--primary);
+    }
+
+    .room-ticks {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .room-total-status {
+      display: none;
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background-color: #f8fafc;
+      border: 1px solid var(--border);
+    }
+
+    /* === ESTILOS PARA LOS RANGE SLIDERS DE EDAD Y CONTADOR DINÁMICO === */
     .slider-box {
       background-color: #ffffff;
       border: 1px solid var(--border);
@@ -628,31 +721,85 @@
         </div>
       </div>
 
-      <!-- TIPO DE HABITACIÓN MÁS UTILIZADA -->
+      <!-- TIPO DE HABITACIÓN MÁS UTILIZADA CON BARRA DE PORCENTAJE (10% - 100%) -->
       <div class="form-group" style="margin-bottom: 18px;">
-        <label style="margin-bottom: 8px;">Selecciona qué tipo de habitación utilizó más tu evento: *</label>
+        <label style="margin-bottom: 8px;">Selecciona qué tipo de habitación utilizó más tu evento y su porcentaje: *</label>
         <div class="grid-4">
-          <label class="checkbox-container custom-card">
-            <input type="checkbox" name="tipo_habitacion" value="Sencilla" data-factor="1.5" onchange="ejecutarCalculos()">
-            <span>1. Sencilla (1.5)</span>
-          </label>
+          <!-- 1. Sencilla -->
+          <div class="room-card" id="card_hab_sencilla">
+            <label class="room-card-header">
+              <input type="checkbox" name="tipo_habitacion" value="Sencilla" data-factor="1.5" data-slider="slider_hab_sencilla" onchange="toggleHabitacionSlider(this, 'panel_hab_sencilla', 'card_hab_sencilla')">
+              <span>1. Sencilla (1.5)</span>
+            </label>
+            <div class="room-slider-panel" id="panel_hab_sencilla">
+              <div class="room-slider-top">
+                <span>Porcentaje:</span>
+                <span class="room-slider-badge" id="val_hab_sencilla">100%</span>
+              </div>
+              <input type="range" id="slider_hab_sencilla" class="room-range" min="10" max="100" step="10" value="100" oninput="actualizarPorcentajeHabitacion('slider_hab_sencilla', 'val_hab_sencilla')">
+              <div class="room-ticks">
+                <span>10%</span><span>30%</span><span>50%</span><span>70%</span><span>100%</span>
+              </div>
+            </div>
+          </div>
 
-          <label class="checkbox-container custom-card">
-            <input type="checkbox" name="tipo_habitacion" value="Doble" data-factor="2" onchange="ejecutarCalculos()">
-            <span>2. Doble (2)</span>
-          </label>
+          <!-- 2. Doble -->
+          <div class="room-card" id="card_hab_doble">
+            <label class="room-card-header">
+              <input type="checkbox" name="tipo_habitacion" value="Doble" data-factor="2" data-slider="slider_hab_doble" onchange="toggleHabitacionSlider(this, 'panel_hab_doble', 'card_hab_doble')">
+              <span>2. Doble (2)</span>
+            </label>
+            <div class="room-slider-panel" id="panel_hab_doble">
+              <div class="room-slider-top">
+                <span>Porcentaje:</span>
+                <span class="room-slider-badge" id="val_hab_doble">100%</span>
+              </div>
+              <input type="range" id="slider_hab_doble" class="room-range" min="10" max="100" step="10" value="100" oninput="actualizarPorcentajeHabitacion('slider_hab_doble', 'val_hab_doble')">
+              <div class="room-ticks">
+                <span>10%</span><span>30%</span><span>50%</span><span>70%</span><span>100%</span>
+              </div>
+            </div>
+          </div>
 
-          <label class="checkbox-container custom-card">
-            <input type="checkbox" name="tipo_habitacion" value="Triple" data-factor="3" onchange="ejecutarCalculos()">
-            <span>3. Triple (3)</span>
-          </label>
+          <!-- 3. Triple -->
+          <div class="room-card" id="card_hab_triple">
+            <label class="room-card-header">
+              <input type="checkbox" name="tipo_habitacion" value="Triple" data-factor="3" data-slider="slider_hab_triple" onchange="toggleHabitacionSlider(this, 'panel_hab_triple', 'card_hab_triple')">
+              <span>3. Triple (3)</span>
+            </label>
+            <div class="room-slider-panel" id="panel_hab_triple">
+              <div class="room-slider-top">
+                <span>Porcentaje:</span>
+                <span class="room-slider-badge" id="val_hab_triple">100%</span>
+              </div>
+              <input type="range" id="slider_hab_triple" class="room-range" min="10" max="100" step="10" value="100" oninput="actualizarPorcentajeHabitacion('slider_hab_triple', 'val_hab_triple')">
+              <div class="room-ticks">
+                <span>10%</span><span>30%</span><span>50%</span><span>70%</span><span>100%</span>
+              </div>
+            </div>
+          </div>
 
-          <label class="checkbox-container custom-card">
-            <input type="checkbox" name="tipo_habitacion" value="Cuádrulpe" data-factor="4" onchange="ejecutarCalculos()">
-            <span>4. Cuádruple (4)</span>
-          </label>
+          <!-- 4. Cuádruple -->
+          <div class="room-card" id="card_hab_cuadruple">
+            <label class="room-card-header">
+              <input type="checkbox" name="tipo_habitacion" value="Cuádruple" data-factor="4" data-slider="slider_hab_cuadruple" onchange="toggleHabitacionSlider(this, 'panel_hab_cuadruple', 'card_hab_cuadruple')">
+              <span>4. Cuádruple (4)</span>
+            </label>
+            <div class="room-slider-panel" id="panel_hab_cuadruple">
+              <div class="room-slider-top">
+                <span>Porcentaje:</span>
+                <span class="room-slider-badge" id="val_hab_cuadruple">100%</span>
+              </div>
+              <input type="range" id="slider_hab_cuadruple" class="room-range" min="10" max="100" step="10" value="100" oninput="actualizarPorcentajeHabitacion('slider_hab_cuadruple', 'val_hab_cuadruple')">
+              <div class="room-ticks">
+                <span>10%</span><span>30%</span><span>50%</span><span>70%</span><span>100%</span>
+              </div>
+            </div>
+          </div>
         </div>
-        <span class="field-hint">Puedes seleccionar una o varias opciones para calcular los cuartos-noche de cada una.</span>
+
+        <div class="room-total-status" id="roomTotalStatus"></div>
+        <span class="field-hint">Selecciona uno o varios tipos de habitación y ajusta la barra de porcentaje (10% al 100%). La suma de los porcentajes seleccionados debe ser 100%.</span>
       </div>
 
       <!-- SECTOR DINÁMICO: TIPO DE EVENTO Y CONSUMO PROMEDIO DIARIO -->
@@ -686,7 +833,7 @@
         <div class="form-group">
           <label for="cuartos_noche">Cuartos-Noche Generados (Total Global) *</label>
           <input type="text" id="cuartos_noche" name="cuartos_noche" placeholder="Cálculo automático" readonly required>
-          <span class="field-hint">Muestra la sumatoria total de cuartos-noche generados según las habitaciones seleccionadas.</span>
+          <span class="field-hint">Calcula el porcentaje individual de cada habitación seleccionada y suma el total global.</span>
         </div>
         <div class="form-group">
           <label for="derrama_economica">Derrama Económica Estimada ($ M.N.) *</label>
@@ -695,7 +842,7 @@
         </div>
       </div>
 
-      <!-- 3. Hotelería Dinámica con la nueva descripción -->
+      <!-- 3. Hotelería Dinámica -->
       <div class="section-title">3. Relación de Hotelería y Cuartos – Noche</div>
       <p class="subsection-subtitle">Enlista los hoteles o zonas de hospedaje que se tienen mapeados y que fueron utilizados durante el evento, indicando el número estimado de cuartos-noche correspondientes a cada uno.</p>
 
@@ -879,11 +1026,11 @@
 
         <div class="drive-warning" id="driveWarning">
           ⚠️ <strong>Archivos muy pesados:</strong> El peso total de tus archivos seleccionados es de <span id="pesoTotalArchivos">0</span> MB (supera el límite de 15 MB).<br>
-          Por favor deselecciónalos y cáargalos directamente en la <a href="https://drive.google.com/drive/folders/1cXZV0SWfkk-V8m69QT-jBj4LVOvEdC0q?usp=sharing" target="_blank" rel="noopener">Carpeta Compartida de Google Drive</a> para poder enviar tu reporte.
+          Por favor deselecciónalos y cárgalos directamente en la <a href="https://drive.google.com/drive/folders/1cXZV0SWfkk-V8m69QT-jBj4LVOvEdC0q?usp=sharing" target="_blank" rel="noopener">Carpeta Compartida de Google Drive</a> para poder enviar tu reporte.
         </div>
       </div>
 
-      <!-- 6. Experiencia en el Destino y OCV con Berenice Yépez incluida -->
+      <!-- 6. Experiencia en el Destino y OCV -->
       <div class="section-title">6. Experiencia en el Destino y OCV</div>
       <p class="subsection-subtitle">Evalúa tu experiencia con la asesoría y acompañamiento recibidos durante el evento.</p>
       
@@ -1011,6 +1158,82 @@
       calcularSumaEdad();
       inicializarFirmaCanvas();
     });
+
+    // === CONTROL DE BARRAS DE PORCENTAJE EN HABITACIONES ===
+    function toggleHabitacionSlider(checkbox, panelId, cardId) {
+      const panel = document.getElementById(panelId);
+      const card = document.getElementById(cardId);
+      const checkedBoxes = document.querySelectorAll('input[name="tipo_habitacion"]:checked');
+
+      if (checkbox.checked) {
+        panel.style.display = 'block';
+        card.classList.add('active');
+        // Si es la primera habitación seleccionada, poner en 100%; si ya hay otras, sugerir 50%
+        const sliderId = checkbox.getAttribute('data-slider');
+        const slider = document.getElementById(sliderId);
+        const badgeId = sliderId.replace('slider_', 'val_');
+        if (checkedBoxes.length === 1) {
+          slider.value = 100;
+          document.getElementById(badgeId).innerText = '100%';
+        } else {
+          slider.value = 50;
+          document.getElementById(badgeId).innerText = '50%';
+        }
+      } else {
+        panel.style.display = 'none';
+        card.classList.remove('active');
+      }
+
+      actualizarEstadoPorcentajeHabitaciones();
+      ejecutarCalculos();
+    }
+
+    function actualizarPorcentajeHabitacion(sliderId, badgeId) {
+      const val = document.getElementById(sliderId).value;
+      document.getElementById(badgeId).innerText = val + '%';
+      actualizarEstadoPorcentajeHabitaciones();
+      ejecutarCalculos();
+    }
+
+    function obtenerSumaPorcentajeHabitaciones() {
+      const checkedBoxes = document.querySelectorAll('input[name="tipo_habitacion"]:checked');
+      let suma = 0;
+      checkedBoxes.forEach(cb => {
+        const sliderId = cb.getAttribute('data-slider');
+        suma += parseInt(document.getElementById(sliderId).value) || 0;
+      });
+      return suma;
+    }
+
+    function actualizarEstadoPorcentajeHabitaciones() {
+      const checkedBoxes = document.querySelectorAll('input[name="tipo_habitacion"]:checked');
+      const statusEl = document.getElementById('roomTotalStatus');
+
+      if (checkedBoxes.length === 0) {
+        statusEl.style.display = 'none';
+        return;
+      }
+
+      const suma = obtenerSumaPorcentajeHabitaciones();
+      statusEl.style.display = 'block';
+
+      if (suma === 100) {
+        statusEl.style.color = '#059669';
+        statusEl.style.backgroundColor = '#ecfdf5';
+        statusEl.style.borderColor = '#a7f3d0';
+        statusEl.innerText = '✓ Suma de porcentajes de habitación: 100% (Correcto)';
+      } else if (suma < 100) {
+        statusEl.style.color = '#d97706';
+        statusEl.style.backgroundColor = '#fffbeb';
+        statusEl.style.borderColor = '#fde68a';
+        statusEl.innerText = `⚠️ Suma actual de habitaciones: ${suma}% / 100% (Falta asignar ${100 - suma}%)`;
+      } else {
+        statusEl.style.color = '#dc2626';
+        statusEl.style.backgroundColor = '#fef2f2';
+        statusEl.style.borderColor = '#fecaca';
+        statusEl.innerText = `⚠️ Suma actual de habitaciones: ${suma}% / 100% (Excede por ${suma - 100}%)`;
+      }
+    }
 
     // === LÓGICA Y DIBUJO DE LA FIRMA DIGITAL ===
     let canvas, ctx;
@@ -1150,7 +1373,7 @@
       }
     }
 
-    // === CÁLCULOS AUTOMÁTICOS INTEGRADOS (SUMATORIA TOTAL DE CUARTOS-NOCHE) ===
+    // === CÁLCULOS AUTOMÁTICOS INTEGRADOS (PROPORCIONAL POR PORCENTAJE + SUMATORIA) ===
     function ejecutarCalculos() {
       const inputTotal = document.getElementById('total_asistentes').value;
       const inputLocales = document.getElementById('asistentes_locales').value;
@@ -1208,14 +1431,20 @@
         inputDerrama.value = '';
       }
 
-      // B) CÁLCULO SUMATORIA TOTAL DE CUARTOS-NOCHE (SUMA ACUMULADA)
+      // B) CÁLCULO PROPORCIONAL INDIVIDUAL POR PORCENTAJE Y SUMATORIA FINAL
       if (checkboxesHabitacion.length > 0 && noches > 0) {
         let totalCuartosNoche = 0;
 
         checkboxesHabitacion.forEach(cb => {
           const factor = parseFloat(cb.getAttribute('data-factor')) || 1;
-          const cuartosCalculados = Math.round((noches * asistentesForaneos) / factor);
-          totalCuartosNoche += cuartosCalculados;
+          const sliderId = cb.getAttribute('data-slider');
+          const porcentaje = (parseFloat(document.getElementById(sliderId).value) || 0) / 100;
+
+          // Cálculo base por tipo de habitación multiplicado por su porcentaje individual
+          const cuartosBase = (noches * asistentesForaneos) / factor;
+          const cuartosConPorcentaje = Math.round(cuartosBase * porcentaje);
+
+          totalCuartosNoche += cuartosConPorcentaje;
         });
 
         inputCuartosNoche.value = totalCuartosNoche.toLocaleString('en-US');
@@ -1431,8 +1660,18 @@
         return;
       }
 
+      const sumaHabitaciones = obtenerSumaPorcentajeHabitaciones();
+      if (sumaHabitaciones !== 100) {
+        alert(`La suma de los porcentajes de los tipos de habitación seleccionados debe ser exactamente 100%.\nActualmente suma: ${sumaHabitaciones}%`);
+        return;
+      }
+
       let habitacionesSeleccionadas = [];
-      checkboxesHabitacion.forEach(cb => habitacionesSeleccionadas.push(cb.value));
+      checkboxesHabitacion.forEach(cb => {
+        const sliderId = cb.getAttribute('data-slider');
+        const pct = document.getElementById(sliderId).value;
+        habitacionesSeleccionadas.push(`${cb.value} (${pct}%)`);
+      });
       const tipoHabitacionSelText = habitacionesSeleccionadas.join(', ');
 
       const selTipoEvento = document.getElementById('tipo_evento_select')?.value;
@@ -1571,6 +1810,16 @@
         document.getElementById('labelTotalProcedencias').innerText = '0';
         document.getElementById('driveWarning').style.display = 'none';
 
+        // Reiniciar tarjetas y sliders de habitaciones
+        ['sencilla', 'doble', 'triple', 'cuadruple'].forEach(tipo => {
+          document.getElementById('panel_hab_' + tipo).style.display = 'none';
+          document.getElementById('card_hab_' + tipo).classList.remove('active');
+          document.getElementById('slider_hab_' + tipo).value = 100;
+          document.getElementById('val_hab_' + tipo).innerText = '100%';
+        });
+        document.getElementById('roomTotalStatus').style.display = 'none';
+
+        // Reiniciar sliders y barra de edad
         idsEdad.forEach(id => {
           document.getElementById(id).value = 0;
           document.getElementById('num_' + id).value = 0;
