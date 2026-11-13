@@ -69,6 +69,31 @@
       pointer-events: none !important;
     }
 
+    /* === NOTIFICACIÓN FLOTANTE (TOAST DE LÍMITE 100%) === */
+    #limitToast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background-color: #b91c1c;
+      color: #ffffff;
+      padding: 14px 20px;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      max-width: 380px;
+      animation: fadeInUp 0.25s ease;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     /* === CONTENEDOR Y CABECERA === */
     .form-container {
       max-width: 860px;
@@ -300,18 +325,41 @@
       margin-top: 3px;
     }
 
-    .room-total-status {
-      display: none;
-      margin-top: 10px;
-      padding: 8px 12px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      font-weight: 600;
+    /* === BARRAS DE SUMA GLOBAL UNIFICADAS === */
+    .total-percent-container {
       background-color: #f8fafc;
       border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-top: 12px;
+      margin-bottom: 10px;
     }
 
-    /* === ESTILOS PARA LOS RANGE SLIDERS DE EDAD Y CONTADOR DINÁMICO === */
+    .total-percent-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 10px;
+      background-color: #e2e8f0;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background-color: #059669;
+      transition: width 0.2s ease, background-color 0.2s ease;
+    }
+
+    /* === ESTILOS PARA LOS RANGE SLIDERS DE EDAD === */
     .slider-box {
       background-color: #ffffff;
       border: 1px solid var(--border);
@@ -364,39 +412,6 @@
       padding: 6px 8px !important;
       text-align: center;
       font-weight: 600;
-    }
-
-    .total-percent-container {
-      background-color: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin-top: 10px;
-      margin-bottom: 18px;
-    }
-
-    .total-percent-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-      font-size: 0.92rem;
-      font-weight: 700;
-    }
-
-    .progress-bar-bg {
-      width: 100%;
-      height: 10px;
-      background-color: #e2e8f0;
-      border-radius: 5px;
-      overflow: hidden;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      width: 0%;
-      background-color: #059669;
-      transition: width 0.2s ease, background-color 0.2s ease;
     }
 
     .data-table {
@@ -640,6 +655,12 @@
     </div>
   </div>
 
+  <!-- ALERTA FLOTANTE INTELIGENTE -->
+  <div id="limitToast">
+    <span>⚠️</span>
+    <span id="limitToastMsg">Has alcanzado el 100% disponible.</span>
+  </div>
+
   <div class="form-container">
     <div class="form-header">
       <div class="header-content">
@@ -721,7 +742,7 @@
         </div>
       </div>
 
-      <!-- TIPO DE HABITACIÓN MÁS UTILIZADA CON BARRA DE PORCENTAJE (10% - 100%) -->
+      <!-- TIPO DE HABITACIÓN MÁS UTILIZADA CON TOPE INTELIGENTE AL 100% -->
       <div class="form-group" style="margin-bottom: 18px;">
         <label style="margin-bottom: 8px;">Selecciona qué tipo de habitación utilizó más tu evento y su porcentaje: *</label>
         <div class="grid-4">
@@ -798,8 +819,18 @@
           </div>
         </div>
 
-        <div class="room-total-status" id="roomTotalStatus"></div>
-        <span class="field-hint">Selecciona uno o varios tipos de habitación y ajusta la barra de porcentaje (10% al 100%). La suma de los porcentajes seleccionados debe ser 100%.</span>
+        <!-- BARRA DE PROGRESO GLOBAL DE HABITACIONES -->
+        <div class="total-percent-container" id="roomTotalContainer" style="display: none;">
+          <div class="total-percent-header">
+            <span>Suma Acumulada de Habitaciones:</span>
+            <span id="label_total_habitaciones" style="color: #059669;">100% / 100%</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="bar_total_habitaciones"></div>
+          </div>
+        </div>
+
+        <span class="field-hint">Selecciona uno o varios tipos de habitación y ajusta la barra (10% al 100%). El tope inteligente impide rebasar el 100%.</span>
       </div>
 
       <!-- SECTOR DINÁMICO: TIPO DE EVENTO Y CONSUMO PROMEDIO DIARIO -->
@@ -914,9 +945,9 @@
 
       <button type="button" class="btn-add-row" onclick="agregarFilaProcedencia()">+ Agregar Procedencia</button>
 
-      <!-- DISTRIBUCIÓN DINÁMICA POR EDAD CON RANGE SLIDERS -->
+      <!-- DISTRIBUCIÓN DINÁMICA POR EDAD CON RANGE SLIDERS Y TOPE INTELIGENTE -->
       <div class="subsection-heading">Distribución por Rango de Edad (%):</div>
-      <p class="subsection-subtitle">Arrastra la barra para asignar el porcentaje estimado a cada rango de edad. La suma total debe ser 100%.</p>
+      <p class="subsection-subtitle">Arrastra la barra para asignar el porcentaje estimado a cada rango de edad. El tope inteligente frena la barra al llegar al 100%.</p>
 
       <div class="grid-2">
         <div class="slider-box">
@@ -1144,6 +1175,20 @@
     const form = document.getElementById('ocvForm');
     const submitBtn = document.getElementById('submitBtn');
     const MAX_SIZE_BYTES = 15 * 1024 * 1024;
+    let toastTimeout = null;
+
+    // === NOTIFICACIÓN RÁPIDA DE TOPE 100% ===
+    function mostrarAlertaLimite(mensaje) {
+      const toast = document.getElementById('limitToast');
+      const msgEl = document.getElementById('limitToastMsg');
+      msgEl.innerText = mensaje;
+      toast.style.display = 'flex';
+
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3200);
+    }
 
     // === CONTROL DEL SPLASH SCREEN ===
     function ocultarSplashScreen() {
@@ -1159,25 +1204,38 @@
       inicializarFirmaCanvas();
     });
 
-    // === CONTROL DE BARRAS DE PORCENTAJE EN HABITACIONES ===
+    // === OPCIÓN 1: TOPE AUTOMÁTICO INTELIGENTE EN HABITACIONES ===
     function toggleHabitacionSlider(checkbox, panelId, cardId) {
       const panel = document.getElementById(panelId);
       const card = document.getElementById(cardId);
-      const checkedBoxes = document.querySelectorAll('input[name="tipo_habitacion"]:checked');
+      const sliderId = checkbox.getAttribute('data-slider');
+      const slider = document.getElementById(sliderId);
+      const badgeId = sliderId.replace('slider_', 'val_');
 
       if (checkbox.checked) {
+        // Calcular cuánto porcentaje queda disponible en las demás habitaciones activas
+        let sumaOtras = 0;
+        document.querySelectorAll('input[name="tipo_habitacion"]:checked').forEach(cb => {
+          if (cb !== checkbox) {
+            const otherSliderId = cb.getAttribute('data-slider');
+            sumaOtras += parseInt(document.getElementById(otherSliderId).value) || 0;
+          }
+        });
+
+        const disponible = 100 - sumaOtras;
+
+        if (disponible < 10) {
+          checkbox.checked = false;
+          mostrarAlertaLimite('Ya has asignado el 100% entre las habitaciones seleccionadas. Reduce alguna antes de agregar otra.');
+          return;
+        }
+
         panel.style.display = 'block';
         card.classList.add('active');
-        const sliderId = checkbox.getAttribute('data-slider');
-        const slider = document.getElementById(sliderId);
-        const badgeId = sliderId.replace('slider_', 'val_');
-        if (checkedBoxes.length === 1) {
-          slider.value = 100;
-          document.getElementById(badgeId).innerText = '100%';
-        } else {
-          slider.value = 50;
-          document.getElementById(badgeId).innerText = '50%';
-        }
+
+        // Asignar el porcentaje restante disponible automáticamente (máx 100%, mín 10%)
+        slider.value = disponible;
+        document.getElementById(badgeId).innerText = disponible + '%';
       } else {
         panel.style.display = 'none';
         card.classList.remove('active');
@@ -1188,8 +1246,27 @@
     }
 
     function actualizarPorcentajeHabitacion(sliderId, badgeId) {
-      const val = document.getElementById(sliderId).value;
-      document.getElementById(badgeId).innerText = val + '%';
+      const slider = document.getElementById(sliderId);
+      let valorDeseado = parseInt(slider.value) || 10;
+
+      // Sumar las demás habitaciones seleccionadas
+      let sumaOtras = 0;
+      document.querySelectorAll('input[name="tipo_habitacion"]:checked').forEach(cb => {
+        const otherSliderId = cb.getAttribute('data-slider');
+        if (otherSliderId !== sliderId) {
+          sumaOtras += parseInt(document.getElementById(otherSliderId).value) || 0;
+        }
+      });
+
+      const maxPermitido = Math.max(10, 100 - sumaOtras);
+
+      if (valorDeseado > maxPermitido) {
+        valorDeseado = maxPermitido;
+        slider.value = valorDeseado;
+        mostrarAlertaLimite(`Tope alcanzado: solo queda ${maxPermitido}% disponible para completar el 100%.`);
+      }
+
+      document.getElementById(badgeId).innerText = valorDeseado + '%';
       actualizarEstadoPorcentajeHabitaciones();
       ejecutarCalculos();
     }
@@ -1206,31 +1283,27 @@
 
     function actualizarEstadoPorcentajeHabitaciones() {
       const checkedBoxes = document.querySelectorAll('input[name="tipo_habitacion"]:checked');
-      const statusEl = document.getElementById('roomTotalStatus');
+      const container = document.getElementById('roomTotalContainer');
+      const label = document.getElementById('label_total_habitaciones');
+      const barFill = document.getElementById('bar_total_habitaciones');
 
       if (checkedBoxes.length === 0) {
-        statusEl.style.display = 'none';
+        container.style.display = 'none';
         return;
       }
 
       const suma = obtenerSumaPorcentajeHabitaciones();
-      statusEl.style.display = 'block';
+      container.style.display = 'block';
+      barFill.style.width = Math.min(suma, 100) + '%';
 
       if (suma === 100) {
-        statusEl.style.color = '#059669';
-        statusEl.style.backgroundColor = '#ecfdf5';
-        statusEl.style.borderColor = '#a7f3d0';
-        statusEl.innerText = '✓ Suma de porcentajes de habitación: 100% (Correcto)';
-      } else if (suma < 100) {
-        statusEl.style.color = '#d97706';
-        statusEl.style.backgroundColor = '#fffbeb';
-        statusEl.style.borderColor = '#fde68a';
-        statusEl.innerText = `⚠️ Suma actual de habitaciones: ${suma}% / 100% (Falta asignar ${100 - suma}%)`;
+        label.innerText = '100% / 100% (¡Suma Correcta!)';
+        label.style.color = '#059669';
+        barFill.style.backgroundColor = '#059669';
       } else {
-        statusEl.style.color = '#dc2626';
-        statusEl.style.backgroundColor = '#fef2f2';
-        statusEl.style.borderColor = '#fecaca';
-        statusEl.innerText = `⚠️ Suma actual de habitaciones: ${suma}% / 100% (Excede por ${suma - 100}%)`;
+        label.innerText = `${suma}% / 100% (Falta asignar ${100 - suma}%)`;
+        label.style.color = '#d97706';
+        barFill.style.backgroundColor = '#d97706';
       }
     }
 
@@ -1252,13 +1325,11 @@
       ctx.lineJoin = 'round';
       ctx.strokeStyle = '#0f172a';
 
-      // Ratón
       canvas.addEventListener('mousedown', startDrawing);
       canvas.addEventListener('mousemove', draw);
       canvas.addEventListener('mouseup', stopDrawing);
       canvas.addEventListener('mouseleave', stopDrawing);
 
-      // Táctil
       canvas.addEventListener('touchstart', startDrawingTouch, { passive: false });
       canvas.addEventListener('touchmove', drawTouch, { passive: false });
       canvas.addEventListener('touchend', stopDrawing);
@@ -1322,25 +1393,34 @@
       }
     }
 
-    // === LÓGICA DE RANGE SLIDERS Y EDADES ===
+    // === OPCIÓN 1: TOPE AUTOMÁTICO INTELIGENTE EN EDADES ===
     function sincronizarEdad(rangeId, numId, valSpanId, desdeRange) {
       const rangeEl = document.getElementById(rangeId);
       const numEl = document.getElementById(numId);
       const valSpan = document.getElementById(valSpanId);
+      const ids = ['edad_3_17', 'edad_18_25', 'edad_26_30', 'edad_31_39', 'edad_40_55', 'edad_56_mas'];
 
-      let valor = 0;
-      if (desdeRange) {
-        valor = parseInt(rangeEl.value) || 0;
-        numEl.value = valor;
-      } else {
-        valor = parseInt(numEl.value) || 0;
-        if (valor < 0) valor = 0;
-        if (valor > 100) valor = 100;
-        numEl.value = valor;
-        rangeEl.value = valor;
+      let valorDeseado = desdeRange ? (parseInt(rangeEl.value) || 0) : (parseInt(numEl.value) || 0);
+      if (valorDeseado < 0) valorDeseado = 0;
+
+      // Sumar los demás rangos de edad
+      let sumaOtros = 0;
+      ids.forEach(id => {
+        if (id !== rangeId) {
+          sumaOtros += parseInt(document.getElementById(id).value) || 0;
+        }
+      });
+
+      const maxPermitido = Math.max(0, 100 - sumaOtros);
+
+      if (valorDeseado > maxPermitido) {
+        valorDeseado = maxPermitido;
+        mostrarAlertaLimite(`Tope alcanzado en edades: solo queda ${maxPermitido}% disponible para completar el 100%.`);
       }
 
-      valSpan.innerText = valor + '%';
+      numEl.value = valorDeseado;
+      rangeEl.value = valorDeseado;
+      valSpan.innerText = valorDeseado + '%';
       calcularSumaEdad();
     }
 
@@ -1358,17 +1438,13 @@
       barFill.style.width = Math.min(suma, 100) + '%';
 
       if (suma === 100) {
-        labelTotal.innerText = '100% (¡Suma Correcta!)';
+        labelTotal.innerText = '100% / 100% (¡Suma Correcta!)';
         labelTotal.style.color = '#059669';
         barFill.style.backgroundColor = '#059669';
-      } else if (suma < 100) {
+      } else {
         labelTotal.innerText = `${suma}% / 100% (Falta un ${100 - suma}%)`;
         labelTotal.style.color = '#d97706';
         barFill.style.backgroundColor = '#d97706';
-      } else {
-        labelTotal.innerText = `${suma}% / 100% (Excede por un ${suma - 100}%)`;
-        labelTotal.style.color = '#dc2626';
-        barFill.style.backgroundColor = '#dc2626';
       }
     }
 
@@ -1437,7 +1513,6 @@
           const sliderId = cb.getAttribute('data-slider');
           const porcentaje = (parseFloat(document.getElementById(sliderId).value) || 0) / 100;
 
-          // Cálculo base por tipo de habitación multiplicado por su porcentaje individual
           const cuartosBase = (diasEvento * asistentesForaneos) / factor;
           const cuartosConPorcentaje = Math.round(cuartosBase * porcentaje);
 
@@ -1814,7 +1889,7 @@
           document.getElementById('slider_hab_' + tipo).value = 100;
           document.getElementById('val_hab_' + tipo).innerText = '100%';
         });
-        document.getElementById('roomTotalStatus').style.display = 'none';
+        document.getElementById('roomTotalContainer').style.display = 'none';
 
         // Reiniciar sliders y barra de edad
         idsEdad.forEach(id => {
