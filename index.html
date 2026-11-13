@@ -838,7 +838,7 @@
         <div class="form-group">
           <label for="derrama_economica">Derrama Económica Estimada ($ M.N.) *</label>
           <input type="text" id="derrama_economica" name="derrama_economica" placeholder="Cálculo automático" readonly required>
-          <span class="field-hint">Se calcula automáticamente: Consumo Diario × Noches × Asistentes Foráneos.</span>
+          <span class="field-hint">Se calcula automáticamente: Consumo Diario × Días Totales × Asistentes Foráneos.</span>
         </div>
       </div>
 
@@ -1168,7 +1168,6 @@
       if (checkbox.checked) {
         panel.style.display = 'block';
         card.classList.add('active');
-        // Si es la primera habitación seleccionada, poner en 100%; si ya hay otras, sugerir 50%
         const sliderId = checkbox.getAttribute('data-slider');
         const slider = document.getElementById(sliderId);
         const badgeId = sliderId.replace('slider_', 'val_');
@@ -1373,7 +1372,7 @@
       }
     }
 
-    // === CÁLCULOS AUTOMÁTICOS INTEGRADOS (PROPORCIONAL POR PORCENTAJE + SUMATORIA) ===
+    // === CÁLCULOS AUTOMÁTICOS INTEGRADOS (CONTEO INCLUSIVO DE DÍAS + PORCENTAJE POR HABITACIÓN) ===
     function ejecutarCalculos() {
       const inputTotal = document.getElementById('total_asistentes').value;
       const inputLocales = document.getElementById('asistentes_locales').value;
@@ -1406,7 +1405,7 @@
         return;
       }
 
-      // 2. EXTRAER NOCHES DE ESTADÍA EN UTC
+      // 2. EXTRAER DÍAS TOTALES DEL EVENTO DE FORMA INCLUSIVA (Ej. 29 al 31 = 3 días)
       const fIniPartes = inputInicio.split('-');
       const fFinPartes = inputFin.split('-');
       const fechaInicio = new Date(Date.UTC(fIniPartes[0], fIniPartes[1] - 1, fIniPartes[2]));
@@ -1414,25 +1413,23 @@
       
       const diferenciaMs = fechaFin - fechaInicio;
       
-      let noches = 0;
-      if (diferenciaMs > 0) {
-        noches = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
-      } else if (diferenciaMs === 0) {
-        noches = 1;
+      let diasEvento = 0;
+      if (diferenciaMs >= 0) {
+        diasEvento = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24)) + 1;
       }
 
       // A) CÁLCULO DE DERRAMA ECONÓMICA
-      if (checkboxConsumo && noches > 0) {
+      if (checkboxConsumo && diasEvento > 0) {
         const consumoTexto = checkboxConsumo.value;
         const consumoDiario = parseFloat(consumoTexto.replace(/,/g, '').replace(/[^0-9.]/g, '')) || 0;
-        const totalDerrama = consumoDiario * noches * asistentesForaneos;
+        const totalDerrama = consumoDiario * diasEvento * asistentesForaneos;
         inputDerrama.value = `$${totalDerrama.toLocaleString('en-US')} M.N.`;
       } else {
         inputDerrama.value = '';
       }
 
       // B) CÁLCULO PROPORCIONAL INDIVIDUAL POR PORCENTAJE Y SUMATORIA FINAL
-      if (checkboxesHabitacion.length > 0 && noches > 0) {
+      if (checkboxesHabitacion.length > 0 && diasEvento > 0) {
         let totalCuartosNoche = 0;
 
         checkboxesHabitacion.forEach(cb => {
@@ -1441,7 +1438,7 @@
           const porcentaje = (parseFloat(document.getElementById(sliderId).value) || 0) / 100;
 
           // Cálculo base por tipo de habitación multiplicado por su porcentaje individual
-          const cuartosBase = (noches * asistentesForaneos) / factor;
+          const cuartosBase = (diasEvento * asistentesForaneos) / factor;
           const cuartosConPorcentaje = Math.round(cuartosBase * porcentaje);
 
           totalCuartosNoche += cuartosConPorcentaje;
